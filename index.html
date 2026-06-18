@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Focus</title>
+<title>Gravitate Focus</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -67,7 +67,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #topbar{display:flex;align-items:center;padding:0 14px;gap:12px;height:42px;flex-shrink:0;background:rgba(255,255,255,.04);backdrop-filter:blur(28px) saturate(200%);-webkit-backdrop-filter:blur(28px) saturate(200%);border-bottom:1px solid var(--line);z-index:50}
 .tb-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
 .brand{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.logo-mark{width:20px;height:20px;color:var(--accent);flex-shrink:0;filter:drop-shadow(0 0 6px rgba(106,167,255,.35))}
+.logo-mark{font-size:22px;color:var(--accent);flex-shrink:0;filter:drop-shadow(0 0 6px rgba(106,167,255,.35));line-height:1}
+.brand-name{font-size:14px;font-weight:600;letter-spacing:-.02em;color:var(--accent);flex-shrink:0}
 #ws-name{font-size:15px;font-weight:600;letter-spacing:-.02em;color:var(--tx);outline:none;border-bottom:1px solid transparent;transition:border-color .2s;min-width:10px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #ws-name:focus{border-bottom-color:var(--accent)}
 .tb-sep{width:1px;height:16px;background:var(--line);flex-shrink:0}
@@ -143,7 +144,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .fs-preset.active{background:rgba(106,167,255,.1);border-color:rgba(106,167,255,.2);color:var(--accent)}
 
 /* Hero quote */
-#hero-quote{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);max-width:520px;text-align:center;font-size:13px;font-weight:300;font-style:italic;color:var(--dim);line-height:1.6;letter-spacing:-.01em}
+#hero-quote{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);max-width:520px;text-align:center;font-size:13px;font-weight:300;font-style:italic;color:var(--dim);line-height:1.6;letter-spacing:-.01em;transition:opacity .8s ease}
 
 /* Topbar timer indicator */
 #tb-timer{display:none;align-items:center;gap:5px;padding:0 8px;height:28px;border-radius:8px;background:rgba(106,167,255,.12);border:1px solid rgba(106,167,255,.2);color:var(--accent);font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;cursor:pointer;font-family:var(--font);flex-shrink:0}
@@ -322,6 +323,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .settings-row:last-child{border-bottom:none}
 .settings-row-label{font-size:13px;color:var(--mu)}
 .settings-row-label small{display:block;font-size:10.5px;color:var(--dim);margin-top:2px}
+.settings-note{font-size:11.5px;color:var(--dim);line-height:1.5;padding:8px 0 4px}
 .toggle{width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,.1);border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
 .toggle.on{background:rgba(106,167,255,.4)}
 .toggle::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--tx);transition:transform .2s}
@@ -332,14 +334,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* First-run overlay */
 #first-run{position:fixed;inset:0;z-index:1000;background:rgba(5,10,20,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 #first-run.show{opacity:1;pointer-events:all}
-.fr-box{text-align:center;max-width:380px;padding:40px}
-.fr-logo{width:48px;height:48px;color:var(--accent);margin:0 auto 20px;filter:drop-shadow(0 0 16px rgba(106,167,255,.4))}
+.fr-box{text-align:center;max-width:520px;padding:40px}
+.fr-logo{font-size:56px;color:var(--accent);margin:0 auto 20px;filter:drop-shadow(0 0 16px rgba(106,167,255,.4));line-height:1}
 .fr-title{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:8px}
 .fr-sub{font-size:14px;color:var(--mu);line-height:1.6;margin-bottom:28px}
 .fr-input{width:100%;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:var(--tx);font-size:16px;font-family:var(--font);outline:none;text-align:center;margin-bottom:16px;transition:border-color .2s}
 .fr-input:focus{border-color:var(--accent)}
 .fr-btn{padding:11px 32px;border-radius:12px;background:rgba(106,167,255,.2);border:1px solid rgba(106,167,255,.3);color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s}
 .fr-btn:hover{background:rgba(106,167,255,.35)}
+.fr-btn:disabled{opacity:.3;cursor:not-allowed}
 
 /* -- DAILY INTENTION GATE -- */
 #intention-gate{position:fixed;inset:0;z-index:950;background:rgba(5,10,20,.94);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
@@ -376,6 +379,25 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .fr-role.sel .fr-role-name{color:var(--accent)}
 .fr-role-desc{font-size:10.5px;color:var(--dim);margin-top:3px;line-height:1.4}
 
+/* -- APP PICKER (first-run step 3) -- */
+.fr-app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;text-align:left;max-height:340px;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+.fr-app-grid::-webkit-scrollbar{width:4px}
+.fr-app-grid::-webkit-scrollbar-track{background:transparent}
+.fr-app-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.fr-cat-label{grid-column:1 / -1;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:8px 0 2px}
+.fr-cat-label:first-child{padding-top:0}
+.fr-app-tile{padding:10px 6px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid transparent;cursor:pointer;text-align:center;transition:background .14s,border-color .14s;position:relative}
+.fr-app-tile:hover{background:rgba(255,255,255,.08)}
+.fr-app-tile.sel{background:rgba(106,167,255,.1);border-color:rgba(106,167,255,.25)}
+.fr-app-tile .fr-app-emoji{font-size:20px;display:block;margin-bottom:4px}
+.fr-app-tile .fr-app-name{font-size:10px;color:var(--mu);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fr-app-tile.sel .fr-app-name{color:var(--accent)}
+.fr-app-check{position:absolute;top:4px;right:4px;width:14px;height:14px;border-radius:50%;background:var(--accent);display:none;align-items:center;justify-content:center;font-size:8px;color:#050a14;font-weight:700}
+.fr-app-tile.sel .fr-app-check{display:flex}
+.fr-app-counter{font-size:12px;color:var(--mu);margin-bottom:14px;font-weight:500}
+.fr-app-counter .fr-count-num{color:var(--accent);font-weight:700}
+.fr-app-counter .fr-count-warn{color:var(--warn)}
+
 /* -- LIGHT MODE -- */
 [data-light="1"]{--bg:#e8eaf2;--tx:rgba(0,0,0,.84);--mu:rgba(0,0,0,.55);--dim:rgba(0,0,0,.38);--line:rgba(0,0,0,.07);--glass-bg:rgba(255,255,255,.52);--glass-bo:rgba(0,0,0,.06);--glass-hi:rgba(255,255,255,.95)}
 [data-light="1"] .b1{background:rgba(120,170,255,.3)}
@@ -404,6 +426,60 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-light="1"] .ig-custom{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.84)}
 [data-light="1"] #mode-pop{background:rgba(245,247,255,.96)}
 [data-light="1"] .fr-role{background:rgba(0,0,0,.03)}
+[data-light="1"] .fr-app-tile{background:rgba(0,0,0,.03)}
+
+/* -- TIME-AWARE THEMES -- */
+[data-time="morning"]{--bg:#faf6ef}
+[data-time="morning"] .b1{background:rgba(255,180,60,.18)}
+[data-time="morning"] .b2{background:rgba(255,140,90,.12)}
+[data-time="morning"] .b3{background:rgba(255,200,100,.15)}
+[data-time="afternoon"]{--bg:#f0f2f8}
+[data-time="afternoon"] .b1{background:rgba(100,160,255,.15)}
+[data-time="afternoon"] .b2{background:rgba(130,100,220,.1)}
+[data-time="afternoon"] .b3{background:rgba(80,140,200,.12)}
+[data-time="evening"]{--bg:#1a1028}
+[data-time="evening"] .b1{background:rgba(180,80,140,.14)}
+[data-time="evening"] .b2{background:rgba(120,60,180,.12)}
+[data-time="evening"] .b3{background:rgba(80,60,160,.1)}
+[data-time="night"]{--bg:#050a14}
+[data-time="night"] .b1{background:rgba(40,90,220,.12)}
+[data-time="night"] .b2{background:rgba(60,30,150,.08)}
+[data-time="night"] .b3{background:rgba(20,60,140,.06)}
+
+/* -- HERO PRIORITIES (Top 3) -- */
+.hero-pri-item{display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:6px 0}
+.hero-pri-item+.hero-pri-item{border-top:1px solid rgba(255,255,255,.06)}
+[data-light="1"] .hero-pri-item+.hero-pri-item{border-top-color:rgba(0,0,0,.05)}
+.hero-pri-num{width:22px;height:22px;border-radius:7px;background:rgba(106,167,255,.15);border:1.5px solid rgba(106,167,255,.3);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);font-family:var(--mono);line-height:1}
+.hero-pri-item.pri-done .hero-pri-num{background:var(--ok);border-color:var(--ok);color:#050a14}
+.hero-pri-text{font-size:16px;font-weight:600;letter-spacing:-.02em;line-height:1.35;color:var(--tx);text-wrap:pretty}
+.hero-pri-item.pri-done .hero-pri-text{text-decoration:line-through;opacity:.5}
+.hero-pri-done-msg{font-size:14px;color:var(--ok);font-weight:500;margin-top:10px;text-align:center}
+.hero-share-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--dim);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s}
+.hero-share-btn:hover{background:rgba(255,255,255,.1);color:var(--tx)}
+[data-light="1"] .hero-share-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.06)}
+[data-light="1"] .hero-share-btn:hover{background:rgba(0,0,0,.08)}
+.hero-share-btn svg{width:13px;height:13px}
+
+/* -- INTENTION GATE: Top 3 Updates -- */
+.ig-counter{font-size:12px;color:var(--mu);margin-bottom:14px;font-weight:500}
+.ig-counter .ig-count-num{color:var(--accent);font-weight:700}
+.ig-task .ig-task-badge{width:20px;height:20px;border-radius:6px;background:rgba(106,167,255,.15);border:1px solid rgba(106,167,255,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--accent);font-family:var(--mono);flex-shrink:0}
+.ig-task .ig-task-plus{width:20px;height:20px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--dim);flex-shrink:0}
+.ig-add-row{display:flex;gap:6px;margin-bottom:16px}
+.ig-add-row .ig-custom{flex:1;margin-bottom:0}
+.ig-add-btn{padding:0 16px;border-radius:12px;background:rgba(106,167,255,.15);border:1px solid rgba(106,167,255,.25);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s;white-space:nowrap}
+.ig-add-btn:hover{background:rgba(106,167,255,.25)}
+
+/* Task priority badge in sidebar */
+.task-pri-badge{width:20px;height:20px;border-radius:5px;background:rgba(106,167,255,.15);border:1px solid rgba(106,167,255,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--accent);font-family:var(--mono);cursor:pointer;flex-shrink:0}
+.task-pri-badge:hover{background:rgba(106,167,255,.25)}
+.task-pri-add{width:20px;height:20px;border-radius:5px;border:none;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--dim);cursor:pointer;flex-shrink:0;font-family:var(--font);opacity:0;transition:opacity .15s}
+.task-row:hover .task-pri-add{opacity:.65}
+.task-pri-add:hover{opacity:1!important;background:rgba(106,167,255,.1);color:var(--accent)}
+
+/* Auto theme option in theme grid */
+.theme-opt .theme-swatch-auto{width:28px;height:28px;border-radius:8px;margin:0 auto 6px;border:1px solid rgba(255,255,255,.1);background:conic-gradient(from 180deg,#faf6ef 0deg,#f0f2f8 90deg,#1a1028 180deg,#050a14 270deg,#faf6ef 360deg)}
 
 /* Hero next meeting preview */
 #hero-next-mtg{font-size:12px;color:var(--dim);text-align:center;margin-bottom:16px}
@@ -446,12 +522,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
   <header id="topbar">
     <div class="tb-left">
       <div class="brand">
-        <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <circle cx="12" cy="12" r="9"></circle>
-          <circle cx="12" cy="12" r="4.4"></circle>
-          <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"></circle>
-          <path d="M12 1.5v3.4M12 19.1v3.4M1.5 12h3.4M19.1 12h3.4" stroke-linecap="round"></path>
-        </svg>
+        <span class="logo-mark">&#x25CE;</span>
+        <span class="brand-name">Gravitate</span>
         <span id="ws-name" contenteditable spellcheck="false">Focus</span>
       </div>
       <div class="tb-sep"></div>
@@ -479,7 +551,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <button class="tb-btn" id="btn-sidepanel" aria-label="Widgets" title="Toggle widgets (W)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M15 3v18"></path></svg>
       </button>
-      <button class="tb-btn" id="btn-help" aria-label="How Focus works" title="Shortcuts (?)">?</button>
+      <button class="tb-btn" id="btn-help" aria-label="How Gravitate Focus works" title="Shortcuts (?)">?</button>
     </div>
   </header>
 
@@ -489,7 +561,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     <div id="hero-date" class="hero-enter">Loading...</div>
 
     <div id="hero-onething" class="hero-enter">
-      <div class="hero-ot-label">The One Thing</div>
+      <div class="hero-ot-label">Today's Priorities</div>
       <div id="hero-onething-body"></div>
     </div>
 
@@ -606,10 +678,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <div class="modal-bg" id="modal-edit">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title">Edit app</div>
+      <div class="modal-title">Edit App</div>
       <button class="modal-close" id="edit-close">&#10005;</button>
     </div>
-    <label class="f-label">App name</label>
+    <label class="f-label">App Name</label>
     <input class="f-input" id="edit-name" placeholder="e.g. Asana" />
     <label class="f-label">URL</label>
     <input class="f-input" id="edit-url" placeholder="https://app.example.com" />
@@ -629,7 +701,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <div class="modal-bg" id="modal-meeting">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title" id="mtg-modal-title">Add meeting</div>
+      <div class="modal-title" id="mtg-modal-title">Add Meeting</div>
       <button class="modal-close" id="mtg-close">&#10005;</button>
     </div>
     <label class="f-label">Title</label>
@@ -647,11 +719,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <div class="modal-bg" id="modal-help">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title">How Focus works</div>
+      <div class="modal-title">How Gravitate Focus Works</div>
       <button class="modal-close" id="help-close">&#10005;</button>
     </div>
     <div class="help-intro">
-      Focus keeps your <b>intention front and centre</b>. Your One Thing card anchors the hero, apps live in the dock, and widgets slide out when you need them. Click any dock app to open in a new tab. Use <kbd class="kbd">&#8984;K</kbd> for quick launch.
+      Gravitate Focus keeps your <b>priorities front and centre</b>. Your Top 3 card anchors the hero, apps live in the dock, and widgets slide out when you need them. Click any dock app to open in a new tab. Use <kbd class="kbd">&#8984;K</kbd> for quick launch.
     </div>
     <div class="sc-row"><span>Open app 1&ndash;8 in new tab</span><span><kbd class="kbd">1</kbd> &ndash; <kbd class="kbd">8</kbd></span></div>
     <div class="sc-row"><span>Quick launch / jump to</span><span><kbd class="kbd">&#8984;K</kbd> or <kbd class="kbd">/</kbd></span></div>
@@ -677,6 +749,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
 
     <div class="settings-group">
+      <div class="settings-group-label">Display</div>
+      <div class="settings-note">Hero view (default). More views coming soon.</div>
+    </div>
+
+    <div class="settings-group">
       <div class="settings-group-label">Focus Coach</div>
       <div class="settings-row">
         <div class="settings-row-label">Enable coach nudges<small>Reminds you when context-switching too much</small></div>
@@ -696,7 +773,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       </div>
       <input type="file" id="import-file" accept=".json" style="display:none" />
       <div style="margin-top:12px">
-        <button class="btn btn-danger" id="btn-reset-all" style="width:100%;text-align:center">Reset all data</button>
+        <button class="btn btn-danger" id="btn-reset-all" style="width:100%;text-align:center">Reset All Data</button>
       </div>
     </div>
   </div>
@@ -715,13 +792,17 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <div id="intention-gate">
   <div class="ig-box">
     <div class="ig-greeting" id="ig-greeting">Good morning</div>
-    <div class="ig-title">What's the one thing today?</div>
-    <div class="ig-sub">Pick the single task that, if you finished it, would make today a win.</div>
-    <div class="ig-pick-label">Pick from today's tasks</div>
+    <div class="ig-title">What are your top priorities today?</div>
+    <div class="ig-sub">Pick up to 3 tasks that would make today a win.</div>
+    <div class="ig-counter" id="ig-counter"></div>
+    <div class="ig-pick-label">Pick From Today's Tasks</div>
     <div class="ig-tasks" id="ig-tasks"></div>
-    <div class="ig-or">or type something new</div>
-    <input class="ig-custom" id="ig-custom" placeholder="Type your one thing..." spellcheck="false" />
-    <button class="ig-go" id="ig-go" disabled>Lock it in</button>
+    <div class="ig-or">or add something new</div>
+    <div class="ig-add-row">
+      <input class="ig-custom" id="ig-custom" placeholder="Type a new priority..." spellcheck="false" />
+      <button class="ig-add-btn" id="ig-add-btn">Add</button>
+    </div>
+    <button class="ig-go" id="ig-go" disabled>Lock It In</button>
     <button class="ig-skip" id="ig-skip">Skip for now</button>
   </div>
 </div>
@@ -729,64 +810,36 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <!-- FIRST RUN -->
 <div id="first-run">
   <div class="fr-box">
-    <svg class="fr-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
-      <circle cx="12" cy="12" r="9"></circle>
-      <circle cx="12" cy="12" r="4.4"></circle>
-      <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"></circle>
-      <path d="M12 1.5v3.4M12 19.1v3.4M1.5 12h3.4M19.1 12h3.4" stroke-linecap="round"></path>
-    </svg>
+    <div class="fr-logo">&#x25CE;</div>
     <!-- Step 1: Name -->
     <div class="fr-step active" id="fr-step-1">
-      <div class="fr-title">Welcome to Focus</div>
+      <div class="fr-title">Welcome to Gravitate Focus</div>
       <div class="fr-sub">Your calm command center. What should we call you?</div>
       <input class="fr-input" id="fr-name" placeholder="Your name..." spellcheck="false" autocomplete="off" />
       <button class="fr-btn" id="fr-next-1">Next</button>
     </div>
     <!-- Step 2: Role -->
     <div class="fr-step" id="fr-step-2">
-      <div class="fr-title">What's your role?</div>
+      <div class="fr-title">What's Your Role?</div>
       <div class="fr-sub">We'll set up your dashboard with the right apps and widgets.</div>
-      <div class="fr-roles" id="fr-roles">
-        <div class="fr-role" data-role="account_manager">
-          <div class="fr-role-icon">&#x1F4CA;</div>
-          <div class="fr-role-name">Account Manager</div>
-          <div class="fr-role-desc">Client reporting, budgets, task management</div>
-        </div>
-        <div class="fr-role" data-role="sales">
-          <div class="fr-role-icon">&#x1F4DE;</div>
-          <div class="fr-role-name">Sales</div>
-          <div class="fr-role-desc">Pipeline, outreach, meetings, CRM</div>
-        </div>
-        <div class="fr-role" data-role="creative">
-          <div class="fr-role-icon">&#x1F3A8;</div>
-          <div class="fr-role-name">Creative</div>
-          <div class="fr-role-desc">Design, content, briefs, review</div>
-        </div>
-        <div class="fr-role" data-role="leadership">
-          <div class="fr-role-icon">&#x1F3AF;</div>
-          <div class="fr-role-name">Leadership</div>
-          <div class="fr-role-desc">Strategy, metrics, team health, ops</div>
-        </div>
-        <div class="fr-role" data-role="developer">
-          <div class="fr-role-icon">&#x1F4BB;</div>
-          <div class="fr-role-name">Developer</div>
-          <div class="fr-role-desc">Code, sprints, PRs, documentation</div>
-        </div>
-        <div class="fr-role" data-role="custom">
-          <div class="fr-role-icon">&#x2699;&#xFE0F;</div>
-          <div class="fr-role-name">Custom</div>
-          <div class="fr-role-desc">I'll set it up myself</div>
-        </div>
-      </div>
-      <button class="fr-btn" id="fr-go" disabled>Get started</button>
+      <div class="fr-roles" id="fr-roles"></div>
+      <button class="fr-btn" id="fr-next-2" disabled>Next</button>
+    </div>
+    <!-- Step 3: App Picker -->
+    <div class="fr-step" id="fr-step-3">
+      <div class="fr-title">Choose Your Apps</div>
+      <div class="fr-sub">These will appear in your dock. You can change them later.</div>
+      <div class="fr-app-counter" id="fr-app-counter"></div>
+      <div class="fr-app-grid" id="fr-app-grid"></div>
+      <button class="fr-btn" id="fr-go">Get Started</button>
     </div>
   </div>
 </div>
 
 <script>
 /* ======================================
-   Focus . focus-os.js
-   Gravitate AI Arm . v12 (Momentum)
+   Gravitate Focus . focus-os.js
+   Gravitate AI Arm . v13 (Momentum)
 ====================================== */
 
 const KEY = 'focos_v10';
@@ -799,23 +852,70 @@ const EMOJIS = [
 ];
 
 const PRESETS = [
-  {id:'asana',   name:'Asana',     url:'https://app.asana.com',           emoji:'\u{1F4CB}'},
-  {id:'gmail',   name:'Gmail',     url:'https://mail.google.com',         emoji:'\u2709\uFE0F'},
-  {id:'slack',   name:'Slack',     url:'https://app.slack.com',           emoji:'\u{1F4AC}'},
-  {id:'ga4',     name:'Analytics', url:'https://analytics.google.com',    emoji:'\u{1F4CA}'},
-  {id:'linear',  name:'Linear',    url:'https://linear.app',              emoji:'\u25C8'},
-  {id:'notion',  name:'Notion',    url:'https://notion.so',               emoji:'\u{1F4DD}'},
-  {id:'loom',    name:'Loom',      url:'https://loom.com',                emoji:'\u{1F3AC}'},
-  {id:'figma',   name:'Figma',     url:'https://figma.com',               emoji:'\u{1F3A8}'},
-  {id:'drive',   name:'Drive',     url:'https://drive.google.com',        emoji:'\u{1F4BE}'},
-  {id:'callrail',name:'CallRail',  url:'https://app.callrail.com',        emoji:'\u{1F4DE}'},
-  {id:'hubspot', name:'HubSpot',   url:'https://app.hubspot.com',         emoji:'\u{1F536}'},
-  {id:'calendar',name:'Calendar',  url:'https://calendar.google.com',     emoji:'\u{1F4C5}'},
-  {id:'meet',    name:'Google Meet',url:'https://meet.google.com',        emoji:'\u{1F3A5}'},
-  {id:'docs',    name:'Docs',      url:'https://docs.google.com',         emoji:'\u{1F4C4}'},
-  {id:'sheets',  name:'Sheets',    url:'https://sheets.google.com',       emoji:'\u{1F4C8}'},
-  {id:'chatgpt', name:'ChatGPT',   url:'https://chat.openai.com',         emoji:'\u26A1'},
+  // Core / Always
+  {id:'google',    name:'Google',         url:'https://google.com',              emoji:'\u{1F50D}', cat:'core'},
+  {id:'gmail',     name:'Gmail',          url:'https://mail.google.com',         emoji:'\u2709\uFE0F', cat:'core'},
+  {id:'calendar',  name:'Calendar',       url:'https://calendar.google.com',     emoji:'\u{1F4C5}', cat:'core'},
+  {id:'drive',     name:'Drive',          url:'https://drive.google.com',        emoji:'\u{1F4BE}', cat:'core'},
+  {id:'docs',      name:'Docs',           url:'https://docs.google.com',         emoji:'\u{1F4C4}', cat:'core'},
+  {id:'sheets',    name:'Sheets',         url:'https://sheets.google.com',       emoji:'\u{1F4C8}', cat:'core'},
+  {id:'meet',      name:'Google Meet',    url:'https://meet.google.com',         emoji:'\u{1F3A5}', cat:'core'},
+  {id:'gchat',     name:'Google Chat',    url:'https://chat.google.com',         emoji:'\u{1F4AC}', cat:'core'},
+  // AI
+  {id:'chatgpt',   name:'ChatGPT',        url:'https://chat.openai.com',         emoji:'\u26A1', cat:'ai'},
+  {id:'claude',    name:'Claude',          url:'https://claude.ai',               emoji:'\u25CE', cat:'ai'},
+  {id:'claude-d',  name:'Claude Design',   url:'https://claude.ai/new',           emoji:'\u{1F3A8}', cat:'ai'},
+  // PM
+  {id:'asana',     name:'Asana',           url:'https://app.asana.com',           emoji:'\u{1F4CB}', cat:'pm'},
+  {id:'linear',    name:'Linear',          url:'https://linear.app',              emoji:'\u25C8', cat:'pm'},
+  {id:'notion',    name:'Notion',          url:'https://notion.so',               emoji:'\u{1F4DD}', cat:'pm'},
+  // Communication
+  {id:'slack',     name:'Slack',           url:'https://app.slack.com',           emoji:'\u{1F4AC}', cat:'comms'},
+  {id:'loom',      name:'Loom',            url:'https://loom.com',                emoji:'\u{1F3AC}', cat:'comms'},
+  // Design
+  {id:'figma',     name:'Figma',           url:'https://figma.com',               emoji:'\u{1F3A8}', cat:'design'},
+  {id:'canva',     name:'Canva',           url:'https://canva.com',               emoji:'\u{1F58C}\uFE0F', cat:'design'},
+  {id:'adobe',     name:'Adobe CC',        url:'https://creativecloud.adobe.com', emoji:'\u{1F4F7}', cat:'design'},
+  // Reporting / Analytics
+  {id:'ga4',       name:'Analytics',       url:'https://analytics.google.com',    emoji:'\u{1F4CA}', cat:'analytics'},
+  {id:'whatagraph',name:'Whatagraph',      url:'https://app.whatagraph.com',      emoji:'\u{1F4CA}', cat:'analytics'},
+  {id:'gsc',       name:'Search Console',  url:'https://search.google.com/search-console', emoji:'\u{1F50D}', cat:'analytics'},
+  // Paid Ads
+  {id:'gads',      name:'Google Ads',      url:'https://ads.google.com',          emoji:'\u{1F4B0}', cat:'ads'},
+  {id:'meta',      name:'Meta Ads',        url:'https://business.facebook.com',   emoji:'\u{1F536}', cat:'ads'},
+  {id:'tiktok',    name:'TikTok Ads',      url:'https://ads.tiktok.com',          emoji:'\u{1F3B5}', cat:'ads'},
+  {id:'bing',      name:'Bing Ads',        url:'https://ads.microsoft.com',       emoji:'\u{1F310}', cat:'ads'},
+  {id:'amazon',    name:'Amazon Ads',      url:'https://advertising.amazon.com',  emoji:'\u{1F4E6}', cat:'ads'},
+  // SEO
+  {id:'semrush',   name:'SEMrush',         url:'https://www.semrush.com',         emoji:'\u{1F50E}', cat:'seo'},
+  {id:'sfrog',     name:'Screaming Frog',  url:'https://www.screamingfrog.co.uk', emoji:'\u{1F438}', cat:'seo'},
+  // Email Marketing
+  {id:'klaviyo',   name:'Klaviyo',          url:'https://www.klaviyo.com/login',   emoji:'\u{1F4E7}', cat:'email'},
+  {id:'mailchimp', name:'Mailchimp',        url:'https://login.mailchimp.com',     emoji:'\u{1F412}', cat:'email'},
+  // CRM / Sales
+  {id:'hubspot',   name:'HubSpot',          url:'https://app.hubspot.com',         emoji:'\u{1F536}', cat:'crm'},
+  {id:'callrail',  name:'CallRail',          url:'https://app.callrail.com',        emoji:'\u{1F4DE}', cat:'crm'},
+  // Social
+  {id:'instagram', name:'Instagram',         url:'https://instagram.com',           emoji:'\u{1F4F7}', cat:'social'},
+  {id:'facebook',  name:'Facebook',          url:'https://facebook.com',            emoji:'\u{1F44D}', cat:'social'},
+  {id:'linkedin',  name:'LinkedIn',          url:'https://linkedin.com',            emoji:'\u{1F4BC}', cat:'social'},
 ];
+
+const CAT_LABELS = {
+  core: 'Core / Google',
+  ai: 'AI',
+  pm: 'Project Management',
+  comms: 'Communication',
+  design: 'Design',
+  analytics: 'Reporting / Analytics',
+  ads: 'Paid Ads',
+  seo: 'SEO',
+  email: 'Email Marketing',
+  crm: 'CRM / Sales',
+  social: 'Social',
+};
+
+const CAT_ORDER = ['core','ai','pm','comms','design','analytics','ads','seo','email','crm','social'];
 
 /* -- LAYOUT CATALOG (kept for mode switching) -- */
 const LAYOUTS = [
@@ -853,36 +953,57 @@ const COACH_MSGS = [
   "The best work happens when you're not in a hurry. What's your real priority?",
   "Good work is unhurried. Finish one thing before you switch again.",
   "You're moving fast. Sometimes slowing down is the fastest way forward.",
-  "Notice the urge to switch \u2014 is it necessary, or just habit?",
+  "Notice the urge to switch. Is it necessary, or just habit?",
   "Every switch costs 23 minutes to recover full focus. Is this switch worth it?",
   "What would happen if you stayed with this one thing for 10 more minutes?",
 ];
 
 const QUOTES = [
-  "The secret of getting ahead is getting started. \u2014 Mark Twain",
-  "Focus is saying no to a thousand good ideas. \u2014 Steve Jobs",
-  "It is not enough to be busy; so are the ants. The question is: what are we busy about? \u2014 Thoreau",
-  "The main thing is to keep the main thing the main thing. \u2014 Stephen Covey",
-  "Concentrate all your thoughts upon the work at hand. The sun's rays do not burn until brought to a focus. \u2014 Alexander Graham Bell",
-  "Do what you can, with what you have, where you are. \u2014 Theodore Roosevelt",
-  "You can do anything, but not everything. \u2014 David Allen",
-  "Simplicity is the ultimate sophistication. \u2014 Leonardo da Vinci",
-  "The way to get started is to quit talking and begin doing. \u2014 Walt Disney",
-  "Deep work is the ability to focus without distraction on a cognitively demanding task. \u2014 Cal Newport",
-  "Start where you are. Use what you have. Do what you can. \u2014 Arthur Ashe",
-  "Energy and persistence conquer all things. \u2014 Benjamin Franklin",
-  "Where focus goes, energy flows. \u2014 Tony Robbins",
-  "Your mind is for having ideas, not holding them. \u2014 David Allen",
-  "Action is the foundational key to all success. \u2014 Pablo Picasso",
+  // Marketing
+  "A SEO expert walks into a bar, pub, tavern, inn, beer garden, saloon, gastropub...",
+  "Where's the best place to hide a dead body? Page 2 of Google search results.",
+  "Why did the marketer get off the trampoline? He was worried about his bounce rate.",
+  "Marketing budget: 50% works great. The other 50% is wasted. Nobody knows which half.",
+  "What's a pirate's favourite content format? WebinARRRs.",
+  // Agency life
+  "\"Can you make the logo bigger?\" Every client, everywhere, forever.",
+  "\"Just a small change.\" Famous last words.",
+  "\"We need it to go viral.\" Budget: $50.",
+  "\"Let's take this offline.\" Translation: let's never discuss this again.",
+  "\"Quick question.\" Narrator: it was not quick.",
+  // Design
+  "Helvetica and Times New Roman walk into a bar. The bartender says: we don't serve your type here.",
+  "How many designers does it take to change a light bulb? Does it have to be a light bulb?",
+  // Data / Analytics
+  "There are two types of people: those who can extrapolate from incomplete data.",
+  "Correlation does not imply causation, but it does waggle its eyebrows suggestively.",
+  "In God we trust. All others must bring data. \u2014 W. Edwards Deming",
+  // Productivity
+  "The secret to getting ahead is getting started. \u2014 Mark Twain",
+  "I'll stop procrastinating. Starting tomorrow.",
+  "My to-do list is really just a wish list at this point.",
+  "Focus is not about saying yes. It's about saying no. \u2014 Steve Jobs",
+  "Done is better than perfect. \u2014 Sheryl Sandberg",
+  // Ads
+  "I'm not saying your Google Ads account needs work, but your quality score just filed for bankruptcy.",
+  "Client: I want to rank #1 for everything. Budget: $200/month. Timeline: yesterday.",
+  // More agency
+  "Scope creep isn't a bug, it's a feature nobody asked for.",
+  "The WiFi went down for five minutes so I had to talk to my coworkers. They seem nice.",
+  "I put the 'pro' in procrastination.",
 ];
+
+let quoteIdx = 0;
+let quoteTimer = null;
 
 /* -- ROLE PRESETS -- */
 const ROLE_PRESETS = {
   account_manager: {
     panels: [
       {preset:'asana'},{preset:'gmail'},{preset:'slack'},{preset:'ga4'},
-      {preset:'sheets'},{preset:'callrail'},{preset:'calendar'},{preset:'drive'},
+      {preset:'whatagraph'},{preset:'callrail'},{preset:'gads'},{preset:'meta'},
     ],
+    defaultApps: ['google','asana','gmail','slack','ga4','whatagraph','callrail','gads','meta','sheets','calendar'],
     modes: [
       {id:'morning',name:'Morning',desc:'Email, calendar, tasks',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'},{preset:'slack'}],layout:'quad'},
       {id:'client',name:'Client Work',desc:'Reporting, calls, tasks',color:'#7fe3a2',panels:[{preset:'ga4'},{preset:'callrail'},{preset:'asana'},{preset:'sheets'}],layout:'quad'},
@@ -894,34 +1015,93 @@ const ROLE_PRESETS = {
   sales: {
     panels: [
       {preset:'hubspot'},{preset:'gmail'},{preset:'calendar'},{preset:'slack'},
-      {preset:'sheets'},{preset:'notion'},{preset:'loom'},{preset:'drive'},
+      {preset:'sheets'},{preset:'loom'},{preset:'meet'},{preset:'linkedin'},
     ],
+    defaultApps: ['google','hubspot','gmail','calendar','slack','sheets','loom','meet','linkedin'],
     modes: [
-      {id:'prospect',name:'Prospecting',desc:'CRM, email, research',color:'#6DAAFF',panels:[{preset:'hubspot'},{preset:'gmail'},{preset:'notion'}],layout:'feat3'},
+      {id:'prospect',name:'Prospecting',desc:'CRM, email, research',color:'#6DAAFF',panels:[{preset:'hubspot'},{preset:'gmail'},{preset:'linkedin'}],layout:'feat3'},
       {id:'followup',name:'Follow-up',desc:'Email, calendar, CRM',color:'#7fe3a2',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'hubspot'},{preset:'slack'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Sheets, Slack, Drive',color:'#ffd86b',panels:[{preset:'sheets'},{preset:'slack'},{preset:'drive'}],layout:'trio'},
+      {id:'admin',name:'Admin',desc:'Sheets, Slack, Drive',color:'#ffd86b',panels:[{preset:'sheets'},{preset:'slack'},{preset:'loom'}],layout:'trio'},
     ],
     rocks:['Close 3 new deals this quarter','Build outreach playbook','Pipeline to $50K MRR'],
     tasks:['Follow up warm leads','Update pipeline in CRM','Prep for discovery call','Send proposal'],
   },
   creative: {
     panels: [
-      {preset:'figma'},{preset:'notion'},{preset:'asana'},{preset:'slack'},
-      {preset:'drive'},{preset:'loom'},{preset:'gmail'},{preset:'calendar'},
+      {preset:'figma'},{preset:'canva'},{preset:'adobe'},{preset:'notion'},
+      {preset:'asana'},{preset:'loom'},{preset:'drive'},{preset:'claude-d'},
     ],
+    defaultApps: ['google','figma','canva','adobe','notion','asana','loom','drive','claude-d'],
     modes: [
-      {id:'design',name:'Design',desc:'Figma, Notion, Drive',color:'#c4a2f0',panels:[{preset:'figma'},{preset:'notion'},{preset:'drive'}],layout:'feat3'},
-      {id:'review',name:'Review',desc:'Loom, Asana, Slack',color:'#7fe3a2',panels:[{preset:'loom'},{preset:'asana'},{preset:'slack'},{preset:'figma'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Email, calendar, tasks',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'}],layout:'trio'},
+      {id:'design',name:'Design',desc:'Figma, Canva, Adobe',color:'#c4a2f0',panels:[{preset:'figma'},{preset:'canva'},{preset:'adobe'}],layout:'feat3'},
+      {id:'review',name:'Review',desc:'Loom, Asana, Notion',color:'#7fe3a2',panels:[{preset:'loom'},{preset:'asana'},{preset:'notion'},{preset:'figma'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Email, Drive, Claude',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'drive'},{preset:'claude-d'}],layout:'trio'},
     ],
     rocks:['Ship rebrand assets','Build design system v2','Clear review backlog'],
     tasks:['Review design feedback','Update brand assets','Record Loom walkthrough','Prep creative brief'],
   },
+  seo: {
+    panels: [
+      {preset:'semrush'},{preset:'sfrog'},{preset:'ga4'},{preset:'gsc'},
+      {preset:'asana'},{preset:'sheets'},{preset:'google'},{preset:'notion'},
+    ],
+    defaultApps: ['google','semrush','sfrog','ga4','gsc','asana','sheets','notion'],
+    modes: [
+      {id:'research',name:'Research',desc:'SEMrush, Search Console, Google',color:'#6DAAFF',panels:[{preset:'semrush'},{preset:'gsc'},{preset:'google'}],layout:'feat3'},
+      {id:'audit',name:'Audit',desc:'Screaming Frog, Analytics, Sheets',color:'#7fe3a2',panels:[{preset:'sfrog'},{preset:'ga4'},{preset:'sheets'},{preset:'gsc'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Asana, Notion, Sheets',color:'#ffd86b',panels:[{preset:'asana'},{preset:'notion'},{preset:'sheets'}],layout:'trio'},
+    ],
+    rocks:['Increase organic traffic 20%','Complete technical audit','Build link strategy'],
+    tasks:['Run keyword research','Check ranking movements','Review crawl errors','Update content calendar'],
+  },
+  paid_media: {
+    panels: [
+      {preset:'gads'},{preset:'meta'},{preset:'tiktok'},{preset:'bing'},
+      {preset:'ga4'},{preset:'whatagraph'},{preset:'asana'},{preset:'sheets'},
+    ],
+    defaultApps: ['google','gads','meta','tiktok','bing','ga4','whatagraph','asana','sheets'],
+    modes: [
+      {id:'optimise',name:'Optimise',desc:'Google Ads, Meta Ads, Analytics',color:'#6DAAFF',panels:[{preset:'gads'},{preset:'meta'},{preset:'ga4'}],layout:'feat3'},
+      {id:'report',name:'Reporting',desc:'Whatagraph, Analytics, Sheets',color:'#7fe3a2',panels:[{preset:'whatagraph'},{preset:'ga4'},{preset:'sheets'},{preset:'asana'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Asana, Sheets, TikTok',color:'#ffd86b',panels:[{preset:'asana'},{preset:'sheets'},{preset:'tiktok'}],layout:'trio'},
+    ],
+    rocks:['Hit ROAS targets across accounts','Launch new campaign structure','Reduce CPA by 15%'],
+    tasks:['Check daily spend pacing','Review ad performance','Adjust bidding strategies','Update campaign reports'],
+  },
+  social_media: {
+    panels: [
+      {preset:'facebook'},{preset:'instagram'},{preset:'canva'},{preset:'notion'},
+      {preset:'asana'},{preset:'linkedin'},{preset:'slack'},{preset:'tiktok'},
+    ],
+    defaultApps: ['google','facebook','instagram','canva','notion','asana','linkedin','slack','tiktok'],
+    modes: [
+      {id:'create',name:'Create',desc:'Canva, Notion, Instagram',color:'#c4a2f0',panels:[{preset:'canva'},{preset:'notion'},{preset:'instagram'}],layout:'feat3'},
+      {id:'engage',name:'Engage',desc:'Facebook, Instagram, LinkedIn',color:'#7fe3a2',panels:[{preset:'facebook'},{preset:'instagram'},{preset:'linkedin'},{preset:'slack'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Asana, Notion, Slack',color:'#ffd86b',panels:[{preset:'asana'},{preset:'notion'},{preset:'slack'}],layout:'trio'},
+    ],
+    rocks:['Grow followers by 25%','Launch content calendar','Improve engagement rate'],
+    tasks:['Schedule weekly posts','Review engagement metrics','Create stories content','Reply to comments'],
+  },
+  email_marketing: {
+    panels: [
+      {preset:'klaviyo'},{preset:'mailchimp'},{preset:'canva'},{preset:'sheets'},
+      {preset:'asana'},{preset:'ga4'},{preset:'gmail'},{preset:'drive'},
+    ],
+    defaultApps: ['google','klaviyo','mailchimp','canva','sheets','asana','ga4','gmail','drive'],
+    modes: [
+      {id:'build',name:'Build',desc:'Klaviyo, Canva, Sheets',color:'#6DAAFF',panels:[{preset:'klaviyo'},{preset:'canva'},{preset:'sheets'}],layout:'feat3'},
+      {id:'analyse',name:'Analyse',desc:'Analytics, Klaviyo, Mailchimp',color:'#7fe3a2',panels:[{preset:'ga4'},{preset:'klaviyo'},{preset:'mailchimp'},{preset:'sheets'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Asana, Gmail, Drive',color:'#ffd86b',panels:[{preset:'asana'},{preset:'gmail'},{preset:'drive'}],layout:'trio'},
+    ],
+    rocks:['Increase open rate to 30%','Build 3 new flows','Grow subscriber list 20%'],
+    tasks:['Review campaign performance','Build next email send','Segment audience lists','A/B test subject lines'],
+  },
   leadership: {
     panels: [
-      {preset:'asana'},{preset:'sheets'},{preset:'ga4'},{preset:'slack'},
-      {preset:'linear'},{preset:'gmail'},{preset:'calendar'},{preset:'notion'},
+      {preset:'asana'},{preset:'sheets'},{preset:'ga4'},{preset:'linear'},
+      {preset:'slack'},{preset:'gmail'},{preset:'calendar'},{preset:'notion'},
     ],
+    defaultApps: ['google','asana','sheets','ga4','linear','slack','gmail','calendar','notion'],
     modes: [
       {id:'strategy',name:'Strategy',desc:'Metrics, Notion, Sheets',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'sheets'},{preset:'notion'}],layout:'feat3'},
       {id:'ops',name:'Operations',desc:'Tasks, Linear, Slack',color:'#7fe3a2',panels:[{preset:'asana'},{preset:'linear'},{preset:'slack'},{preset:'sheets'}],layout:'quad'},
@@ -932,11 +1112,12 @@ const ROLE_PRESETS = {
   },
   developer: {
     panels: [
-      {preset:'linear'},{preset:'notion'},{preset:'slack'},{preset:'gmail'},
-      {preset:'figma'},{preset:'drive'},{preset:'calendar'},{preset:'chatgpt'},
+      {preset:'linear'},{preset:'claude'},{preset:'notion'},{preset:'slack'},
+      {preset:'gmail'},{preset:'figma'},{preset:'drive'},{preset:'chatgpt'},
     ],
+    defaultApps: ['google','linear','claude','notion','slack','gmail','figma','drive','chatgpt'],
     modes: [
-      {id:'deep',name:'Deep Work',desc:'Code, docs, Linear',color:'#6DAAFF',panels:[{preset:'linear'},{preset:'notion'}],layout:'duoV'},
+      {id:'deep',name:'Deep Work',desc:'Code, docs, Linear',color:'#6DAAFF',panels:[{preset:'linear'},{preset:'claude'}],layout:'duoV'},
       {id:'collab',name:'Collab',desc:'Slack, Figma, Linear',color:'#7fe3a2',panels:[{preset:'slack'},{preset:'figma'},{preset:'linear'},{preset:'notion'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'slack'}],layout:'trio'},
     ],
@@ -945,9 +1126,10 @@ const ROLE_PRESETS = {
   },
   custom: {
     panels: [
-      {preset:'asana'},{preset:'gmail'},{preset:'slack'},{preset:'ga4'},
-      {preset:'linear'},{preset:'notion'},{preset:'loom'},{preset:'figma'},
+      {preset:'google'},{preset:'gmail'},{preset:'asana'},{preset:'slack'},
+      {preset:'calendar'},{preset:'sheets'},{preset:'drive'},{preset:'notion'},
     ],
+    defaultApps: ['google','gmail','asana','slack','calendar','sheets','drive','notion'],
     modes: [
       {id:'morning',name:'Morning',desc:'Start your day',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'asana'},{preset:'slack'},{preset:'calendar'}],layout:'quad'},
       {id:'deep',name:'Deep Work',desc:'Focused work',color:'#7fe3a2',panels:[{preset:'asana'},{preset:'notion'}],layout:'duoV'},
@@ -958,6 +1140,19 @@ const ROLE_PRESETS = {
   },
 };
 
+const ROLE_META = [
+  {id:'account_manager', icon:'\u{1F4CA}', name:'Account Manager', desc:'Client reporting, budgets, task management'},
+  {id:'sales',           icon:'\u{1F4DE}', name:'Sales',           desc:'Pipeline, outreach, meetings, CRM'},
+  {id:'creative',        icon:'\u{1F3A8}', name:'Creative / Design', desc:'Design, content, briefs, review'},
+  {id:'seo',             icon:'\u{1F50E}', name:'SEO',             desc:'Rankings, audits, keyword research'},
+  {id:'paid_media',      icon:'\u{1F4B0}', name:'Paid Media',      desc:'Google, Meta, TikTok, Bing ads'},
+  {id:'social_media',    icon:'\u{1F4F7}', name:'Social Media',    desc:'Content, engagement, scheduling'},
+  {id:'email_marketing', icon:'\u{1F4E7}', name:'Email Marketing', desc:'Klaviyo, Mailchimp, flows, campaigns'},
+  {id:'leadership',      icon:'\u{1F3AF}', name:'Leadership',      desc:'Strategy, metrics, team health, ops'},
+  {id:'developer',       icon:'\u{1F4BB}', name:'Developer',       desc:'Code, sprints, PRs, documentation'},
+  {id:'custom',          icon:'\u2699\uFE0F', name:'Custom',       desc:"I'll set it up myself"},
+];
+
 /* -- MODE COLORS -- */
 const MODE_COLORS = {'#6DAAFF':'Morning blue','#7fe3a2':'Focus green','#ffd86b':'Admin gold','#c4a2f0':'Creative purple'};
 
@@ -965,13 +1160,14 @@ const DEFAULT_STATE = {
   wsName:    'Focus',
   light:     false,
   theme:     'midnight',
+  autoTheme: true,
   layoutId:  'quad',
   role:      'custom',
   panels:[
-    {preset:'asana'},  {preset:'gmail'},
-    {preset:'slack'},  {preset:'ga4'},
-    {preset:'linear'}, {preset:'notion'},
-    {preset:'loom'},   {preset:'figma'},
+    {preset:'google'},{preset:'gmail'},
+    {preset:'asana'},{preset:'slack'},
+    {preset:'calendar'},{preset:'sheets'},
+    {preset:'drive'},{preset:'notion'},
   ],
   // Context modes
   modes: clone(ROLE_PRESETS.custom.modes),
@@ -985,7 +1181,7 @@ const DEFAULT_STATE = {
   sprint:{name:'Sprint 12', daysLeft:8, progress:68},
   meetings:[
     {id:1, time:'09:30', title:'Daily standup'},
-    {id:2, time:'13:00', title:'Luxe \u2014 client check-in'},
+    {id:2, time:'13:00', title:'Luxe, client check-in'},
     {id:3, time:'15:30', title:'Sprint 12 review'},
   ],
   rocks:[
@@ -997,10 +1193,11 @@ const DEFAULT_STATE = {
     {id:1, text:'Review sprint 12 progress',  done:false},
     {id:2, text:'Gravitate new-client deck',  done:false},
     {id:3, text:'Weekly team standup',        done:true},
-    {id:4, text:'CallRail audit \u2014 Luxe',  done:false},
+    {id:4, text:'CallRail audit, Luxe',       done:false},
   ],
   coach:{on:true, sensitivity:'med', switchCount:0},
   oneThingId: 2,
+  topPriorities: [],
   firstRun: true,
   switchLog: [],
 };
@@ -1025,6 +1222,13 @@ function loadState() {
     if (!merged.focus) merged.focus = {duration:25,remaining:0,running:false,sessionsToday:0,lastSessionDate:null};
     if (!merged.switchLog) merged.switchLog = [];
     if (!merged.role) merged.role = 'custom';
+    // Auto-theme migration
+    if (merged.autoTheme === undefined) merged.autoTheme = true;
+    // Top priorities migration
+    if (!merged.topPriorities) merged.topPriorities = [];
+    if (merged.oneThingId && merged.topPriorities.length === 0) {
+      merged.topPriorities = [merged.oneThingId];
+    }
     return merged;
   } catch { return clone(DEFAULT_STATE); }
 }
@@ -1063,7 +1267,7 @@ function renderDock() {
     item.className = 'dock-item';
     item.dataset.idx = idx;
     item.dataset.tooltip = p.name + ' \u00B7 ' + getDomain(p.url);
-    item.title = p.name + ' \u2014 ' + getDomain(p.url);
+    item.title = p.name + ', ' + getDomain(p.url);
     item.innerHTML =
       '<span class="dock-badge">' + (idx + 1) + '</span>' +
       '<span class="dock-emoji">' + p.emoji + '</span>' +
@@ -1087,52 +1291,198 @@ function renderDock() {
 
 /* -- RENDER: HERO CLOCK + GREETING -- */
 
+const MORNING_GREETINGS = [
+  'Good morning{name}. Fresh start.',
+  'Good morning{name}. Let\'s go.',
+  'Rise and focus{name}.',
+  'Good morning{name}. New day, new wins.',
+  'Good morning{name}. Coffee first, then conquer.',
+];
+
+function getTimeGreeting() {
+  const hr = new Date().getHours();
+  const period = getTimePeriod();
+  if (period === 'morning') {
+    const idx = Math.floor(Math.random() * MORNING_GREETINGS.length);
+    return MORNING_GREETINGS[idx];
+  }
+  if (period === 'afternoon') return 'Good afternoon{name}';
+  if (period === 'evening') return 'Good evening{name}';
+  return 'Working late{name}';
+}
+
+function getTimePeriod() {
+  const hr = new Date().getHours();
+  if (hr >= 5 && hr < 11) return 'morning';
+  if (hr >= 11 && hr < 17) return 'afternoon';
+  if (hr >= 17 && hr < 21) return 'evening';
+  return 'night';
+}
+
+let lastGreeting = '';
+
 function renderClock() {
   const now   = new Date();
   const h     = String(now.getHours()).padStart(2,'0');
   const m     = String(now.getMinutes()).padStart(2,'0');
   const date  = now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});
-  const hr    = now.getHours();
-  const greet = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
   const name  = (S.wsName && S.wsName.toLowerCase() !== 'focus') ? ', ' + S.wsName.split(' ')[0] : '';
 
+  // Only regenerate greeting when period or name changes
+  const period = getTimePeriod();
+  const cacheKey = period + '|' + name;
+  if (!lastGreeting || !lastGreeting.startsWith(cacheKey + '||')) {
+    const template = getTimeGreeting();
+    lastGreeting = cacheKey + '||' + template.replace('{name}', name);
+  }
+  const greet = lastGreeting.split('||').slice(1).join('||');
+
   set('hero-clock', h + ':' + m);
-  set('hero-date', greet + name + '  \u00B7  ' + date);
+  set('hero-date', greet + '  \u00B7  ' + date);
   set('tb-clock', h + ':' + m);
-  document.title = greet + (name ? name : '') + ' \u00B7 Focus';
+  const titleGreet = period === 'morning' ? 'Good morning' : period === 'afternoon' ? 'Good afternoon' : period === 'evening' ? 'Good evening' : 'Working late';
+  document.title = titleGreet + (name ? name : '') + ' : Gravitate Focus';
 }
 
-/* -- RENDER: HERO ONE THING -- */
+/* -- RENDER: HERO PRIORITIES (Top 3) -- */
 
-function renderOneThing() {
+function renderOneThing() { renderPriorities(); }
+
+function renderPriorities() {
   const el = document.getElementById('hero-onething-body');
   if (!el) return;
-  const t = S.tasks.find(x => x.id === S.oneThingId);
-  if (!t) {
+  // Clean out stale IDs
+  S.topPriorities = (S.topPriorities || []).filter(id => S.tasks.find(t => t.id === id));
+  const priorities = S.topPriorities.map(id => S.tasks.find(t => t.id === id)).filter(Boolean);
+
+  if (!priorities.length) {
     el.innerHTML = '<div class="hero-ot-empty">What will you focus on today?</div>' +
-      '<div class="hero-ot-hint">Open widgets (W) and tap \u2606 on a task to set your focus.</div>';
+      '<div class="hero-ot-hint">Open widgets (W) and tap + on a task to set your priorities.</div>';
     return;
   }
-  el.innerHTML =
-    '<div class="hero-ot-task'+(t.done?' ot-done':'')+'">' +
-    '<div class="hero-ot-check"><span class="task-tick">\u2713</span></div>' +
-    '<div class="hero-ot-text">'+esc(t.text)+'</div></div>';
-  el.querySelector('.hero-ot-task').addEventListener('click', () => {
-    t.done = !t.done; save(); renderTasks(); renderOneThing();
+
+  const allDone = priorities.every(t => t.done);
+
+  let html = priorities.map((t, i) =>
+    '<div class="hero-pri-item'+(t.done?' pri-done':'')+'" data-tid="'+t.id+'">' +
+    '<div class="hero-pri-num">'+(t.done?'\u2713':(i+1))+'</div>' +
+    '<div class="hero-pri-text">'+esc(t.text)+'</div></div>'
+  ).join('');
+
+  if (allDone) {
+    html += '<div class="hero-pri-done-msg">All priorities done. What a day.</div>';
+  }
+
+  // Share button
+  html += '<div style="text-align:center"><button class="hero-share-btn" id="share-priorities-btn">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
+    'Share</button></div>';
+
+  el.innerHTML = html;
+
+  el.querySelectorAll('.hero-pri-item').forEach(row => {
+    row.addEventListener('click', () => {
+      const t = S.tasks.find(x => x.id === +row.dataset.tid);
+      if (t) { t.done = !t.done; save(); renderTasks(); renderPriorities(); }
+    });
+  });
+
+  const shareBtn = document.getElementById('share-priorities-btn');
+  if (shareBtn) shareBtn.addEventListener('click', e => { e.stopPropagation(); sharePriorities(); });
+}
+
+/* -- SHARE / SCREENSHOT PRIORITIES -- */
+
+function sharePriorities() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 800; canvas.height = 400;
+  const ctx = canvas.getContext('2d');
+  // Background
+  ctx.fillStyle = '#f8f7f4';
+  ctx.fillRect(0, 0, 800, 400);
+  // Header
+  ctx.fillStyle = '#00193D';
+  ctx.font = '600 14px -apple-system, sans-serif';
+  ctx.fillText('\u25CE Gravitate Focus', 40, 50);
+  ctx.fillStyle = '#888';
+  ctx.font = '400 13px -apple-system, sans-serif';
+  ctx.fillText(new Date().toLocaleDateString('en-AU', {weekday:'long', day:'numeric', month:'long', year:'numeric'}), 40, 72);
+  // Divider
+  ctx.strokeStyle = '#e0ddd6';
+  ctx.beginPath(); ctx.moveTo(40, 90); ctx.lineTo(760, 90); ctx.stroke();
+  // Title
+  ctx.fillStyle = '#00193D';
+  ctx.font = '600 20px -apple-system, sans-serif';
+  ctx.fillText("Today's Priorities", 40, 130);
+  // Priorities
+  const priorities = S.topPriorities.map(id => S.tasks.find(t => t.id === id)).filter(Boolean);
+  priorities.forEach((t, i) => {
+    const y = 175 + i * 65;
+    ctx.fillStyle = t.done ? '#5a8c70' : '#00193D';
+    ctx.font = '600 16px -apple-system, sans-serif';
+    ctx.fillText((i+1) + '.', 40, y);
+    ctx.font = (t.done ? '400' : '500') + ' 16px -apple-system, sans-serif';
+    ctx.fillText(t.text, 70, y);
+    if (t.done) {
+      ctx.strokeStyle = '#5a8c70';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(70, y - 4); ctx.lineTo(70 + ctx.measureText(t.text).width, y - 4); ctx.stroke();
+    }
+  });
+
+  canvas.toBlob(function(blob) {
+    if (navigator.share && navigator.canShare) {
+      const file = new File([blob], 'priorities.png', {type: 'image/png'});
+      const shareData = {files: [file], title: "Today's Priorities"};
+      if (navigator.canShare(shareData)) {
+        navigator.share(shareData).catch(function() { downloadBlob(blob); });
+      } else {
+        downloadBlob(blob);
+      }
+    } else {
+      downloadBlob(blob);
+    }
   });
 }
 
-/* -- RENDER: DAILY QUOTE -- */
+function downloadBlob(blob) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'priorities-' + todayStr() + '.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* -- RENDER: DAILY QUOTE (rotating with fade) -- */
 
 function renderQuote() {
   const el = document.getElementById('hero-quote');
   if (!el) return;
-  // Pick quote based on day-of-year so it changes daily
+  // Pick initial quote based on day-of-year
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
   const dayOfYear = Math.floor((now - start) / 86400000);
-  const idx = dayOfYear % QUOTES.length;
-  el.textContent = '\u201C' + QUOTES[idx] + '\u201D';
+  quoteIdx = dayOfYear % QUOTES.length;
+  showQuote(el);
+  // Cycle every 25 seconds with fade
+  if (quoteTimer) clearInterval(quoteTimer);
+  quoteTimer = setInterval(() => cycleQuote(el), 25000);
+}
+
+function showQuote(el) {
+  el.style.opacity = '1';
+  el.textContent = '\u201C' + QUOTES[quoteIdx] + '\u201D';
+}
+
+function cycleQuote(el) {
+  el.style.opacity = '0';
+  setTimeout(() => {
+    quoteIdx = (quoteIdx + 1) % QUOTES.length;
+    el.textContent = '\u201C' + QUOTES[quoteIdx] + '\u201D';
+    el.style.opacity = '1';
+  }, 800);
 }
 
 /* -- RENDER: SIDEBAR WIDGETS -- */
@@ -1242,42 +1592,63 @@ function renderRocks() {
 function renderTasks() {
   const el = document.getElementById('tasks-list');
   if (!el) return;
-  el.innerHTML = S.tasks.map(t =>
-    '<div class="task-row'+(t.done?' done':'')+'" data-tid="'+t.id+'">' +
+  if (!S.topPriorities) S.topPriorities = [];
+  el.innerHTML = S.tasks.map(t => {
+    const priIdx = S.topPriorities.indexOf(t.id);
+    const isPri = priIdx !== -1;
+    let priBtnHtml;
+    if (isPri) {
+      priBtnHtml = '<div class="task-pri-badge" data-tid="'+t.id+'" title="Priority '+(priIdx+1)+', click to remove">'+(priIdx+1)+'</div>';
+    } else {
+      priBtnHtml = '<button class="task-pri-add" data-tid="'+t.id+'" title="Add to priorities">+</button>';
+    }
+    return '<div class="task-row'+(t.done?' done':'')+'" data-tid="'+t.id+'">' +
     '<div class="task-box"><span class="task-tick">\u2713</span></div>' +
     '<span class="task-text">'+esc(t.text)+'</span>' +
     '<div class="task-actions-wrap">' +
-    '<button class="task-star'+(t.id===S.oneThingId?' on':'')+'" data-tid="'+t.id+'" ' +
-    'aria-label="Set as the one thing" title="Set as the one thing">'+(t.id===S.oneThingId?'\u2605':'\u2606')+'</button>' +
+    priBtnHtml +
     '<button class="task-del" data-tid="'+t.id+'" title="Delete task">\u2715</button>' +
-    '</div></div>'
-  ).join('');
+    '</div></div>';
+  }).join('');
   const doneCount = S.tasks.filter(t => t.done).length;
   const totalCount = S.tasks.length;
   const countEl = document.getElementById('task-count');
   if (countEl) countEl.textContent = totalCount ? doneCount + ' of ' + totalCount + ' done' : '';
   el.querySelectorAll('.task-row').forEach(row => {
     row.addEventListener('click', e => {
-      if (e.target.closest('.task-star') || e.target.closest('.task-del')) return;
+      if (e.target.closest('.task-pri-badge') || e.target.closest('.task-pri-add') || e.target.closest('.task-del')) return;
       const task = S.tasks.find(t => t.id === +row.dataset.tid);
-      if (task) { task.done = !task.done; save(); renderTasks(); renderOneThing(); }
+      if (task) { task.done = !task.done; save(); renderTasks(); renderPriorities(); }
     });
   });
-  el.querySelectorAll('.task-star').forEach(btn => {
+  el.querySelectorAll('.task-pri-badge').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const id = +btn.dataset.tid;
-      S.oneThingId = (S.oneThingId === id) ? null : id;
-      save(); renderTasks(); renderOneThing();
+      S.topPriorities = S.topPriorities.filter(pid => pid !== id);
+      S.oneThingId = S.topPriorities[0] || null;
+      save(); renderTasks(); renderPriorities();
+    });
+  });
+  el.querySelectorAll('.task-pri-add').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = +btn.dataset.tid;
+      if (S.topPriorities.length < 3 && !S.topPriorities.includes(id)) {
+        S.topPriorities.push(id);
+        S.oneThingId = S.topPriorities[0] || null;
+        save(); renderTasks(); renderPriorities();
+      }
     });
   });
   el.querySelectorAll('.task-del').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const id = +btn.dataset.tid;
-      if (S.oneThingId === id) S.oneThingId = null;
+      S.topPriorities = S.topPriorities.filter(pid => pid !== id);
+      S.oneThingId = S.topPriorities[0] || null;
       S.tasks = S.tasks.filter(t => t.id !== id);
-      save(); renderTasks(); renderOneThing();
+      save(); renderTasks(); renderPriorities();
     });
   });
 }
@@ -1351,7 +1722,7 @@ function saveEdit() {
 function deletePanel() {
   if (editIdx === null) return;
   const defaults = clone(DEFAULT_STATE.panels);
-  S.panels[editIdx] = defaults[editIdx] || {preset:'asana'};
+  S.panels[editIdx] = defaults[editIdx] || {preset:'google'};
   save();
   renderDock();
   closeModal('modal-edit');
@@ -1364,7 +1735,7 @@ let editMeetingId = null;
 
 function openMeetingModal(mt) {
   editMeetingId = mt ? mt.id : null;
-  document.getElementById('mtg-modal-title').textContent = mt ? 'Edit meeting' : 'Add meeting';
+  document.getElementById('mtg-modal-title').textContent = mt ? 'Edit Meeting' : 'Add Meeting';
   document.getElementById('mtg-title').value = mt ? mt.title : '';
   document.getElementById('mtg-time').value  = mt ? mt.time : '';
   openModal('modal-meeting');
@@ -1421,16 +1792,30 @@ function saveSprintEdit() {
 
 function renderSettings() {
   const tg = document.getElementById('theme-grid');
-  tg.innerHTML = THEMES.map(t =>
-    '<div class="theme-opt'+(S.theme===t.id?' active':'')+'" data-tid="'+t.id+'">' +
+  // Auto theme option first
+  let themeHtml = '<div class="theme-opt'+(S.autoTheme?' active':'')+'" data-tid="auto">' +
+    '<div class="theme-swatch-auto"></div>' +
+    '<div class="theme-name">Auto (time)</div></div>';
+  themeHtml += THEMES.map(t =>
+    '<div class="theme-opt'+(!S.autoTheme && S.theme===t.id?' active':'')+'" data-tid="'+t.id+'">' +
     '<div class="theme-swatch" style="background:'+t.swatch+'"></div>' +
     '<div class="theme-name">'+t.label+'</div></div>'
   ).join('');
+  tg.innerHTML = themeHtml;
   tg.querySelectorAll('.theme-opt').forEach(opt => {
     opt.addEventListener('click', () => {
-      S.theme = opt.dataset.tid;
+      if (opt.dataset.tid === 'auto') {
+        S.autoTheme = true;
+        applyAutoTheme();
+      } else {
+        S.autoTheme = false;
+        S.theme = opt.dataset.tid;
+        // Remove auto-theme data attributes
+        delete document.body.dataset.time;
+        applyTheme();
+        document.body.dataset.light = S.light ? '1' : '0';
+      }
       save();
-      applyTheme();
       renderSettings();
     });
   });
@@ -1462,6 +1847,23 @@ function applyTheme() {
   document.body.dataset.theme = S.theme || 'midnight';
 }
 
+function applyAutoTheme() {
+  if (!S.autoTheme) return;
+  const period = getTimePeriod();
+  document.body.dataset.time = period;
+  // Remove manual theme when auto is active
+  delete document.body.dataset.theme;
+  // Set light mode for morning/afternoon, dark for evening/night
+  if (period === 'morning' || period === 'afternoon') {
+    document.body.dataset.light = '1';
+    S.light = true;
+  } else {
+    document.body.dataset.light = '0';
+    S.light = false;
+  }
+  document.getElementById('btn-light').classList.toggle('active', S.light);
+}
+
 /* -- COMMAND PALETTE -- */
 
 let cmdkItems = [];
@@ -1487,7 +1889,7 @@ function buildCmdkItems(query) {
   items.push({type:'action', action:'settings', name:'Settings', sub:'Themes, coach, export', emoji:'\u2699\uFE0F'});
   items.push({type:'action', action:'light', name:'Toggle light mode', sub:'Switch appearance', emoji:'\u2600\uFE0F'});
   items.push({type:'action', action:'widgets', name:'Toggle widgets', sub:'Open side panel', emoji:'\u{1F4CB}'});
-  items.push({type:'action', action:'help', name:'Help & shortcuts', sub:'How Focus works', emoji:'\u2753'});
+  items.push({type:'action', action:'help', name:'Help & shortcuts', sub:'How Gravitate Focus works', emoji:'\u2753'});
 
   if (!q) return items.slice(0, 10);
   return items
@@ -1586,6 +1988,7 @@ function setLight(on) {
   save();
 }
 
+
 /* -- SIDE PANEL -- */
 
 function toggleSidePanel() {
@@ -1625,7 +2028,7 @@ function exportData() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'focus-config-' + new Date().toISOString().slice(0,10) + '.json';
+  a.download = 'gravitate-focus-' + new Date().toISOString().slice(0,10) + '.json';
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -1646,7 +2049,7 @@ function importData(file) {
 }
 
 function resetAllData() {
-  if (!confirm('Reset all Focus data? This will clear your panels, tasks, rocks, and settings.')) return;
+  if (!confirm('Reset all Gravitate Focus data? This will clear your panels, tasks, rocks, and settings.')) return;
   localStorage.removeItem(KEY);
   location.reload();
 }
@@ -1699,13 +2102,28 @@ function commitRock() {
   inp.classList.remove('show');
 }
 
-/* -- FIRST RUN (multi-step) -- */
+/* -- FIRST RUN (multi-step with app picker) -- */
 
 let frRole = null;
+let frSelectedApps = [];
 
 function showFirstRun() {
   document.getElementById('first-run').classList.add('show');
+  renderFrRoles();
   setTimeout(() => document.getElementById('fr-name').focus(), 300);
+}
+
+function renderFrRoles() {
+  const el = document.getElementById('fr-roles');
+  el.innerHTML = ROLE_META.map(r =>
+    '<div class="fr-role" data-role="'+r.id+'">' +
+    '<div class="fr-role-icon">'+r.icon+'</div>' +
+    '<div class="fr-role-name">'+r.name+'</div>' +
+    '<div class="fr-role-desc">'+r.desc+'</div></div>'
+  ).join('');
+  el.querySelectorAll('.fr-role').forEach(r => {
+    r.addEventListener('click', () => frSelectRole(r.dataset.role));
+  });
 }
 
 function frNextStep() {
@@ -1720,19 +2138,80 @@ function frNextStep() {
 function frSelectRole(role) {
   frRole = role;
   document.querySelectorAll('.fr-role').forEach(r => r.classList.toggle('sel', r.dataset.role === role));
-  document.getElementById('fr-go').disabled = false;
+  document.getElementById('fr-next-2').disabled = false;
+}
+
+function frGoToStep3() {
+  if (!frRole) return;
+  document.getElementById('fr-step-2').classList.remove('active');
+  document.getElementById('fr-step-3').classList.add('active');
+
+  // Pre-select role defaults
+  const preset = ROLE_PRESETS[frRole];
+  const defaults = preset.defaultApps || preset.panels.map(p => p.preset);
+  // Always include google
+  frSelectedApps = [...new Set(['google', ...defaults])].slice(0, 8);
+  renderFrAppGrid();
+}
+
+function renderFrAppGrid() {
+  const grid = document.getElementById('fr-app-grid');
+  let html = '';
+
+  CAT_ORDER.forEach(cat => {
+    const apps = PRESETS.filter(p => p.cat === cat);
+    if (!apps.length) return;
+    html += '<div class="fr-cat-label">' + (CAT_LABELS[cat] || cat) + '</div>';
+    apps.forEach(app => {
+      const sel = frSelectedApps.includes(app.id);
+      html += '<div class="fr-app-tile' + (sel ? ' sel' : '') + '" data-appid="' + app.id + '">' +
+        '<span class="fr-app-check">\u2713</span>' +
+        '<span class="fr-app-emoji">' + app.emoji + '</span>' +
+        '<span class="fr-app-name">' + esc(app.name) + '</span></div>';
+    });
+  });
+  grid.innerHTML = html;
+
+  grid.querySelectorAll('.fr-app-tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+      const id = tile.dataset.appid;
+      if (id === 'google') return; // Google always selected
+      if (frSelectedApps.includes(id)) {
+        frSelectedApps = frSelectedApps.filter(a => a !== id);
+      } else if (frSelectedApps.length < 8) {
+        frSelectedApps.push(id);
+      }
+      renderFrAppGrid();
+    });
+  });
+
+  updateFrAppCounter();
+}
+
+function updateFrAppCounter() {
+  const el = document.getElementById('fr-app-counter');
+  const count = frSelectedApps.length;
+  const warn = count > 8;
+  el.innerHTML = '<span class="' + (warn ? 'fr-count-warn' : 'fr-count-num') + '">' + count + '</span> of 8 selected';
+  document.getElementById('fr-go').disabled = count === 0;
 }
 
 function completeFirstRun() {
   const role = frRole || 'custom';
   S.role = role;
   const preset = ROLE_PRESETS[role];
-  S.panels = clone(preset.panels);
+
+  // Build panels from selected apps
+  const panels = frSelectedApps.slice(0, 8).map(id => ({preset: id}));
+  while (panels.length < 8) panels.push({preset: 'google'});
+  S.panels = panels;
+
   S.modes = clone(preset.modes);
   S.activeMode = preset.modes[0].id;
   S.rocks = preset.rocks.map((t,i) => ({id:i+1, text:t, done:false}));
   S.tasks = preset.tasks.map((t,i) => ({id:i+1, text:t, done:false}));
   S.oneThingId = null;
+  S.topPriorities = [];
   S.firstRun = false;
   save();
   document.getElementById('first-run').classList.remove('show');
@@ -1765,8 +2244,9 @@ function renderFocusSession() {
   const ring = document.getElementById('fs-ring-fill');
   if (ring) ring.style.strokeDashoffset = offset;
 
-  // Task label
-  const ot = S.tasks.find(t => t.id === S.oneThingId);
+  // Task label (show priority 1)
+  const pri1Id = (S.topPriorities && S.topPriorities.length) ? S.topPriorities[0] : S.oneThingId;
+  const ot = S.tasks.find(t => t.id === pri1Id);
   set('fs-task-label', f.running ? ('Working on: ' + (ot ? ot.text : 'focused work')) : 'Ready to focus');
 
   // Sessions count
@@ -1936,55 +2416,89 @@ function needsIntention() {
 function showIntentionGate() {
   if (!needsIntention()) return;
   const gate = document.getElementById('intention-gate');
-  const hr = new Date().getHours();
-  set('ig-greeting', hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening');
+  const period = getTimePeriod();
+  const greetMap = {morning:'Good morning',afternoon:'Good afternoon',evening:'Good evening',night:'Working late'};
+  set('ig-greeting', greetMap[period] || 'Good morning');
 
-  const el = document.getElementById('ig-tasks');
-  const incomplete = S.tasks.filter(t => !t.done);
-  el.innerHTML = incomplete.map(t =>
-    '<div class="ig-task" data-tid="'+t.id+'"><span class="ig-task-text">'+esc(t.text)+'</span></div>'
-  ).join('');
-  if (!incomplete.length) {
-    el.innerHTML = '<div style="font-size:12px;color:var(--dim);padding:8px;text-align:center">No tasks yet. Type one below.</div>';
+  let selectedIds = [];
+
+  function renderIgTasks() {
+    const el = document.getElementById('ig-tasks');
+    const incomplete = S.tasks.filter(t => !t.done);
+    if (!incomplete.length) {
+      el.innerHTML = '<div style="font-size:12px;color:var(--dim);padding:8px;text-align:center">No tasks yet. Add one below.</div>';
+    } else {
+      el.innerHTML = incomplete.map(t => {
+        const selIdx = selectedIds.indexOf(t.id);
+        const isSel = selIdx !== -1;
+        return '<div class="ig-task'+(isSel?' sel':'')+'" data-tid="'+t.id+'">' +
+          (isSel ? '<span class="ig-task-badge">'+(selIdx+1)+'</span>' : '<span class="ig-task-plus">+</span>') +
+          '<span class="ig-task-text">'+esc(t.text)+'</span></div>';
+      }).join('');
+    }
+
+    el.querySelectorAll('.ig-task').forEach(row => {
+      row.addEventListener('click', () => {
+        const id = +row.dataset.tid;
+        const idx = selectedIds.indexOf(id);
+        if (idx !== -1) {
+          selectedIds.splice(idx, 1);
+        } else if (selectedIds.length < 3) {
+          selectedIds.push(id);
+        }
+        updateIgState();
+        renderIgTasks();
+      });
+    });
+
+    updateIgCounter();
   }
 
-  let selectedId = null;
-  el.querySelectorAll('.ig-task').forEach(row => {
-    row.addEventListener('click', () => {
-      el.querySelectorAll('.ig-task').forEach(r => r.classList.remove('sel'));
-      row.classList.add('sel');
-      selectedId = +row.dataset.tid;
-      document.getElementById('ig-custom').value = '';
-      document.getElementById('ig-go').disabled = false;
-    });
-  });
+  function updateIgState() {
+    document.getElementById('ig-go').disabled = selectedIds.length === 0;
+  }
+
+  function updateIgCounter() {
+    const counter = document.getElementById('ig-counter');
+    if (counter) {
+      counter.innerHTML = '<span class="ig-count-num">' + selectedIds.length + '</span> of 3 selected';
+    }
+  }
+
+  renderIgTasks();
 
   const customInput = document.getElementById('ig-custom');
   customInput.value = '';
-  customInput.addEventListener('input', () => {
-    if (customInput.value.trim()) {
-      el.querySelectorAll('.ig-task').forEach(r => r.classList.remove('sel'));
-      selectedId = null;
-      document.getElementById('ig-go').disabled = false;
-    } else if (!selectedId) {
-      document.getElementById('ig-go').disabled = true;
+
+  // Add button for custom task
+  document.getElementById('ig-add-btn').onclick = () => {
+    const txt = customInput.value.trim();
+    if (!txt) return;
+    if (selectedIds.length >= 3) return;
+    const id = Math.max(0, ...S.tasks.map(t=>t.id)) + 1;
+    S.tasks.push({id, text: txt, done: false});
+    selectedIds.push(id);
+    customInput.value = '';
+    save();
+    updateIgState();
+    renderIgTasks();
+  };
+
+  customInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      document.getElementById('ig-add-btn').click();
     }
   });
 
   document.getElementById('ig-go').onclick = () => {
-    const customText = customInput.value.trim();
-    if (customText) {
-      const id = Math.max(0, ...S.tasks.map(t=>t.id)) + 1;
-      S.tasks.push({id, text: customText, done: false});
-      S.oneThingId = id;
-    } else if (selectedId) {
-      S.oneThingId = selectedId;
-    }
+    S.topPriorities = [...selectedIds];
+    S.oneThingId = S.topPriorities[0] || null;
     S.intentionDate = todayStr();
     save();
     gate.classList.remove('show');
     renderTasks();
-    renderOneThing();
+    renderPriorities();
     renderFocusSession();
   };
 
@@ -2003,7 +2517,7 @@ function renderAll() {
   renderDock();
   renderModeSwitcher();
   renderClock();
-  renderOneThing();
+  renderPriorities();
   renderQuote();
   renderFocusSession();
   renderMeetings();
@@ -2094,9 +2608,14 @@ function timeAgo(ts){
 function init() {
   S = loadState();
 
-  document.body.dataset.light = S.light ? '1' : '0';
-  document.getElementById('btn-light').classList.toggle('active', !!S.light);
-  applyTheme();
+  // Apply auto-theme if enabled, otherwise manual theme
+  if (S.autoTheme) {
+    applyAutoTheme();
+  } else {
+    document.body.dataset.light = S.light ? '1' : '0';
+    document.getElementById('btn-light').classList.toggle('active', !!S.light);
+    applyTheme();
+  }
 
   setupWsName();
   renderAll();
@@ -2110,9 +2629,13 @@ function init() {
     focusInterval = setInterval(focusTick, 1000);
   }
 
-  // Check auto-mode every minute
+  // Check auto-mode every minute, and auto-theme
   if (S.autoMode) checkAutoMode();
-  setInterval(() => { if (S.autoMode) checkAutoMode(); }, 60000);
+  if (S.autoTheme) applyAutoTheme();
+  setInterval(() => {
+    if (S.autoMode) checkAutoMode();
+    if (S.autoTheme) applyAutoTheme();
+  }, 60000);
 
   // Topbar buttons
   document.getElementById('btn-light').addEventListener('click', () => setLight(!S.light));
@@ -2213,14 +2736,12 @@ function init() {
     ov.addEventListener('click', e => { if (e.target===ov) ov.classList.remove('open'); });
   });
 
-  // First run (multi-step)
+  // First run (3-step with app picker)
   document.getElementById('fr-next-1').addEventListener('click', frNextStep);
   document.getElementById('fr-name').addEventListener('keydown', e => {
     if (e.key === 'Enter') { e.preventDefault(); frNextStep(); }
   });
-  document.querySelectorAll('.fr-role').forEach(r => {
-    r.addEventListener('click', () => frSelectRole(r.dataset.role));
-  });
+  document.getElementById('fr-next-2').addEventListener('click', frGoToStep3);
   document.getElementById('fr-go').addEventListener('click', completeFirstRun);
 
   setupKeyboard();
