@@ -161,14 +161,20 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
 /* -- BOTTOM DOCK -- */
 #dock{flex-shrink:0;padding:8px 16px 12px;display:flex;justify-content:center;z-index:40}
-#dock-strip{display:flex;gap:6px;padding:6px 14px;border-radius:18px;background:rgba(255,255,255,.055);backdrop-filter:blur(40px) saturate(220%);-webkit-backdrop-filter:blur(40px) saturate(220%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 20px rgba(0,0,0,.2)}
+#dock-strip{display:flex;flex-wrap:wrap;max-width:90vw;gap:6px;padding:6px 14px;border-radius:18px;background:rgba(255,255,255,.055);backdrop-filter:blur(40px) saturate(220%);-webkit-backdrop-filter:blur(40px) saturate(220%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 20px rgba(0,0,0,.2);justify-content:center}
 .dock-item{width:56px;height:56px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:background .15s,transform .15s,border-color .15s;position:relative;text-decoration:none}
 .dock-item:hover{background:rgba(255,255,255,.1);transform:translateY(-3px);border-color:rgba(255,255,255,.14)}
 .dock-emoji{font-size:22px;line-height:1;pointer-events:none}
 .dock-name{font-size:9px;color:var(--mu);font-weight:500;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:48px;text-align:center;pointer-events:none}
 .dock-badge{position:absolute;top:2px;right:2px;width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.08);font-size:8px;color:var(--dim);display:flex;align-items:center;justify-content:center;font-weight:600;font-family:var(--mono);pointer-events:none}
+.dock-logo{width:24px;height:24px;border-radius:4px;object-fit:contain;pointer-events:none}
+.dock-emoji-fb{font-size:22px;line-height:1;pointer-events:none;display:none}
 .dock-edit{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:rgba(106,167,255,.2);border:1px solid rgba(106,167,255,.3);color:var(--accent);font-size:8px;display:none;align-items:center;justify-content:center;cursor:pointer;font-family:var(--font);z-index:2}
 .dock-item:hover .dock-edit{display:flex}
+
+.dock-divider{width:1px;height:36px;background:rgba(255,255,255,.1);margin:0 4px;flex-shrink:0;align-self:center}
+.cmdk-logo{width:20px;height:20px;border-radius:3px;object-fit:contain}
+.cmdk-emoji-fb{font-size:21px;width:26px;text-align:center;flex-shrink:0;display:none}
 
 /* -- SIDE PANEL (slide-out) -- */
 #side-panel-overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.3);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s}
@@ -248,6 +254,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #task-add-input{width:100%;margin-top:8px;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--tx);font-size:12px;font-family:var(--font);outline:none;display:none}
 #task-add-input.show{display:block}
 #task-add-input:focus{border-color:var(--accent)}
+
+.task-text-link{color:inherit;text-decoration:none;cursor:pointer;display:inline;position:relative}
+.task-text-link:hover{text-decoration:underline;text-underline-offset:2px}
+.task-ext-icon{opacity:0;transition:opacity .15s;font-size:9px;margin-left:3px;vertical-align:middle}
+.task-text-link:hover .task-ext-icon{opacity:.5}
+.asana-open-link{display:inline-flex;align-items:center;gap:4px;margin-top:10px;font-size:11px;color:var(--dim);text-decoration:none;border:1px solid var(--line);border-radius:7px;padding:4px 10px;transition:background .14s,color .14s}
+.asana-open-link:hover{background:rgba(255,255,255,.07);color:var(--tx)}
+.asana-open-link svg{width:11px;height:11px;flex-shrink:0}
 
 /* -- COACH TOAST -- */
 #coach-toast{position:fixed;top:52px;right:14px;width:256px;padding:13px 15px;border-radius:14px;background:rgba(6,14,28,.9);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border:1px solid rgba(106,167,255,.2);box-shadow:0 8px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.1);z-index:900;transform:translateX(calc(100% + 30px));transition:transform .42s cubic-bezier(.16,1,.3,1)}
@@ -386,17 +400,18 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .fr-role-desc{font-size:10.5px;color:var(--dim);margin-top:3px;line-height:1.4}
 
 /* -- APP PICKER (first-run step 3) -- */
-.fr-app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;text-align:left;max-height:340px;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+.fr-app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;text-align:left;max-height:50vh;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
 .fr-app-grid::-webkit-scrollbar{width:4px}
 .fr-app-grid::-webkit-scrollbar-track{background:transparent}
-.fr-app-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.fr-app-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:2px}
+.fr-app-grid::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.3)}
 .fr-cat-label{grid-column:1 / -1;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:8px 0 2px}
 .fr-cat-label:first-child{padding-top:0}
-.fr-app-tile{padding:10px 6px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid transparent;cursor:pointer;text-align:center;transition:background .14s,border-color .14s;position:relative}
+.fr-app-tile{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid transparent;cursor:pointer;transition:background .14s,border-color .14s;position:relative;display:flex;align-items:center;gap:6px}
 .fr-app-tile:hover{background:rgba(255,255,255,.08)}
 .fr-app-tile.sel{background:rgba(106,167,255,.1);border-color:rgba(106,167,255,.25)}
-.fr-app-tile .fr-app-emoji{font-size:20px;display:block;margin-bottom:4px}
-.fr-app-tile .fr-app-name{font-size:10px;color:var(--mu);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fr-app-tile .fr-app-emoji{font-size:18px;flex-shrink:0}
+.fr-app-tile .fr-app-name{font-size:11px;color:var(--mu);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
 .fr-app-tile.sel .fr-app-name{color:var(--accent)}
 .fr-app-check{position:absolute;top:4px;right:4px;width:14px;height:14px;border-radius:50%;background:var(--accent);display:none;align-items:center;justify-content:center;font-size:8px;color:#050a14;font-weight:700}
 .fr-app-tile.sel .fr-app-check{display:flex}
@@ -847,10 +862,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <input class="fr-input" id="fr-name" placeholder="Your name..." spellcheck="false" autocomplete="off" />
       <button class="fr-btn" id="fr-next-1">Next</button>
     </div>
-    <!-- Step 2: Role -->
+    <!-- Step 2: Departments -->
     <div class="fr-step" id="fr-step-2">
-      <div class="fr-title">What's Your Role?</div>
-      <div class="fr-sub">We'll set up your dashboard with the right apps and widgets.</div>
+      <div class="fr-title">Which Departments Are You In?</div>
+      <div class="fr-sub">Select all that apply. This customises your app selection.</div>
       <div class="fr-roles" id="fr-roles"></div>
       <button class="fr-btn" id="fr-next-2" disabled>Next</button>
     </div>
@@ -1355,6 +1370,7 @@ const DEFAULT_STATE = {
   topPriorities: [],
   firstRun: true,
   switchLog: [],
+  departments: [],
 };
 
 /* -- STATE -- */
@@ -1386,6 +1402,8 @@ function loadState() {
     if (merged.oneThingId && merged.topPriorities.length === 0) {
       merged.topPriorities = [merged.oneThingId];
     }
+    // Departments migration
+    if (!merged.departments) merged.departments = [];
     return merged;
   } catch { return clone(DEFAULT_STATE); }
 }
@@ -1407,6 +1425,15 @@ function getDomain(url) {
   try { return new URL(url).hostname.replace(/^www\./,''); } catch { return url; }
 }
 
+/* -- FAVICON HELPER -- */
+
+function getFavicon(url, size) {
+  try {
+    const domain = new URL(url).hostname;
+    return 'https://www.google.com/s2/favicons?domain=' + domain + '&sz=' + (size || 32);
+  } catch { return ''; }
+}
+
 /* -- RENDER: DOCK -- */
 
 const EDIT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
@@ -1415,11 +1442,24 @@ function renderDock() {
   const strip = document.getElementById('dock-strip');
   strip.innerHTML = '';
 
-  const count = Math.min(S.panels.length, 8);
+  // Group apps by category for dividers when departments are set
+  const hasDepts = S.departments && S.departments.length > 1;
+  let lastCat = null;
+
+  const count = S.panels.length;
   for (let idx = 0; idx < count; idx++) {
     const p = getPanel(idx);
     if (!p) continue;
 
+    // Insert divider between category groups when multiple departments selected
+    if (hasDepts && p.cat && p.cat !== lastCat && lastCat !== null) {
+      const divider = document.createElement('div');
+      divider.className = 'dock-divider';
+      strip.appendChild(divider);
+    }
+    if (p.cat) lastCat = p.cat;
+
+    const faviconUrl = getFavicon(p.url, 32);
     const item = document.createElement('div');
     item.className = 'dock-item';
     item.dataset.idx = idx;
@@ -1427,7 +1467,10 @@ function renderDock() {
     item.title = p.name + ', ' + getDomain(p.url);
     item.innerHTML =
       '<span class="dock-badge">' + (idx + 1) + '</span>' +
-      '<span class="dock-emoji">' + p.emoji + '</span>' +
+      (faviconUrl
+        ? '<img class="dock-logo" src="' + faviconUrl + '" alt="" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'" />' +
+          '<span class="dock-emoji-fb">' + p.emoji + '</span>'
+        : '<span class="dock-emoji">' + p.emoji + '</span>') +
       '<span class="dock-name">' + esc(p.name) + '</span>' +
       '<span class="dock-edit" data-idx="' + idx + '">\u270E</span>';
 
@@ -1530,10 +1573,14 @@ function renderPriorities() {
     html += '<div class="hero-pri-done-msg">All priorities done. What a day.</div>';
   }
 
-  // Share button
-  html += '<div style="text-align:center"><button class="hero-share-btn" id="share-priorities-btn">' +
+  // Share button and Asana link
+  html += '<div style="text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap">' +
+    '<button class="hero-share-btn" id="share-priorities-btn">' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
-    'Share</button></div>';
+    'Share</button>' +
+    '<a class="asana-open-link" href="https://app.asana.com/0/my-tasks" target="_blank" rel="noopener">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
+    'Open in Asana</a></div>';
 
   el.innerHTML = html;
 
@@ -1761,7 +1808,7 @@ function renderTasks() {
     }
     return '<div class="task-row'+(t.done?' done':'')+'" data-tid="'+t.id+'">' +
     '<div class="task-box"><span class="task-tick">\u2713</span></div>' +
-    '<span class="task-text">'+esc(t.text)+'</span>' +
+    '<span class="task-text"><a class="task-text-link" href="https://app.asana.com/0/my-tasks" target="_blank" rel="noopener" title="Open in Asana" onclick="event.stopPropagation()">'+esc(t.text)+'<span class="task-ext-icon">\u2197</span></a></span>' +
     '<div class="task-actions-wrap">' +
     priBtnHtml +
     '<button class="task-del" data-tid="'+t.id+'" title="Delete task">\u2715</button>' +
@@ -2092,9 +2139,19 @@ function renderCmdk() {
     else if (it.type === 'preset') meta = ARROW_SVG_SM;
     else if (it.type === 'task') meta = '<span class="cmdk-kbd">\u2713</span>';
     else meta = '';
+
+    let iconHtml;
+    if ((it.type === 'panel' || it.type === 'preset') && it.url) {
+      const fav = getFavicon(it.url, 16);
+      iconHtml = '<img class="cmdk-logo" src="' + fav + '" alt="" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'inline-block\'" />' +
+        '<span class="cmdk-emoji-fb cmdk-emoji" style="display:none">'+it.emoji+'</span>';
+    } else {
+      iconHtml = '<span class="cmdk-emoji">'+it.emoji+'</span>';
+    }
+
     return '<div class="cmdk-item'+(i===cmdkSel?' sel':'')+'" data-i="'+i+'">' +
-      '<span class="cmdk-emoji">'+it.emoji+'</span>' +
-      '<div class="cmdk-body"><div class="cmdk-name">'+esc(it.name)+'</div><div class="cmdk-sub">'+esc(it.sub)+'</div></div>' +
+      iconHtml +
+      '<div class="cmdk-body"><div class="cmdk-name">'+esc(it.name)+'</div><div class="cmdk-sub">'+esc(it.sub||'')+'</div></div>' +
       '<div class="cmdk-meta">'+meta+'</div></div>';
   }).join('');
   list.querySelectorAll('.cmdk-item').forEach(el => {
@@ -2289,10 +2346,14 @@ function renderFlowDots(containerId, step, total) {
 /* -- FIRST RUN (multi-step with app picker) -- */
 
 let frRole = null;
+let frSelectedDepts = [];
 let frSelectedApps = [];
 let frIgSelectedIds = [];
 
 function showFirstRun() {
+  frSelectedDepts = [];
+  frRole = null;
+  frSelectedApps = [];
   document.getElementById('first-run').classList.add('show');
   renderFrRoles();
   renderFlowDots('fr-flow-dots', 0, 4);
@@ -2302,13 +2363,13 @@ function showFirstRun() {
 function renderFrRoles() {
   const el = document.getElementById('fr-roles');
   el.innerHTML = ROLE_META.map(r =>
-    '<div class="fr-role" data-role="'+r.id+'">' +
+    '<div class="fr-role'+(frSelectedDepts.includes(r.id)?' sel':'')+'" data-role="'+r.id+'">' +
     '<div class="fr-role-icon">'+r.icon+'</div>' +
     '<div class="fr-role-name">'+r.name+'</div>' +
     '<div class="fr-role-desc">'+r.desc+'</div></div>'
   ).join('');
   el.querySelectorAll('.fr-role').forEach(r => {
-    r.addEventListener('click', () => frSelectRole(r.dataset.role));
+    r.addEventListener('click', () => frToggleDept(r.dataset.role));
   });
 }
 
@@ -2322,23 +2383,37 @@ function frNextStep() {
   renderFlowDots('fr-flow-dots', 1, 4);
 }
 
-function frSelectRole(role) {
-  frRole = role;
-  document.querySelectorAll('.fr-role').forEach(r => r.classList.toggle('sel', r.dataset.role === role));
-  document.getElementById('fr-next-2').disabled = false;
+function frToggleDept(role) {
+  const idx = frSelectedDepts.indexOf(role);
+  if (idx !== -1) {
+    frSelectedDepts.splice(idx, 1);
+  } else {
+    frSelectedDepts.push(role);
+  }
+  // Keep frRole as the first selected dept for backwards compat
+  frRole = frSelectedDepts[0] || null;
+  renderFrRoles();
+  document.getElementById('fr-next-2').disabled = frSelectedDepts.length === 0;
 }
 
+function frSelectRole(role) { frToggleDept(role); }
+
 function frGoToStep3() {
-  if (!frRole) return;
+  if (!frSelectedDepts.length) return;
   document.getElementById('fr-step-2').classList.remove('active');
   document.getElementById('fr-step-3').classList.add('active');
   renderFlowDots('fr-flow-dots', 2, 4);
 
-  // Pre-select role defaults
-  const preset = ROLE_PRESETS[frRole];
-  const defaults = preset.defaultApps || preset.panels.map(p => p.preset);
-  // Always include google
-  frSelectedApps = [...new Set(['google', ...defaults])].slice(0, 8);
+  // Merge defaultApps from all selected departments
+  let merged = ['google'];
+  frSelectedDepts.forEach(deptId => {
+    const preset = ROLE_PRESETS[deptId];
+    if (preset) {
+      const apps = preset.defaultApps || preset.panels.map(p => p.preset);
+      merged = merged.concat(apps);
+    }
+  });
+  frSelectedApps = [...new Set(merged)];
   renderFrAppGrid();
 }
 
@@ -2352,10 +2427,11 @@ function renderFrAppGrid() {
     html += '<div class="fr-cat-label">' + (CAT_LABELS[cat] || cat) + '</div>';
     apps.forEach(app => {
       const sel = frSelectedApps.includes(app.id);
-      html += '<div class="fr-app-tile' + (sel ? ' sel' : '') + '" data-appid="' + app.id + '">' +
+      const fav = getFavicon(app.url, 20);
+      html += '<div class="fr-app-tile' + (sel ? ' sel' : '') + '" data-appid="' + app.id + '" style="padding:8px 10px;display:flex;align-items:center;gap:6px;text-align:left">' +
         '<span class="fr-app-check">\u2713</span>' +
-        '<span class="fr-app-emoji">' + app.emoji + '</span>' +
-        '<span class="fr-app-name">' + esc(app.name) + '</span></div>';
+        (fav ? '<img src="' + fav + '" alt="" style="width:20px;height:20px;border-radius:3px;object-fit:contain;flex-shrink:0" onerror="this.style.display=\'none\'" />' : '') +
+        '<span class="fr-app-name" style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(app.name) + '</span></div>';
     });
   });
   grid.innerHTML = html;
@@ -2366,7 +2442,7 @@ function renderFrAppGrid() {
       if (id === 'google') return; // Google always selected
       if (frSelectedApps.includes(id)) {
         frSelectedApps = frSelectedApps.filter(a => a !== id);
-      } else if (frSelectedApps.length < 8) {
+      } else {
         frSelectedApps.push(id);
       }
       renderFrAppGrid();
@@ -2379,20 +2455,18 @@ function renderFrAppGrid() {
 function updateFrAppCounter() {
   const el = document.getElementById('fr-app-counter');
   const count = frSelectedApps.length;
-  const warn = count > 8;
-  el.innerHTML = '<span class="' + (warn ? 'fr-count-warn' : 'fr-count-num') + '">' + count + '</span> of 8 selected';
+  el.innerHTML = '<span class="fr-count-num">' + count + '</span> selected';
   document.getElementById('fr-go').disabled = count === 0;
 }
 
 function completeFirstRun() {
   const role = frRole || 'custom';
   S.role = role;
+  S.departments = [...frSelectedDepts];
   const preset = ROLE_PRESETS[role];
 
-  // Build panels from selected apps
-  const panels = frSelectedApps.slice(0, 8).map(id => ({preset: id}));
-  while (panels.length < 8) panels.push({preset: 'google'});
-  S.panels = panels;
+  // Build panels from all selected apps (no cap)
+  S.panels = frSelectedApps.map(id => ({preset: id}));
 
   S.modes = clone(preset.modes);
   S.activeMode = preset.modes[0].id;
