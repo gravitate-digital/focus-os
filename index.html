@@ -171,6 +171,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .dock-emoji-fb{font-size:22px;line-height:1;pointer-events:none;display:none}
 .dock-edit{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:rgba(106,167,255,.2);border:1px solid rgba(106,167,255,.3);color:var(--accent);font-size:8px;display:none;align-items:center;justify-content:center;cursor:pointer;font-family:var(--font);z-index:2}
 .dock-item:hover .dock-edit{display:flex}
+.dock-fav{position:absolute;top:-4px;left:-4px;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);color:var(--dim);font-size:8px;display:none;align-items:center;justify-content:center;cursor:pointer;font-family:var(--font);z-index:2;transition:background .14s,color .14s}
+.dock-item:hover .dock-fav{display:flex}
+.dock-fav.on{display:flex;background:rgba(106,167,255,.2);border-color:rgba(106,167,255,.3);color:var(--accent)}
+#dock-tabs{display:flex;justify-content:center;gap:4px;margin-bottom:6px;flex-wrap:wrap}
+.dock-tab{padding:4px 12px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--mu);font-size:10px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s,border-color .14s;white-space:nowrap}
+.dock-tab:hover{background:rgba(255,255,255,.1);color:var(--tx)}
+.dock-tab.active{background:rgba(106,167,255,.15);border-color:rgba(106,167,255,.25);color:var(--accent)}
+[data-light="1"] .dock-tab{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.06)}
+[data-light="1"] .dock-tab:hover{background:rgba(0,0,0,.07)}
 
 .dock-divider{width:1px;height:36px;background:rgba(255,255,255,.1);margin:0 4px;flex-shrink:0;align-self:center}
 .cmdk-logo{width:20px;height:20px;border-radius:3px;object-fit:contain}
@@ -629,6 +638,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
   <!-- BOTTOM DOCK -->
   <nav id="dock">
+    <div id="dock-tabs"></div>
     <div id="dock-strip"></div>
   </nav>
 
@@ -797,6 +807,18 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
 
     <div class="settings-group">
+      <div class="settings-group-label">Apps &amp; Departments</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Change departments<small>Re-select which departments you're in</small></div>
+        <button class="btn btn-sec" id="btn-change-depts" style="font-size:11px;padding:6px 12px">Change</button>
+      </div>
+      <div class="settings-row">
+        <div class="settings-row-label">Add or remove apps<small>Manage your dock apps</small></div>
+        <button class="btn btn-sec" id="btn-manage-apps" style="font-size:11px;padding:6px 12px">Manage</button>
+      </div>
+    </div>
+
+    <div class="settings-group">
       <div class="settings-group-label">Focus Coach</div>
       <div class="settings-row">
         <div class="settings-row-label">Enable coach nudges<small>Reminds you when context-switching too much</small></div>
@@ -818,6 +840,39 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <div style="margin-top:12px">
         <button class="btn btn-danger" id="btn-reset-all" style="width:100%;text-align:center">Reset All Data</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHANGE DEPARTMENTS MODAL -->
+<div class="modal-bg" id="modal-depts">
+  <div class="modal-box" style="width:440px">
+    <div class="modal-head">
+      <div class="modal-title">Change Departments</div>
+      <button class="modal-close" id="depts-close">&#10005;</button>
+    </div>
+    <div style="font-size:12px;color:var(--mu);margin-bottom:14px;line-height:1.5">Select all departments you're in. Your existing apps won't be removed, but new apps from newly selected departments will be added.</div>
+    <div class="fr-roles" id="modal-dept-grid"></div>
+    <div class="modal-actions">
+      <button class="btn btn-sec" id="depts-cancel">Cancel</button>
+      <button class="btn btn-pri" id="depts-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- MANAGE APPS MODAL -->
+<div class="modal-bg" id="modal-apps">
+  <div class="modal-box" style="width:480px">
+    <div class="modal-head">
+      <div class="modal-title">Manage Apps</div>
+      <button class="modal-close" id="apps-close">&#10005;</button>
+    </div>
+    <div style="font-size:12px;color:var(--mu);margin-bottom:4px;line-height:1.5">Toggle apps on or off. Checked apps appear in your dock.</div>
+    <div class="fr-app-counter" id="modal-app-counter"></div>
+    <div class="fr-app-grid" id="modal-app-grid"></div>
+    <div class="modal-actions">
+      <button class="btn btn-sec" id="apps-cancel">Cancel</button>
+      <button class="btn btn-pri" id="apps-save">Save</button>
     </div>
   </div>
 </div>
@@ -1365,12 +1420,14 @@ const DEFAULT_STATE = {
     {id:4, text:'CallRail audit, Luxe',       done:false},
   ],
   coach:{on:true, sensitivity:'med', switchCount:0},
-  bgMode: 'gradient',
+  bgMode: 'photos',
   oneThingId: 2,
   topPriorities: [],
   firstRun: true,
   switchLog: [],
   departments: [],
+  dockFilter: 'all',
+  favourites: [],
 };
 
 /* -- STATE -- */
@@ -1404,6 +1461,10 @@ function loadState() {
     }
     // Departments migration
     if (!merged.departments) merged.departments = [];
+    // dockFilter migration
+    if (!merged.dockFilter) merged.dockFilter = 'all';
+    // favourites migration
+    if (!merged.favourites) merged.favourites = [];
     return merged;
   } catch { return clone(DEFAULT_STATE); }
 }
@@ -1438,35 +1499,79 @@ function getFavicon(url, size) {
 
 const EDIT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
 
+function renderDockTabs() {
+  const el = document.getElementById('dock-tabs');
+  if (!el) return;
+  if (!S.departments || S.departments.length <= 1) { el.innerHTML = ''; return; }
+
+  const tabs = [{id:'all', label:'All'}];
+  tabs.push({id:'fav', label:'\u2605 Favourites'});
+  S.departments.forEach(deptId => {
+    const meta = ROLE_META.find(r => r.id === deptId);
+    if (meta) tabs.push({id: deptId, label: meta.name});
+  });
+
+  el.innerHTML = tabs.map(t =>
+    '<button class="dock-tab'+(S.dockFilter === t.id ? ' active' : '')+'" data-filter="'+t.id+'">'+t.label+'</button>'
+  ).join('');
+
+  el.querySelectorAll('.dock-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      S.dockFilter = btn.dataset.filter;
+      save();
+      renderDock();
+    });
+  });
+}
+
+function getPanelDepts(p) {
+  // Returns an array of department IDs that claim this panel's preset
+  const depts = [];
+  if (!p || !p.id) return depts;
+  S.departments.forEach(deptId => {
+    const rp = ROLE_PRESETS[deptId];
+    if (!rp) return;
+    const apps = rp.defaultApps || rp.panels.map(x => x.preset);
+    if (apps.includes(p.id)) depts.push(deptId);
+  });
+  return depts;
+}
+
 function renderDock() {
+  renderDockTabs();
+
   const strip = document.getElementById('dock-strip');
   strip.innerHTML = '';
 
-  // Group apps by category for dividers when departments are set
-  const hasDepts = S.departments && S.departments.length > 1;
-  let lastCat = null;
+  const filter = S.dockFilter || 'all';
 
   const count = S.panels.length;
+  let visibleIdx = 0;
   for (let idx = 0; idx < count; idx++) {
     const p = getPanel(idx);
     if (!p) continue;
 
-    // Insert divider between category groups when multiple departments selected
-    if (hasDepts && p.cat && p.cat !== lastCat && lastCat !== null) {
-      const divider = document.createElement('div');
-      divider.className = 'dock-divider';
-      strip.appendChild(divider);
+    // Apply filter
+    if (filter === 'fav') {
+      if (!S.favourites || !S.favourites.includes(p.id)) continue;
+    } else if (filter !== 'all') {
+      const depts = getPanelDepts(p);
+      if (!depts.includes(filter)) continue;
     }
-    if (p.cat) lastCat = p.cat;
+
+    const dispNum = visibleIdx + 1;
+    visibleIdx++;
 
     const faviconUrl = getFavicon(p.url, 32);
+    const isFav = S.favourites && S.favourites.includes(p.id);
     const item = document.createElement('div');
     item.className = 'dock-item';
     item.dataset.idx = idx;
     item.dataset.tooltip = p.name + ' \u00B7 ' + getDomain(p.url);
     item.title = p.name + ', ' + getDomain(p.url);
     item.innerHTML =
-      '<span class="dock-badge">' + (idx + 1) + '</span>' +
+      '<span class="dock-badge">' + dispNum + '</span>' +
+      '<button class="dock-fav' + (isFav ? ' on' : '') + '" data-fid="' + (p.id||'') + '" title="Favourite">' + (isFav ? '\u2605' : '\u2606') + '</button>' +
       (faviconUrl
         ? '<img class="dock-logo" src="' + faviconUrl + '" alt="" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'" />' +
           '<span class="dock-emoji-fb">' + p.emoji + '</span>'
@@ -1475,8 +1580,21 @@ function renderDock() {
       '<span class="dock-edit" data-idx="' + idx + '">\u270E</span>';
 
     item.addEventListener('click', e => {
-      if (e.target.closest('.dock-edit')) return;
+      if (e.target.closest('.dock-edit') || e.target.closest('.dock-fav')) return;
       openPanel(idx);
+    });
+
+    item.querySelector('.dock-fav').addEventListener('click', e => {
+      e.stopPropagation();
+      const fid = e.currentTarget.dataset.fid;
+      if (!fid) return;
+      if (S.favourites.includes(fid)) {
+        S.favourites = S.favourites.filter(f => f !== fid);
+      } else {
+        S.favourites.push(fid);
+      }
+      save();
+      renderDock();
     });
 
     const editBtn = item.querySelector('.dock-edit');
@@ -1486,6 +1604,14 @@ function renderDock() {
     });
 
     strip.appendChild(item);
+  }
+
+  // Empty state for filtered views
+  if (visibleIdx === 0) {
+    const empty = document.createElement('div');
+    empty.style.cssText = 'font-size:11px;color:var(--dim);padding:16px 8px;';
+    empty.textContent = filter === 'fav' ? 'No favourites yet. Hover an app and click the star.' : 'No apps in this department.';
+    strip.appendChild(empty);
   }
 }
 
@@ -2694,7 +2820,7 @@ function switchMode(modeId) {
   S.activeMode = modeId;
   if (mode.panels) S.panels = clone(mode.panels);
   if (mode.layout) S.layoutId = mode.layout;
-  while (S.panels.length < 8) S.panels.push({preset:'notion'});
+  // Don't pad with duplicates
   save();
   renderDock();
   renderModeSwitcher();
@@ -2877,6 +3003,123 @@ function showIntentionGate() {
   };
 
   gate.classList.add('show');
+}
+
+/* -- CHANGE DEPARTMENTS MODAL -- */
+
+let modalDeptSelected = [];
+
+function openDeptsModal() {
+  modalDeptSelected = [...(S.departments || [])];
+  renderModalDeptGrid();
+  openModal('modal-depts');
+}
+
+function renderModalDeptGrid() {
+  const el = document.getElementById('modal-dept-grid');
+  if (!el) return;
+  el.innerHTML = ROLE_META.map(r =>
+    '<div class="fr-role'+(modalDeptSelected.includes(r.id)?' sel':'')+'" data-role="'+r.id+'">' +
+    '<div class="fr-role-icon">'+r.icon+'</div>' +
+    '<div class="fr-role-name">'+r.name+'</div>' +
+    '<div class="fr-role-desc">'+r.desc+'</div></div>'
+  ).join('');
+  el.querySelectorAll('.fr-role').forEach(r => {
+    r.addEventListener('click', () => {
+      const id = r.dataset.role;
+      const idx = modalDeptSelected.indexOf(id);
+      if (idx !== -1) { modalDeptSelected.splice(idx, 1); } else { modalDeptSelected.push(id); }
+      renderModalDeptGrid();
+    });
+  });
+}
+
+function saveDeptsModal() {
+  const added = modalDeptSelected.filter(d => !S.departments.includes(d));
+  S.departments = [...modalDeptSelected];
+  S.role = S.departments[0] || 'custom';
+  // Add apps from newly selected departments without wiping existing panels
+  added.forEach(deptId => {
+    const rp = ROLE_PRESETS[deptId];
+    if (!rp) return;
+    const apps = rp.defaultApps || rp.panels.map(p => p.preset);
+    const existing = S.panels.map(p => p.preset);
+    apps.forEach(appId => {
+      if (!existing.includes(appId)) {
+        S.panels.push({preset: appId});
+      }
+    });
+  });
+  // Reset filter to 'all' to avoid showing empty filtered view
+  S.dockFilter = 'all';
+  save();
+  closeModal('modal-depts');
+  renderDock();
+}
+
+/* -- MANAGE APPS MODAL -- */
+
+let modalAppsSelected = [];
+
+function openAppsModal() {
+  modalAppsSelected = S.panels.filter(p => p.preset).map(p => p.preset);
+  // also include any custom panels so they aren't lost
+  renderModalAppGrid();
+  openModal('modal-apps');
+}
+
+function renderModalAppGrid() {
+  const grid = document.getElementById('modal-app-grid');
+  if (!grid) return;
+  let html = '';
+  CAT_ORDER.forEach(cat => {
+    const apps = PRESETS.filter(p => p.cat === cat);
+    if (!apps.length) return;
+    html += '<div class="fr-cat-label">' + (CAT_LABELS[cat] || cat) + '</div>';
+    apps.forEach(app => {
+      const sel = modalAppsSelected.includes(app.id);
+      const fav = getFavicon(app.url, 20);
+      html += '<div class="fr-app-tile' + (sel ? ' sel' : '') + '" data-appid="' + app.id + '">' +
+        '<span class="fr-app-check">\u2713</span>' +
+        (fav ? '<img src="' + fav + '" alt="" style="width:20px;height:20px;border-radius:3px;object-fit:contain;flex-shrink:0" onerror="this.style.display=\'none\'" />' : '') +
+        '<span class="fr-app-name">' + esc(app.name) + '</span></div>';
+    });
+  });
+  grid.innerHTML = html;
+  grid.querySelectorAll('.fr-app-tile').forEach(tile => {
+    tile.addEventListener('click', () => {
+      const id = tile.dataset.appid;
+      if (modalAppsSelected.includes(id)) {
+        modalAppsSelected = modalAppsSelected.filter(a => a !== id);
+      } else {
+        modalAppsSelected.push(id);
+      }
+      renderModalAppGrid();
+      updateModalAppCounter();
+    });
+  });
+  updateModalAppCounter();
+}
+
+function updateModalAppCounter() {
+  const el = document.getElementById('modal-app-counter');
+  if (el) el.innerHTML = '<span class="fr-count-num">' + modalAppsSelected.length + '</span> selected';
+}
+
+function saveAppsModal() {
+  // Preserve custom panels, rebuild preset panels from selection
+  const customPanels = S.panels.filter(p => p.custom);
+  const presetPanels = modalAppsSelected.map(id => {
+    // Carry over existing panel data (e.g. lastOpen)
+    return S.panels.find(p => p.preset === id) || {preset: id};
+  });
+  S.panels = [...presetPanels, ...customPanels];
+  // Remove stale favourites
+  S.favourites = (S.favourites || []).filter(fid => modalAppsSelected.includes(fid));
+  S.dockFilter = 'all';
+  save();
+  closeModal('modal-apps');
+  renderDock();
 }
 
 /* -- RENDER ALL -- */
@@ -3099,6 +3342,18 @@ function init() {
 
   // Coach dismiss
   document.getElementById('coach-x').addEventListener('click', () => document.getElementById('coach-toast').classList.remove('show'));
+
+  // Change departments modal
+  document.getElementById('btn-change-depts').addEventListener('click', () => { closeModal('modal-settings'); openDeptsModal(); });
+  document.getElementById('depts-close').addEventListener('click', () => closeModal('modal-depts'));
+  document.getElementById('depts-cancel').addEventListener('click', () => closeModal('modal-depts'));
+  document.getElementById('depts-save').addEventListener('click', saveDeptsModal);
+
+  // Manage apps modal
+  document.getElementById('btn-manage-apps').addEventListener('click', () => { closeModal('modal-settings'); openAppsModal(); });
+  document.getElementById('apps-close').addEventListener('click', () => closeModal('modal-apps'));
+  document.getElementById('apps-cancel').addEventListener('click', () => closeModal('modal-apps'));
+  document.getElementById('apps-save').addEventListener('click', saveAppsModal);
 
   // Click-outside modals
   document.querySelectorAll('.modal-bg').forEach(ov => {
