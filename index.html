@@ -1872,6 +1872,11 @@ function renderPriorities() {
     html += '<div class="hero-pri-done-msg">All priorities done. What a day.</div>';
   }
 
+  // Always show add input (especially when all done)
+  html += '<div class="hero-pri-add" style="margin-top:10px;display:flex;gap:6px;align-items:center">' +
+    '<input class="hero-pri-input" id="hero-pri-input" placeholder="Add another priority..." spellcheck="false" style="flex:1;padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:var(--tx);font-size:13px;font-family:var(--font);outline:none">' +
+    '<button class="fs-btn pri" id="hero-pri-add-btn" style="flex-shrink:0;padding:8px 14px;font-size:12px">Add</button></div>';
+
   // Share button and Asana link
   html += '<div style="text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap">' +
     '<button class="hero-share-btn" id="share-priorities-btn">' +
@@ -1897,6 +1902,26 @@ function renderPriorities() {
 
   const shareBtn = document.getElementById('share-priorities-btn');
   if (shareBtn) shareBtn.addEventListener('click', e => { e.stopPropagation(); sharePriorities(); });
+
+  // Add new priority from hero card
+  const addBtn = document.getElementById('hero-pri-add-btn');
+  const addInput = document.getElementById('hero-pri-input');
+  if (addBtn && addInput) {
+    const doAdd = () => {
+      const txt = addInput.value.trim();
+      if (!txt) return;
+      const id = Math.max(0, ...S.tasks.map(t=>t.id)) + 1;
+      S.tasks.push({id, text: txt, done: false});
+      if (S.topPriorities.length < 3) S.topPriorities.push(id);
+      S.oneThingId = S.topPriorities[0] || null;
+      addInput.value = '';
+      save(); renderTasks(); renderPriorities();
+    };
+    addBtn.addEventListener('click', doAdd);
+    addInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doAdd(); } });
+    addInput.addEventListener('focus', e => { addInput.style.borderColor = 'var(--accent)'; });
+    addInput.addEventListener('blur', e => { addInput.style.borderColor = ''; });
+  }
 }
 
 /* -- SHARE / SCREENSHOT PRIORITIES -- */
