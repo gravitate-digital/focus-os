@@ -535,11 +535,27 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* Auto theme option in theme grid */
 .theme-opt .theme-swatch-auto{width:28px;height:28px;border-radius:8px;margin:0 auto 6px;border:1px solid rgba(255,255,255,.1);background:conic-gradient(from 180deg,#faf6ef 0deg,#f0f2f8 90deg,#1a1028 180deg,#050a14 270deg,#faf6ef 360deg)}
 
-/* -- FINISH HIM overlay -- */
-.finish-him-overlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.8);opacity:0;transition:opacity .3s;pointer-events:none}
+/* -- FINISH HIM: full MK experience -- */
+.finish-him-overlay{position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.92);opacity:0;transition:opacity .2s;pointer-events:none;overflow:hidden}
 .finish-him-overlay.show{opacity:1}
-.finish-him-text{font-size:clamp(48px,10vw,96px);font-weight:800;color:#ff3333;text-shadow:0 0 40px rgba(255,50,50,.6),0 0 80px rgba(255,50,50,.3);letter-spacing:.05em;text-transform:uppercase;animation:finishHimPulse .4s ease-in-out infinite alternate}
-@keyframes finishHimPulse{from{transform:scale(1)}to{transform:scale(1.05)}}
+.fh-scorpion{position:absolute;left:-100px;top:50%;transform:translateY(-50%);font-size:80px;opacity:0;filter:drop-shadow(0 0 30px rgba(255,150,0,.5))}
+.finish-him-overlay.show .fh-scorpion{animation:scorpionEnter .5s ease-out forwards}
+@keyframes scorpionEnter{0%{left:-100px;opacity:0}100%{left:40px;opacity:1}}
+.fh-chain{position:absolute;top:50%;height:4px;background:linear-gradient(90deg,rgba(180,180,180,.8),rgba(255,200,0,.6));transform:translateY(-50%);left:120px;width:0;border-radius:2px;box-shadow:0 0 8px rgba(255,200,0,.4)}
+.finish-him-overlay.show .fh-chain{animation:chainExtend .5s .15s ease-out forwards}
+@keyframes chainExtend{0%{width:0}100%{width:calc(50% - 100px)}}
+.fh-spear{position:absolute;left:-60px;top:50%;transform:translateY(-50%);font-size:40px;opacity:0}
+.finish-him-overlay.show .fh-spear{animation:spearThrow .5s .1s ease-out forwards}
+@keyframes spearThrow{0%{left:-60px;opacity:0}40%{opacity:1}100%{left:calc(50% - 20px);opacity:1}}
+.finish-him-text{font-size:clamp(42px,9vw,88px);font-weight:900;color:#ff2200;text-shadow:0 0 40px rgba(255,30,0,.7),0 0 80px rgba(255,30,0,.4),0 4px 0 #880000;letter-spacing:.08em;text-transform:uppercase;opacity:0;transform:scale(2);z-index:1}
+.finish-him-overlay.show .finish-him-text{animation:fhTextSlam .4s .5s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes fhTextSlam{0%{opacity:0;transform:scale(2)}100%{opacity:1;transform:scale(1)}}
+.fh-sub{font-size:14px;color:rgba(255,200,0,.8);font-weight:600;letter-spacing:.15em;text-transform:uppercase;opacity:0;margin-top:10px;z-index:1}
+.finish-him-overlay.show .fh-sub{animation:fhSubFade .3s .8s ease forwards}
+@keyframes fhSubFade{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:none}}
+.fh-flash{position:absolute;inset:0;background:white;opacity:0;pointer-events:none}
+.finish-him-overlay.show .fh-flash{animation:fhFlash .15s .48s ease}
+@keyframes fhFlash{0%{opacity:0}50%{opacity:.5}100%{opacity:0}}
 
 /* -- DISPLAY THEMES -- */
 [data-display="ivory"]{--bg:#FAF9F6;--tx:rgba(0,25,61,.84);--mu:rgba(0,25,61,.55);--dim:rgba(0,25,61,.35);--line:rgba(0,25,61,.08);--accent:#0048AD;--glass-bg:rgba(255,255,255,.7);--glass-bo:rgba(0,25,61,.08);--glass-hi:rgba(255,255,255,.95)}
@@ -3439,22 +3455,34 @@ function playTaskSound() {
   if (S.soundMuted || S.soundEffect === 'none') return;
   const sfx = SOUND_EFFECTS.find(s => s.id === S.soundEffect);
   if (!sfx || !sfx.file) return;
+  // Stop any currently playing sound
+  if (currentPreviewAudio) { currentPreviewAudio.pause(); currentPreviewAudio = null; }
   const audio = new Audio(sfx.file);
   audio.volume = 0.5;
+  currentPreviewAudio = audio;
   audio.play().catch(() => {});
+  audio.addEventListener('ended', () => { if (currentPreviewAudio === audio) currentPreviewAudio = null; });
   if (S.soundEffect === 'finish-him') showFinishHim();
 }
+
+let currentPreviewAudio = null;
 
 function showFinishHim() {
   const overlay = document.createElement('div');
   overlay.className = 'finish-him-overlay';
-  overlay.innerHTML = '<div class="finish-him-text">FINISH HIM!</div>';
+  overlay.innerHTML =
+    '<div class="fh-flash"></div>' +
+    '<div class="fh-scorpion">\u{1F977}</div>' +
+    '<div class="fh-chain"></div>' +
+    '<div class="fh-spear">\u{1F531}</div>' +
+    '<div class="finish-him-text">FINISH HIM!</div>' +
+    '<div class="fh-sub">GET OVER HERE</div>';
   document.body.appendChild(overlay);
   requestAnimationFrame(() => overlay.classList.add('show'));
   setTimeout(() => {
     overlay.classList.remove('show');
-    setTimeout(() => overlay.remove(), 500);
-  }, 1500);
+    setTimeout(() => overlay.remove(), 600);
+  }, 2200);
 }
 
 /* -- DISPLAY THEME -- */
