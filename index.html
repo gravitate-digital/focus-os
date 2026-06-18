@@ -869,6 +869,9 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     <div class="sc-row"><span>Settings</span><span><kbd class="kbd">S</kbd></span></div>
     <div class="sc-row"><span>Toggle light mode</span><span><kbd class="kbd">&#8997;L</kbd></span></div>
     <div class="sc-row"><span>Close / dismiss</span><span><kbd class="kbd">Esc</kbd></span></div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:11px;color:var(--dim);line-height:1.55">
+      <b style="color:var(--mu)">Security:</b> All your data stays in this browser's localStorage. Nothing is sent to any server. App links open in new tabs with their own login. Asana task sync requires OAuth and is coming in a future update with a secure backend. See Settings for full details.
+    </div>
   </div>
 </div>
 
@@ -935,6 +938,17 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <button class="toggle" id="sound-mute-toggle"></button>
       </div>
       <div id="sound-picker" style="margin-top:8px"></div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">Security and Privacy</div>
+      <div style="font-size:12px;color:var(--mu);line-height:1.6;margin-bottom:12px;padding:10px 12px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--line)">
+        <div style="font-weight:600;color:var(--tx);margin-bottom:6px">Your data stays on this device</div>
+        <div style="margin-bottom:6px">Focus stores everything in your browser's localStorage. Nothing is sent to any server, database, or third party. No cookies. No tracking. No analytics.</div>
+        <div style="margin-bottom:6px"><strong style="color:var(--tx)">App links</strong> open external sites (Asana, Google, etc.) in new tabs. Those sites have their own login and security. Focus does not access, read, or store your credentials for any external service.</div>
+        <div style="margin-bottom:6px"><strong style="color:var(--tx)">Asana task sync</strong> is not available in this version. Pulling tasks from Asana requires OAuth authentication with a backend server to handle tokens securely. This will be available when Focus moves to a proper app build (Next.js + Supabase). For now, tasks are managed manually within Focus.</div>
+        <div><strong style="color:var(--tx)">To clear all data:</strong> use the Reset button below, or run <code style="font-size:11px;background:rgba(255,255,255,.08);padding:1px 5px;border-radius:3px">localStorage.removeItem('focos_v10')</code> in the browser console.</div>
+      </div>
     </div>
 
     <div class="settings-group">
@@ -1882,7 +1896,7 @@ function renderPriorities() {
     '<button class="hero-share-btn" id="share-priorities-btn">' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
     'Share</button>' +
-    '<a class="asana-open-link" href="https://app.asana.com/0/my-tasks" target="_blank" rel="noopener">' +
+    '<a class="asana-open-link" href="https://app.asana.com/0/my-tasks" target="_blank" rel="noopener" title="Opens Asana in a new tab. Asana sync requires a login and is coming in a future update.">' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
     'Open in Asana</a></div>';
 
