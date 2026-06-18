@@ -160,7 +160,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 @media(prefers-reduced-motion:no-preference){#tb-timer .pulse{animation:pulse 1.5s ease-in-out infinite}}
 
 /* -- BOTTOM DOCK -- */
-#dock{flex-shrink:0;padding:8px 16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:40;position:relative}
+#dock{flex-shrink:0;padding:10px 16px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:40;position:relative}
 #dock-strip{display:flex;flex-wrap:wrap;max-width:90vw;gap:6px;padding:6px 14px;border-radius:18px;background:rgba(255,255,255,.055);backdrop-filter:blur(40px) saturate(220%);-webkit-backdrop-filter:blur(40px) saturate(220%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 20px rgba(0,0,0,.2);justify-content:center}
 #dock-expand{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);width:auto;max-width:90vw;padding:12px 16px;border-radius:16px;background:rgba(7,13,26,.92);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:1px solid rgba(255,255,255,.1);box-shadow:0 -8px 40px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:60;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 #dock-expand.show{opacity:1;pointer-events:all}
@@ -422,7 +422,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* -- ROLE PICKER (first-run step 2) -- */
 .fr-step{display:none}
 .fr-step.active{display:block}
-.fr-roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-bottom:16px;text-align:left}
+.fr-roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-bottom:16px;text-align:left}
 .fr-role{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .14s,border-color .14s;display:flex;align-items:center;gap:10px}
 .fr-role:hover{background:rgba(255,255,255,.08)}
 .fr-role.sel{background:rgba(106,167,255,.1);border-color:rgba(106,167,255,.25)}
@@ -562,14 +562,34 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-display="ivory"] .b1{background:rgba(0,72,173,.1)}
 [data-display="ivory"] .b2{background:rgba(0,106,255,.06)}
 [data-display="ivory"] .b3{background:rgba(109,170,255,.08)}
-[data-display="ivory"] #topbar{background:rgba(250,249,246,.85)}
-[data-display="ivory"] .widget{background:rgba(255,255,255,.7)}
-[data-display="ivory"] #dock-strip{background:rgba(255,255,255,.6)}
+[data-display="ivory"] #topbar{background:rgba(250,249,246,.85);border-bottom-color:rgba(0,25,61,.08)}
+[data-display="ivory"] .widget{background:rgba(255,255,255,.7);border-color:rgba(0,25,61,.07)}
+[data-display="ivory"] #dock-strip{background:rgba(255,255,255,.6);border-color:rgba(0,25,61,.08)}
+[data-display="ivory"] .dock-item{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.05)}
+[data-display="ivory"] .dock-item:hover{background:rgba(0,0,0,.07)}
+[data-display="ivory"] .modal-box,[data-display="ivory"] #cmdk,[data-display="ivory"] #coach-toast{background:rgba(250,249,246,.96);color:rgba(0,25,61,.84)}
+[data-display="ivory"] #side-panel{background:rgba(250,249,246,.95);border-left-color:rgba(0,25,61,.08)}
+[data-display="ivory"] .f-input{background:rgba(0,0,0,.03);border-color:rgba(0,25,61,.1);color:rgba(0,25,61,.84)}
+[data-display="ivory"] .theme-opt{background:rgba(0,0,0,.03)}
+[data-display="ivory"] .sens-opt{background:rgba(0,0,0,.03)}
+[data-display="ivory"] .toggle{background:rgba(0,0,0,.1)}
+[data-display="ivory"] .toggle::after{background:white}
+[data-display="ivory"] #hero-onething{background:linear-gradient(180deg,rgba(0,72,173,.08),rgba(0,72,173,.03));border-color:rgba(0,72,173,.15)}
+[data-display="ivory"] #first-run,[data-display="ivory"] #intention-gate{background:rgba(250,249,246,.95)}
+[data-display="ivory"] .ig-task{background:rgba(0,0,0,.03)}
+[data-display="ivory"] .ig-custom,[data-display="ivory"] .fr-input{background:rgba(0,0,0,.03);border-color:rgba(0,25,61,.1);color:rgba(0,25,61,.84)}
+[data-display="ivory"] #mode-pop{background:rgba(250,249,246,.97)}
+[data-display="ivory"] .fr-role,[data-display="ivory"] .fr-app-tile{background:rgba(0,0,0,.03)}
 
-[data-display="leather"]{--bg:#0F0907;--tx:rgba(182,212,255,.9);--mu:rgba(182,212,255,.5);--dim:rgba(182,212,255,.28);--line:rgba(182,212,255,.08);--accent:#6DAAFF;--glass-bg:rgba(27,16,14,.65);--glass-bo:rgba(182,212,255,.12);--glass-hi:rgba(182,212,255,.1)}
-[data-display="leather"] .b1{background:rgba(0,106,255,.08)}
-[data-display="leather"] .b2{background:rgba(43,27,23,.3)}
-[data-display="leather"] .b3{background:rgba(0,72,173,.06)}
+[data-display="leather"]{--bg:#0F0907;--tx:rgba(255,230,200,.9);--mu:rgba(255,200,160,.55);--dim:rgba(255,200,160,.3);--line:rgba(255,200,160,.1);--accent:#C8976A;--glass-bg:rgba(30,16,10,.7);--glass-bo:rgba(200,151,106,.15);--glass-hi:rgba(200,151,106,.1)}
+[data-display="leather"] .b1{background:rgba(180,100,40,.12)}
+[data-display="leather"] .b2{background:rgba(120,60,20,.15)}
+[data-display="leather"] .b3{background:rgba(160,80,30,.08)}
+[data-display="leather"] #topbar{background:rgba(15,9,7,.85);border-bottom-color:rgba(200,151,106,.12)}
+[data-display="leather"] #dock-strip{background:rgba(20,11,8,.7);border-color:rgba(200,151,106,.2)}
+[data-display="leather"] .dock-item{border-color:rgba(200,151,106,.1)}
+[data-display="leather"] .dock-item:hover{background:rgba(200,151,106,.12);border-color:rgba(200,151,106,.25)}
+[data-display="leather"] .widget{background:rgba(25,14,10,.65);border-color:rgba(200,151,106,.12)}
 
 [data-display="ocean"]{--bg:#00193D;--tx:rgba(255,255,255,.92);--mu:rgba(182,212,255,.6);--dim:rgba(182,212,255,.35);--line:rgba(182,212,255,.1);--accent:#6DAAFF;--glass-bg:rgba(0,38,91,.5);--glass-bo:rgba(109,170,255,.15);--glass-hi:rgba(109,170,255,.12)}
 [data-display="ocean"] .b1{background:rgba(0,106,255,.15)}
@@ -1275,6 +1295,7 @@ const QUOTES = [
 
 let quoteIdx = 0;
 let quoteTimer = null;
+let currentPreviewAudio = null;
 
 /* -- TEAM PHOTOS -- */
 const TEAM_PHOTOS = [
@@ -1599,8 +1620,8 @@ function loadState() {
     if (!merged.role) merged.role = 'custom';
     // Auto-theme migration
     if (merged.autoTheme === undefined) merged.autoTheme = true;
-    // bgMode migration
-    if (!merged.bgMode) merged.bgMode = 'gradient';
+    // bgMode migration — default to 'photos' (team photos are the hero)
+    if (!merged.bgMode) merged.bgMode = 'photos';
     // Top priorities migration
     if (!merged.topPriorities) merged.topPriorities = [];
     if (merged.oneThingId && merged.topPriorities.length === 0) {
@@ -2521,8 +2542,16 @@ function renderSettings() {
         save();
         renderSettings();
         if (S.soundEffect !== 'none' && !S.soundMuted) {
+          // Stop any currently playing preview before starting a new one
+          if (currentPreviewAudio) { currentPreviewAudio.pause(); currentPreviewAudio.currentTime = 0; currentPreviewAudio = null; }
           const sfx = SOUND_EFFECTS.find(s => s.id === S.soundEffect);
-          if (sfx && sfx.file) { const a = new Audio(sfx.file); a.volume = 0.4; a.play().catch(() => {}); }
+          if (sfx && sfx.file) {
+            const a = new Audio(sfx.file);
+            a.volume = 0.4;
+            currentPreviewAudio = a;
+            a.play().catch(() => {});
+            a.addEventListener('ended', () => { if (currentPreviewAudio === a) currentPreviewAudio = null; });
+          }
         }
       });
     });
@@ -2546,15 +2575,21 @@ function applyAutoTheme() {
   document.body.dataset.time = period;
   // Remove manual theme when auto is active
   delete document.body.dataset.theme;
-  // Set light mode for morning/afternoon, dark for evening/night
-  if (period === 'morning' || period === 'afternoon') {
-    document.body.dataset.light = '1';
-    S.light = true;
-  } else {
-    document.body.dataset.light = '0';
-    S.light = false;
+  // Only touch light mode if display theme doesn't force a specific light setting
+  const dt = S.displayTheme || 'default';
+  const displayForcesLight = (dt === 'ivory');
+  const displayForcesDark = (dt === 'leather' || dt === 'ocean' || dt === 'arcade' || dt === 'retro');
+  if (!displayForcesLight && !displayForcesDark) {
+    // Set light mode for morning/afternoon, dark for evening/night
+    if (period === 'morning' || period === 'afternoon') {
+      document.body.dataset.light = '1';
+      S.light = true;
+    } else {
+      document.body.dataset.light = '0';
+      S.light = false;
+    }
+    document.getElementById('btn-light').classList.toggle('active', S.light);
   }
-  document.getElementById('btn-light').classList.toggle('active', S.light);
 }
 
 /* -- COMMAND PALETTE -- */
@@ -3504,8 +3539,6 @@ function playTaskSound() {
   if (S.soundEffect === 'finish-him') showFinishHim();
 }
 
-let currentPreviewAudio = null;
-
 function showFinishHim() {
   const overlay = document.createElement('div');
   overlay.className = 'finish-him-overlay';
@@ -3527,9 +3560,24 @@ function showFinishHim() {
 /* -- DISPLAY THEME -- */
 
 function applyDisplayTheme() {
-  document.body.dataset.display = S.displayTheme || 'default';
-  if (S.displayTheme === 'ivory') {
+  const theme = S.displayTheme || 'default';
+  document.body.dataset.display = theme;
+  // Ivory is always light; all other display themes are dark (or honour the manual toggle)
+  if (theme === 'ivory') {
     document.body.dataset.light = '1';
+    S.light = true;
+    const btn = document.getElementById('btn-light');
+    if (btn) btn.classList.add('active');
+  } else if (theme === 'leather' || theme === 'ocean' || theme === 'arcade' || theme === 'retro') {
+    document.body.dataset.light = '0';
+    S.light = false;
+    const btn = document.getElementById('btn-light');
+    if (btn) btn.classList.remove('active');
+  } else {
+    // Default: respect auto-theme or manual light toggle
+    document.body.dataset.light = S.light ? '1' : '0';
+    const btn = document.getElementById('btn-light');
+    if (btn) btn.classList.toggle('active', !!S.light);
   }
 }
 
