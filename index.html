@@ -535,6 +535,55 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* Auto theme option in theme grid */
 .theme-opt .theme-swatch-auto{width:28px;height:28px;border-radius:8px;margin:0 auto 6px;border:1px solid rgba(255,255,255,.1);background:conic-gradient(from 180deg,#faf6ef 0deg,#f0f2f8 90deg,#1a1028 180deg,#050a14 270deg,#faf6ef 360deg)}
 
+/* -- FINISH HIM overlay -- */
+.finish-him-overlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.8);opacity:0;transition:opacity .3s;pointer-events:none}
+.finish-him-overlay.show{opacity:1}
+.finish-him-text{font-size:clamp(48px,10vw,96px);font-weight:800;color:#ff3333;text-shadow:0 0 40px rgba(255,50,50,.6),0 0 80px rgba(255,50,50,.3);letter-spacing:.05em;text-transform:uppercase;animation:finishHimPulse .4s ease-in-out infinite alternate}
+@keyframes finishHimPulse{from{transform:scale(1)}to{transform:scale(1.05)}}
+
+/* -- DISPLAY THEMES -- */
+[data-display="ivory"]{--bg:#FAF9F6;--tx:rgba(0,25,61,.84);--mu:rgba(0,25,61,.55);--dim:rgba(0,25,61,.35);--line:rgba(0,25,61,.08);--accent:#0048AD;--glass-bg:rgba(255,255,255,.7);--glass-bo:rgba(0,25,61,.08);--glass-hi:rgba(255,255,255,.95)}
+[data-display="ivory"] .b1{background:rgba(0,72,173,.1)}
+[data-display="ivory"] .b2{background:rgba(0,106,255,.06)}
+[data-display="ivory"] .b3{background:rgba(109,170,255,.08)}
+[data-display="ivory"] #topbar{background:rgba(250,249,246,.85)}
+[data-display="ivory"] .widget{background:rgba(255,255,255,.7)}
+[data-display="ivory"] #dock-strip{background:rgba(255,255,255,.6)}
+
+[data-display="leather"]{--bg:#0F0907;--tx:rgba(182,212,255,.9);--mu:rgba(182,212,255,.5);--dim:rgba(182,212,255,.28);--line:rgba(182,212,255,.08);--accent:#6DAAFF;--glass-bg:rgba(27,16,14,.65);--glass-bo:rgba(182,212,255,.12);--glass-hi:rgba(182,212,255,.1)}
+[data-display="leather"] .b1{background:rgba(0,106,255,.08)}
+[data-display="leather"] .b2{background:rgba(43,27,23,.3)}
+[data-display="leather"] .b3{background:rgba(0,72,173,.06)}
+
+[data-display="ocean"]{--bg:#00193D;--tx:rgba(255,255,255,.92);--mu:rgba(182,212,255,.6);--dim:rgba(182,212,255,.35);--line:rgba(182,212,255,.1);--accent:#6DAAFF;--glass-bg:rgba(0,38,91,.5);--glass-bo:rgba(109,170,255,.15);--glass-hi:rgba(109,170,255,.12)}
+[data-display="ocean"] .b1{background:rgba(0,106,255,.15)}
+[data-display="ocean"] .b2{background:rgba(109,170,255,.08)}
+[data-display="ocean"] .b3{background:rgba(0,72,173,.12)}
+
+[data-display="arcade"]{--bg:#0a0014;--tx:#fff;--mu:rgba(255,255,255,.7);--dim:rgba(255,255,255,.4);--line:rgba(255,0,255,.15);--accent:#ff00ff;--ok:#00ffff;--warn:#ffff00;--glass-bg:rgba(255,0,255,.08);--glass-bo:rgba(255,0,255,.2);--glass-hi:rgba(0,255,255,.1)}
+[data-display="arcade"] .b1{background:rgba(255,0,255,.15)}
+[data-display="arcade"] .b2{background:rgba(0,255,255,.1)}
+[data-display="arcade"] .b3{background:rgba(255,255,0,.06)}
+[data-display="arcade"] #topbar{background:rgba(10,0,20,.8);border-bottom-color:rgba(255,0,255,.2)}
+[data-display="arcade"] #dock-strip{background:rgba(10,0,20,.7);border-color:rgba(255,0,255,.25)}
+[data-display="arcade"] .dock-item{border-color:rgba(255,0,255,.15)}
+[data-display="arcade"] .dock-item:hover{background:rgba(255,0,255,.15);border-color:rgba(0,255,255,.3);box-shadow:0 0 20px rgba(255,0,255,.3)}
+[data-display="arcade"] #hero-clock{text-shadow:0 0 30px rgba(255,0,255,.4)}
+[data-display="arcade"] .hero-ot-label{color:#00ffff}
+[data-display="arcade"] .fs-btn.pri{background:rgba(255,0,255,.2);border-color:rgba(255,0,255,.4);color:#ff00ff}
+[data-display="arcade"] .widget{background:rgba(10,0,20,.6);border-color:rgba(255,0,255,.15)}
+[data-display="arcade"] .hero-pri-item:not(.pri-done){animation:arcadeGrow 1800s linear infinite}
+@keyframes arcadeGrow{0%{transform:scale(1)}100%{transform:scale(1.3)}}
+[data-display="arcade"] .hero-pri-item:not(.pri-done):hover{transform:scale(1)!important}
+
+[data-display="retro"]{--bg:#1a1c2c;--tx:#f4f4f4;--mu:#a7a7c5;--dim:#5d5d8a;--line:rgba(93,93,138,.2);--accent:#41a6f6;--ok:#73eff7;--warn:#ffcd75;--glass-bg:rgba(44,46,68,.7);--glass-bo:rgba(65,166,246,.2);--glass-hi:rgba(115,239,247,.1)}
+[data-display="retro"] .b1{background:rgba(65,166,246,.12)}
+[data-display="retro"] .b2{background:rgba(115,239,247,.08)}
+[data-display="retro"] .b3{background:rgba(255,205,117,.06)}
+[data-display="retro"] #hero-clock{font-family:'Courier New',monospace;font-weight:700;letter-spacing:.02em}
+[data-display="retro"] #topbar{background:rgba(26,28,44,.9)}
+[data-display="retro"] #dock-strip{background:rgba(26,28,44,.8);border-color:rgba(65,166,246,.2)}
+
 /* -- FLOW STEP DOTS -- */
 .flow-steps{display:flex;justify-content:center;gap:6px;margin-bottom:20px}
 .flow-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:background .2s}
@@ -816,6 +865,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
 
     <div class="settings-group">
+      <div class="settings-group-label">Display Theme</div>
+      <div class="theme-grid" id="display-theme-grid"></div>
+    </div>
+
+    <div class="settings-group">
       <div class="settings-group-label">Background Theme</div>
       <div class="theme-grid" id="theme-grid"></div>
     </div>
@@ -856,6 +910,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div class="f-label" style="margin-bottom:7px">Sensitivity</div>
         <div class="sens-row" id="coach-sens-row"></div>
       </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">Task Completion Sound</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Mute all sounds</div>
+        <button class="toggle" id="sound-mute-toggle"></button>
+      </div>
+      <div id="sound-picker" style="margin-top:8px"></div>
     </div>
 
     <div class="settings-group">
@@ -1095,6 +1158,26 @@ const THEMES = [
   {id:'dawn',     label:'Dawn',     swatch:'linear-gradient(135deg,#1a1008,#200810)'},
   {id:'deep',     label:'Deep',     swatch:'linear-gradient(135deg,#020408,#040818)'},
   {id:'noir',     label:'Noir',     swatch:'linear-gradient(135deg,#000,#0a0a0a)'},
+];
+
+const SOUND_EFFECTS = [
+  {id:'none', name:'Muted', file:null},
+  {id:'ding', name:'Ding', file:'sounds/ding-sound-effect_2.mp3'},
+  {id:'finish-him', name:'FINISH HIM!', file:'sounds/finish-him.mp3'},
+  {id:'hee-hee', name:'Michael Jackson', file:'sounds/michael-jackson-hee-hee.mp3'},
+  {id:'yippee', name:'Yippee!', file:'sounds/yippeeeeeeeeeeeeee.mp3'},
+  {id:'snoop', name:'Snoop Dogg', file:'sounds/Snoop.mp3'},
+  {id:'final-fantasy', name:'Final Fantasy', file:'sounds/final_fantasy_KDr5Pxg.mp3'},
+  {id:'deg-deg', name:'Deg Deg', file:'sounds/deg-deg_4M6Cojn.mp3'},
+];
+
+const DISPLAY_THEMES = [
+  {id:'default', name:'Default', desc:'Clean midnight glass'},
+  {id:'ivory', name:'Ivory', desc:'Light Gravitate cream'},
+  {id:'leather', name:'Leather', desc:'Dark cocoa warmth'},
+  {id:'ocean', name:'Ocean Blue', desc:'Deep navy glass'},
+  {id:'arcade', name:'Arcade', desc:'Neon, bold, gamified'},
+  {id:'retro', name:'Retro Game', desc:'Pixel art vibes'},
 ];
 
 const MORNING_VIBES = [
@@ -1451,6 +1534,9 @@ const DEFAULT_STATE = {
     {id:4, text:'CallRail audit, Luxe',       done:false},
   ],
   coach:{on:true, sensitivity:'med', switchCount:0},
+  soundEffect: 'ding',
+  soundMuted: false,
+  displayTheme: 'default',
   bgMode: 'photos',
   oneThingId: 2,
   topPriorities: [],
@@ -1496,6 +1582,11 @@ function loadState() {
     if (!merged.dockFilter) merged.dockFilter = 'all';
     // favourites migration
     if (!merged.favourites) merged.favourites = [];
+    // sound migration
+    if (!merged.soundEffect) merged.soundEffect = 'ding';
+    if (merged.soundMuted === undefined) merged.soundMuted = false;
+    // displayTheme migration
+    if (!merged.displayTheme) merged.displayTheme = 'default';
     return merged;
   } catch { return clone(DEFAULT_STATE); }
 }
@@ -1779,7 +1870,12 @@ function renderPriorities() {
   el.querySelectorAll('.hero-pri-item').forEach(row => {
     row.addEventListener('click', () => {
       const t = S.tasks.find(x => x.id === +row.dataset.tid);
-      if (t) { t.done = !t.done; save(); renderTasks(); renderPriorities(); }
+      if (t) {
+        const wasUndone = !t.done;
+        t.done = !t.done;
+        if (t.done && wasUndone) playTaskSound();
+        save(); renderTasks(); renderPriorities();
+      }
     });
   });
 
@@ -2014,7 +2110,12 @@ function renderTasks() {
     row.addEventListener('click', e => {
       if (e.target.closest('.task-pri-badge') || e.target.closest('.task-pri-add') || e.target.closest('.task-del')) return;
       const task = S.tasks.find(t => t.id === +row.dataset.tid);
-      if (task) { task.done = !task.done; save(); renderTasks(); renderPriorities(); }
+      if (task) {
+        const wasUndone = !task.done;
+        task.done = !task.done;
+        if (task.done && wasUndone) playTaskSound();
+        save(); renderTasks(); renderPriorities();
+      }
     });
   });
   el.querySelectorAll('.task-pri-badge').forEach(btn => {
@@ -2259,6 +2360,32 @@ function saveSprintEdit() {
 /* -- SETTINGS -- */
 
 function renderSettings() {
+  // Display theme grid
+  const dtGrid = document.getElementById('display-theme-grid');
+  if (dtGrid) {
+    const swatches = {
+      'default':'linear-gradient(135deg,#050a14,#0a1830)',
+      'ivory':'linear-gradient(135deg,#FAF9F6,#EDE9DE)',
+      'leather':'linear-gradient(135deg,#0F0907,#2B1B17)',
+      'ocean':'linear-gradient(135deg,#00193D,#003784)',
+      'arcade':'linear-gradient(135deg,#0a0014,#ff00ff)',
+      'retro':'linear-gradient(135deg,#1a1c2c,#41a6f6)',
+    };
+    dtGrid.innerHTML = DISPLAY_THEMES.map(t =>
+      '<div class="theme-opt'+(S.displayTheme===t.id?' active':'')+'" data-dtid="'+t.id+'">' +
+      '<div class="theme-swatch" style="background:'+(swatches[t.id]||swatches.default)+'"></div>' +
+      '<div class="theme-name">'+t.name+'</div></div>'
+    ).join('');
+    dtGrid.querySelectorAll('.theme-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        S.displayTheme = opt.dataset.dtid;
+        save();
+        applyDisplayTheme();
+        renderSettings();
+      });
+    });
+  }
+
   const tg = document.getElementById('theme-grid');
   // Auto theme option first
   let themeHtml = '<div class="theme-opt'+(S.autoTheme?' active':'')+'" data-tid="auto">' +
@@ -2323,6 +2450,35 @@ function renderSettings() {
       renderSettings();
     });
   });
+
+  // Sound picker
+  const soundPicker = document.getElementById('sound-picker');
+  if (soundPicker) {
+    soundPicker.innerHTML = SOUND_EFFECTS.map(sfx =>
+      '<button class="sens-opt'+(S.soundEffect===sfx.id?' active':'')+'" data-sfx="'+sfx.id+'" style="font-size:11px;padding:6px">'+esc(sfx.name)+'</button>'
+    ).join('');
+    soundPicker.style.display = 'flex';
+    soundPicker.style.flexWrap = 'wrap';
+    soundPicker.style.gap = '5px';
+    soundPicker.querySelectorAll('.sens-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        S.soundEffect = btn.dataset.sfx;
+        save();
+        renderSettings();
+        if (S.soundEffect !== 'none' && !S.soundMuted) {
+          const sfx = SOUND_EFFECTS.find(s => s.id === S.soundEffect);
+          if (sfx && sfx.file) { const a = new Audio(sfx.file); a.volume = 0.4; a.play().catch(() => {}); }
+        }
+      });
+    });
+  }
+
+  // Sound mute toggle
+  const muteToggle = document.getElementById('sound-mute-toggle');
+  if (muteToggle) {
+    muteToggle.className = 'toggle' + (S.soundMuted ? ' on' : '');
+    muteToggle.onclick = () => { S.soundMuted = !S.soundMuted; save(); renderSettings(); };
+  }
 }
 
 function applyTheme() {
@@ -3277,6 +3433,39 @@ function saveAppsModal() {
   renderDock();
 }
 
+/* -- SOUND EFFECTS -- */
+
+function playTaskSound() {
+  if (S.soundMuted || S.soundEffect === 'none') return;
+  const sfx = SOUND_EFFECTS.find(s => s.id === S.soundEffect);
+  if (!sfx || !sfx.file) return;
+  const audio = new Audio(sfx.file);
+  audio.volume = 0.5;
+  audio.play().catch(() => {});
+  if (S.soundEffect === 'finish-him') showFinishHim();
+}
+
+function showFinishHim() {
+  const overlay = document.createElement('div');
+  overlay.className = 'finish-him-overlay';
+  overlay.innerHTML = '<div class="finish-him-text">FINISH HIM!</div>';
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('show'));
+  setTimeout(() => {
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.remove(), 500);
+  }, 1500);
+}
+
+/* -- DISPLAY THEME -- */
+
+function applyDisplayTheme() {
+  document.body.dataset.display = S.displayTheme || 'default';
+  if (S.displayTheme === 'ivory') {
+    document.body.dataset.light = '1';
+  }
+}
+
 /* -- RENDER ALL -- */
 
 function renderAll() {
@@ -3383,6 +3572,7 @@ function init() {
     applyTheme();
   }
 
+  applyDisplayTheme();
   setupWsName();
   renderAll();
   applyBgMode();
