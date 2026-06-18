@@ -314,7 +314,24 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .f-label{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:5px}
 .f-input{width:100%;padding:9px 11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:var(--tx);font-size:13.5px;font-family:var(--font);outline:none;transition:border-color .2s,background .2s;margin-bottom:13px}
 .f-input:focus{border-color:var(--accent);background:rgba(255,255,255,.07)}
-.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-bottom:14px}
+/* Edit modal app selector */
+.edit-app-list{max-height:180px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:3px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent}
+.edit-app-list::-webkit-scrollbar{width:4px}
+.edit-app-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+.edit-app-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;background:rgba(255,255,255,.03);border:1px solid transparent;cursor:pointer;transition:background .12s,border-color .12s}
+.edit-app-item:hover{background:rgba(255,255,255,.07)}
+.edit-app-item.sel{background:rgba(106,167,255,.12);border-color:rgba(106,167,255,.25)}
+.edit-app-item img{width:20px;height:20px;border-radius:4px;object-fit:contain;flex-shrink:0}
+.edit-app-item .ea-name{font-size:12px;font-weight:500;color:var(--tx);flex:1}
+.edit-app-item .ea-domain{font-size:10px;color:var(--dim);flex-shrink:0}
+.edit-app-item.sel .ea-name{color:var(--accent)}
+.edit-divider{text-align:center;margin:10px 0;position:relative}
+.edit-divider::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:var(--line)}
+.edit-divider span{position:relative;background:rgba(7,13,26,.95);padding:0 12px;font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+[data-light="1"] .edit-divider span{background:rgba(245,247,255,.92)}
+[data-light="1"] .edit-app-item{background:rgba(0,0,0,.02)}
+[data-light="1"] .edit-app-item:hover{background:rgba(0,0,0,.05)}
+.emoji-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:14px}
 .emoji-opt{aspect-ratio:1;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid transparent;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;transition:background .12s,border-color .12s}
 .emoji-opt:hover{background:rgba(255,255,255,.09)}
 .emoji-opt.sel{background:rgba(106,167,255,.14);border-color:rgba(106,167,255,.28)}
@@ -725,11 +742,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <div class="modal-title">Edit App</div>
       <button class="modal-close" id="edit-close">&#10005;</button>
     </div>
+    <label class="f-label">Quick Swap: Choose an App</label>
+    <div class="edit-app-list" id="edit-app-list"></div>
+    <div class="edit-divider"><span>or customise</span></div>
     <label class="f-label">App Name</label>
     <input class="f-input" id="edit-name" placeholder="e.g. Asana" />
     <label class="f-label">URL</label>
     <input class="f-input" id="edit-url" placeholder="https://app.example.com" />
-    <label class="f-label">Icon</label>
+    <label class="f-label">Icon (optional)</label>
     <div class="emoji-grid" id="emoji-grid"></div>
     <div class="modal-actions" style="justify-content:space-between">
       <button class="btn btn-danger" id="edit-delete">Reset</button>
@@ -958,10 +978,9 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 const KEY = 'focos_v10';
 
 const EMOJIS = [
-  '\u{1F4CB}','\u2709\uFE0F','\u{1F4AC}','\u{1F4CA}','\u25C8','\u{1F4DD}','\u{1F3AC}','\u{1F3A8}',
-  '\u{1F4DE}','\u{1F536}','\u{1F4C5}','\u{1F4BE}','\u{1F517}','\u{1F4CC}','\u26A1','\u{1F3AF}',
-  '\u{1F680}','\u{1F4A1}','\u{1F527}','\u{1F4C8}','\u{1F50D}','\u{1F3C6}','\u{1F310}','\u2699\uFE0F',
-  '\u{1F4F1}','\u{1F4E7}','\u{1F4F0}','\u{1F512}','\u{1F5C2}\uFE0F','\u{1F4BB}','\u{1F3A5}','\u{1F4C4}'
+  '\u25CE','\u25B2','\u25C8','\u273A','\u25C9','\u2302','\u2605','\u2606','\u25CF','\u25CB',
+  '\u25A0','\u25A1','\u25B6','\u25C0','\u2666','\u2663','\u2660','\u2764','\u2726','\u2727',
+  '\u2736','\u2737','\u2738','\u2742','\u274B','\u2756','\u2318','\u2325','\u232B','\u2608'
 ];
 
 const PRESETS = [
@@ -2007,13 +2026,39 @@ function openPanel(idx) {
 
 let editIdx = null;
 
+let editSelectedPreset = null;
+
 function openEditModal(idx) {
   editIdx = idx;
+  editSelectedPreset = null;
   const p = getPanel(idx);
   if (!p) return;
   document.getElementById('edit-name').value = p.name;
   document.getElementById('edit-url').value  = p.url;
 
+  // Render app selector list (all presets with favicons)
+  const list = document.getElementById('edit-app-list');
+  list.innerHTML = PRESETS.map(pr => {
+    const isCurrent = (p.id === pr.id) || (p.preset === pr.id);
+    return '<div class="edit-app-item'+(isCurrent?' sel':'')+'" data-pid="'+pr.id+'">' +
+      '<img src="'+getFavicon(pr.url, 20)+'" alt="" onerror="this.style.display=\'none\'">' +
+      '<span class="ea-name">'+esc(pr.name)+'</span>' +
+      '<span class="ea-domain">'+esc(getDomain(pr.url))+'</span></div>';
+  }).join('');
+  list.querySelectorAll('.edit-app-item').forEach(item => {
+    item.addEventListener('click', () => {
+      list.querySelectorAll('.edit-app-item').forEach(i => i.classList.remove('sel'));
+      item.classList.add('sel');
+      const pr = PRESETS.find(p => p.id === item.dataset.pid);
+      if (pr) {
+        editSelectedPreset = pr.id;
+        document.getElementById('edit-name').value = pr.name;
+        document.getElementById('edit-url').value = pr.url;
+      }
+    });
+  });
+
+  // Render unicode icon grid
   const grid = document.getElementById('emoji-grid');
   grid.innerHTML = EMOJIS.map(e =>
     '<div class="emoji-opt'+(p.emoji===e?' sel':'')+'" data-e="'+e+'">'+e+'</div>'
@@ -2026,27 +2071,32 @@ function openEditModal(idx) {
   });
 
   openModal('modal-edit');
-  setTimeout(() => document.getElementById('edit-name').focus(), 50);
 }
+
+
 
 function saveEdit() {
   if (editIdx === null) return;
-  const name  = document.getElementById('edit-name').value.trim();
-  const url   = document.getElementById('edit-url').value.trim();
-  const emoji = document.querySelector('#emoji-grid .emoji-opt.sel')?.dataset.e || '\u{1F517}';
-  if (!name || !url) return;
 
-  S.panels[editIdx] = {
-    custom:   true,
-    name,
-    url:      url.startsWith('http') ? url : 'https://' + url,
-    emoji,
-    lastOpen: S.panels[editIdx]?.lastOpen,
-  };
+  // If a preset was selected from the app list, use it directly
+  if (editSelectedPreset) {
+    S.panels[editIdx] = { preset: editSelectedPreset, lastOpen: S.panels[editIdx]?.lastOpen };
+  } else {
+    const name  = document.getElementById('edit-name').value.trim();
+    const url   = document.getElementById('edit-url').value.trim();
+    const emoji = document.querySelector('#emoji-grid .emoji-opt.sel')?.dataset.e || '\u25CE';
+    if (!name || !url) return;
+    S.panels[editIdx] = {
+      custom: true, name,
+      url: url.startsWith('http') ? url : 'https://' + url,
+      emoji, lastOpen: S.panels[editIdx]?.lastOpen,
+    };
+  }
   save();
   renderDock();
   closeModal('modal-edit');
   editIdx = null;
+  editSelectedPreset = null;
 }
 
 function deletePanel() {
