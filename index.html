@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Gravitate Focus</title>
+<title>Focus</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -61,7 +61,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-theme="noir"]{--bg:#000}
 
 /* Photo + Unicode backgrounds */
-#photo-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.5s ease;z-index:1}
+#photo-bg{position:absolute;inset:0;background-size:cover;background-position:center 25%;opacity:0;transition:opacity 1.5s ease;z-index:1}
 #photo-bg::after{content:'';position:absolute;inset:0;background:rgba(5,10,20,.55);pointer-events:none}
 [data-light="1"] #photo-bg::after{background:rgba(255,255,255,.5)}
 #unicode-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:1;overflow:hidden;pointer-events:none}
@@ -73,7 +73,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #topbar{display:flex;align-items:center;padding:0 14px;gap:12px;height:42px;flex-shrink:0;background:rgba(255,255,255,.04);backdrop-filter:blur(28px) saturate(200%);-webkit-backdrop-filter:blur(28px) saturate(200%);border-bottom:1px solid var(--line);z-index:50}
 .tb-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
 .brand{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.logo-mark{font-size:22px;color:var(--accent);flex-shrink:0;filter:drop-shadow(0 0 6px rgba(106,167,255,.35));line-height:1}
+.logo-mark{width:20px;height:20px;color:var(--accent);flex-shrink:0;filter:drop-shadow(0 0 6px rgba(106,167,255,.35))}
 .brand-name{font-size:14px;font-weight:600;letter-spacing:-.02em;color:var(--accent);flex-shrink:0}
 #ws-name{font-size:15px;font-weight:600;letter-spacing:-.02em;color:var(--tx);outline:none;border-bottom:1px solid transparent;transition:border-color .2s;min-width:10px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #ws-name:focus{border-bottom-color:var(--accent)}
@@ -364,7 +364,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #first-run{position:fixed;inset:0;z-index:1000;background:rgba(5,10,20,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 #first-run.show{opacity:1;pointer-events:all}
 .fr-box{text-align:center;max-width:520px;padding:40px}
-.fr-logo{font-size:56px;color:var(--accent);margin:0 auto 20px;filter:drop-shadow(0 0 16px rgba(106,167,255,.4));line-height:1}
+.fr-logo{width:48px;height:48px;color:var(--accent);margin:0 auto 20px;filter:drop-shadow(0 0 16px rgba(106,167,255,.4))}
 .fr-title{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:8px}
 .fr-sub{font-size:14px;color:var(--mu);line-height:1.6;margin-bottom:28px}
 .fr-input{width:100%;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:var(--tx);font-size:16px;font-family:var(--font);outline:none;text-align:center;margin-bottom:16px;transition:border-color .2s}
@@ -565,8 +565,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
   <header id="topbar">
     <div class="tb-left">
       <div class="brand">
-        <span class="logo-mark">&#x25CE;</span>
-        <span class="brand-name">Gravitate</span>
+        <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 1.5v3.4M12 19.1v3.4M1.5 12h3.4M19.1 12h3.4" stroke-linecap="round"/></svg>
+        <span class="brand-name">Focus</span>
         <span id="ws-name" contenteditable spellcheck="false">Focus</span>
       </div>
       <div class="tb-sep"></div>
@@ -594,7 +594,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <button class="tb-btn" id="btn-sidepanel" aria-label="Widgets" title="Toggle widgets (W)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M15 3v18"></path></svg>
       </button>
-      <button class="tb-btn" id="btn-help" aria-label="How Gravitate Focus works" title="Shortcuts (?)">?</button>
+      <button class="tb-btn" id="btn-help" aria-label="How Focus works" title="Shortcuts (?)">?</button>
     </div>
   </header>
 
@@ -763,11 +763,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <div class="modal-bg" id="modal-help">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title">How Gravitate Focus Works</div>
+      <div class="modal-title">How Focus Works</div>
       <button class="modal-close" id="help-close">&#10005;</button>
     </div>
     <div class="help-intro">
-      Gravitate Focus keeps your <b>priorities front and centre</b>. Your Top 3 card anchors the hero, apps live in the dock, and widgets slide out when you need them. Click any dock app to open in a new tab. Use <kbd class="kbd">&#8984;K</kbd> for quick launch.
+      Focus keeps your <b>priorities front and centre</b>. Your Top 3 card anchors the hero, apps live in the dock, and widgets slide out when you need them. Click any dock app to open in a new tab. Use <kbd class="kbd">&#8984;K</kbd> for quick launch.
     </div>
     <div class="sc-row"><span>Open app 1&ndash;8 in new tab</span><span><kbd class="kbd">1</kbd> &ndash; <kbd class="kbd">8</kbd></span></div>
     <div class="sc-row"><span>Quick launch / jump to</span><span><kbd class="kbd">&#8984;K</kbd> or <kbd class="kbd">/</kbd></span></div>
@@ -908,11 +908,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <!-- FIRST RUN -->
 <div id="first-run">
   <div class="fr-box">
-    <div class="fr-logo">&#x25CE;</div>
+    <svg class="fr-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 1.5v3.4M12 19.1v3.4M1.5 12h3.4M19.1 12h3.4" stroke-linecap="round"/></svg>
     <div class="flow-steps" id="fr-flow-dots"></div>
     <!-- Step 1: Name -->
     <div class="fr-step active" id="fr-step-1">
-      <div class="fr-title">Welcome to Gravitate Focus</div>
+      <div class="fr-title">Welcome to Focus</div>
       <div class="fr-sub">Your calm command center. What should we call you?</div>
       <input class="fr-input" id="fr-name" placeholder="Your name..." spellcheck="false" autocomplete="off" />
       <button class="fr-btn" id="fr-next-1">Next</button>
@@ -951,7 +951,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
 <script>
 /* ======================================
-   Gravitate Focus . focus-os.js
+   Focus . focus-os.js
    Gravitate AI Arm . v13 (Momentum)
 ====================================== */
 
@@ -1016,7 +1016,7 @@ const PRESETS = [
   {id:'proposals', name:'Proposals',         url:'https://proposals.gravitatedigital.com.au', emoji:'\u{1F4DD}', cat:'gravitate'},
   {id:'pace',      name:'Pace Timekeeping',  url:'https://pace-os.vercel.app',               emoji:'\u23F1\uFE0F', cat:'gravitate'},
   {id:'space',     name:'Gravitate Space',   url:'https://gravitatespace.com.au',             emoji:'\u{1F3E2}', cat:'gravitate'},
-  {id:'gfocus',    name:'Gravitate Focus',   url:'https://focus-os-snowy-nu.vercel.app',      emoji:'\u25CE', cat:'gravitate'},
+  {id:'gfocus',    name:'Focus',   url:'https://focus-os-snowy-nu.vercel.app',      emoji:'\u25CE', cat:'gravitate'},
 ];
 
 const CAT_LABELS = {
@@ -1667,7 +1667,7 @@ function renderClock() {
   set('hero-date', greet + '  \u00B7  ' + date);
   set('tb-clock', h + ':' + m);
   const titleGreet = period === 'morning' ? 'Good morning' : period === 'afternoon' ? 'Good afternoon' : period === 'evening' ? 'Good evening' : 'Working late';
-  document.title = titleGreet + (name ? name : '') + ' : Gravitate Focus';
+  document.title = titleGreet + (name ? name : '') + ' : Focus';
 }
 
 /* -- RENDER: HERO PRIORITIES (Top 3) -- */
@@ -1733,7 +1733,7 @@ function sharePriorities() {
   // Header
   ctx.fillStyle = '#00193D';
   ctx.font = '600 14px -apple-system, sans-serif';
-  ctx.fillText('\u25CE Gravitate Focus', 40, 50);
+  ctx.fillText('\u25CE Focus', 40, 50);
   ctx.fillStyle = '#888';
   ctx.font = '400 13px -apple-system, sans-serif';
   ctx.fillText(new Date().toLocaleDateString('en-AU', {weekday:'long', day:'numeric', month:'long', year:'numeric'}), 40, 72);
@@ -2233,7 +2233,7 @@ function buildCmdkItems(query) {
   items.push({type:'action', action:'settings', name:'Settings', sub:'Themes, coach, export', emoji:'\u2699\uFE0F'});
   items.push({type:'action', action:'light', name:'Toggle light mode', sub:'Switch appearance', emoji:'\u2600\uFE0F'});
   items.push({type:'action', action:'widgets', name:'Toggle widgets', sub:'Open side panel', emoji:'\u{1F4CB}'});
-  items.push({type:'action', action:'help', name:'Help & shortcuts', sub:'How Gravitate Focus works', emoji:'\u2753'});
+  items.push({type:'action', action:'help', name:'Help & shortcuts', sub:'How Focus works', emoji:'\u2753'});
 
   if (!q) return items.slice(0, 10);
   return items
@@ -2405,7 +2405,7 @@ function importData(file) {
 }
 
 function resetAllData() {
-  if (!confirm('Reset all Gravitate Focus data? This will clear your panels, tasks, rocks, and settings.')) return;
+  if (!confirm('Reset all Focus data? This will clear your panels, tasks, rocks, and settings.')) return;
   localStorage.removeItem(KEY);
   location.reload();
 }
