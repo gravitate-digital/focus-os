@@ -60,6 +60,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-theme="noir"] .b3{background:rgba(255,255,255,.02)}
 [data-theme="noir"]{--bg:#000}
 
+/* Photo + Unicode backgrounds */
+#photo-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.5s ease;z-index:1}
+#photo-bg::after{content:'';position:absolute;inset:0;background:rgba(5,10,20,.55);pointer-events:none}
+[data-light="1"] #photo-bg::after{background:rgba(255,255,255,.5)}
+#unicode-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:1;overflow:hidden;pointer-events:none}
+
 /* -- APP SHELL -- */
 #app{position:relative;z-index:10;display:flex;flex-direction:column;height:100vh;width:100vw}
 
@@ -102,14 +108,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .mode-auto-label{flex:1}
 
 /* -- HERO SECTION -- */
-#hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:hidden;min-height:0;position:relative}
+#hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 20px 90px;overflow:hidden;min-height:0;position:relative;gap:0}
 
 /* Hero clock */
-#hero-clock{font-size:82px;font-weight:100;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1;color:var(--tx);text-align:center;margin-bottom:6px}
-#hero-date{font-size:16px;color:var(--mu);font-weight:300;letter-spacing:-.01em;text-align:center;margin-bottom:32px}
+#hero-clock{font-size:82px;font-weight:100;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1;color:var(--tx);text-align:center;margin-bottom:4px}
+#hero-date{font-size:16px;color:var(--mu);font-weight:300;letter-spacing:-.01em;text-align:center;margin-bottom:20px}
 
 /* Hero One Thing card */
-#hero-onething{width:100%;max-width:480px;padding:20px 24px;border-radius:18px;background:linear-gradient(180deg,rgba(106,167,255,.12),rgba(106,167,255,.04));backdrop-filter:blur(40px) saturate(220%);-webkit-backdrop-filter:blur(40px) saturate(220%);border:1px solid rgba(106,167,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 6px 24px rgba(0,0,0,.18);margin-bottom:24px;text-align:left;transition:opacity .3s}
+#hero-onething{width:100%;max-width:480px;padding:20px 24px;border-radius:18px;background:linear-gradient(180deg,rgba(106,167,255,.12),rgba(106,167,255,.04));backdrop-filter:blur(40px) saturate(220%);-webkit-backdrop-filter:blur(40px) saturate(220%);border:1px solid rgba(106,167,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 6px 24px rgba(0,0,0,.18);margin-bottom:12px;text-align:left;transition:opacity .3s}
 .hero-ot-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
 .hero-ot-task{display:flex;align-items:flex-start;gap:14px;cursor:pointer}
 .hero-ot-check{width:22px;height:22px;border-radius:7px;border:1.5px solid rgba(106,167,255,.5);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
@@ -122,7 +128,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .hero-ot-hint{font-size:11px;color:var(--dim);margin-top:7px;line-height:1.5}
 
 /* Hero Focus Session */
-#hero-focus{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:24px}
+#hero-focus{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:0}
 .hero-fs-display{display:flex;align-items:center;gap:18px}
 .hero-fs-ring{position:relative;width:64px;height:64px;flex-shrink:0}
 .hero-fs-ring svg{width:64px;height:64px;transform:rotate(-90deg)}
@@ -144,7 +150,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .fs-preset.active{background:rgba(106,167,255,.1);border-color:rgba(106,167,255,.2);color:var(--accent)}
 
 /* Hero quote */
-#hero-quote{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);max-width:520px;text-align:center;font-size:13px;font-weight:300;font-style:italic;color:var(--dim);line-height:1.6;letter-spacing:-.01em;transition:opacity .8s ease}
+#hero-quote{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);max-width:520px;text-align:center;font-size:13px;font-weight:300;font-style:italic;color:var(--dim);line-height:1.6;letter-spacing:-.01em;transition:opacity .8s ease}
 
 /* Topbar timer indicator */
 #tb-timer{display:none;align-items:center;gap:5px;padding:0 8px;height:28px;border-radius:8px;background:rgba(106,167,255,.12);border:1px solid rgba(106,167,255,.2);color:var(--accent);font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;cursor:pointer;font-family:var(--font);flex-shrink:0}
@@ -482,7 +488,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .theme-opt .theme-swatch-auto{width:28px;height:28px;border-radius:8px;margin:0 auto 6px;border:1px solid rgba(255,255,255,.1);background:conic-gradient(from 180deg,#faf6ef 0deg,#f0f2f8 90deg,#1a1028 180deg,#050a14 270deg,#faf6ef 360deg)}
 
 /* Hero next meeting preview */
-#hero-next-mtg{font-size:12px;color:var(--dim);text-align:center;margin-bottom:16px}
+#hero-next-mtg{font-size:12px;color:var(--dim);text-align:center;margin-bottom:10px}
 #hero-next-mtg .mtg-accent{color:var(--accent)}
 
 /* Dock tooltip */
@@ -514,7 +520,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 </head>
 <body>
 
-<div id="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div id="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div id="photo-bg"></div><div id="unicode-bg"></div></div>
 
 <div id="app">
 
@@ -749,6 +755,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
 
     <div class="settings-group">
+      <div class="settings-group-label">Background</div>
+      <div class="sens-row" id="bg-mode-row">
+        <button class="sens-opt" data-bgmode="gradient">Gradient</button>
+        <button class="sens-opt" data-bgmode="photos">Team Photos</button>
+        <button class="sens-opt" data-bgmode="unicode">Unicode Pattern</button>
+      </div>
+    </div>
+
+    <div class="settings-group">
       <div class="settings-group-label">Display</div>
       <div class="settings-note">Hero view (default). More views coming soon.</div>
     </div>
@@ -899,9 +914,15 @@ const PRESETS = [
   {id:'instagram', name:'Instagram',         url:'https://instagram.com',           emoji:'\u{1F4F7}', cat:'social'},
   {id:'facebook',  name:'Facebook',          url:'https://facebook.com',            emoji:'\u{1F44D}', cat:'social'},
   {id:'linkedin',  name:'LinkedIn',          url:'https://linkedin.com',            emoji:'\u{1F4BC}', cat:'social'},
+  // Gravitate Internal
+  {id:'proposals', name:'Proposals',         url:'https://proposals.gravitatedigital.com.au', emoji:'\u{1F4DD}', cat:'gravitate'},
+  {id:'pace',      name:'Pace Timekeeping',  url:'https://pace-os.vercel.app',               emoji:'\u23F1\uFE0F', cat:'gravitate'},
+  {id:'space',     name:'Gravitate Space',   url:'https://gravitatespace.com.au',             emoji:'\u{1F3E2}', cat:'gravitate'},
+  {id:'gfocus',    name:'Gravitate Focus',   url:'https://focus-os-snowy-nu.vercel.app',      emoji:'\u25CE', cat:'gravitate'},
 ];
 
 const CAT_LABELS = {
+  gravitate: 'Gravitate Apps',
   core: 'Core / Google',
   ai: 'AI',
   pm: 'Project Management',
@@ -915,7 +936,7 @@ const CAT_LABELS = {
   social: 'Social',
 };
 
-const CAT_ORDER = ['core','ai','pm','comms','design','analytics','ads','seo','email','crm','social'];
+const CAT_ORDER = ['gravitate','core','ai','pm','comms','design','analytics','ads','seo','email','crm','social'];
 
 /* -- LAYOUT CATALOG (kept for mode switching) -- */
 const LAYOUTS = [
@@ -959,42 +980,136 @@ const COACH_MSGS = [
 ];
 
 const QUOTES = [
-  // Marketing
+  // SEO & Digital Marketing
   "A SEO expert walks into a bar, pub, tavern, inn, beer garden, saloon, gastropub...",
-  "Where's the best place to hide a dead body? Page 2 of Google search results.",
-  "Why did the marketer get off the trampoline? He was worried about his bounce rate.",
-  "Marketing budget: 50% works great. The other 50% is wasted. Nobody knows which half.",
-  "What's a pirate's favourite content format? WebinARRRs.",
+  "Where's the best place to hide the evidence? Page 2 of Google.",
+  "Why did the marketer get off the trampoline? Worried about the bounce rate.",
+  "Why do SEOs love the farmer's market? Lots of organic content.",
+  "What do SEO professionals see when they see twins? Duplicate content.",
+  "Why did the SEO cross the road? To get hit with traffic.",
+  "I tried to check into room 404 at the hotel. Couldn't find it.",
+  "What kind of fruit do SEOs like best? Low hanging.",
+  "Why do mobile marketers make good parents? They're responsive.",
+  "Why did the digital marketer get dumped? A serious lack of engagement.",
   // Agency life
-  "\"Can you make the logo bigger?\" Every client, everywhere, forever.",
-  "\"Just a small change.\" Famous last words.",
+  "\"Can you make the logo bigger?\" : Every client, everywhere, forever.",
+  "\"Just a small change.\" : Famous last words.",
   "\"We need it to go viral.\" Budget: $50.",
   "\"Let's take this offline.\" Translation: let's never discuss this again.",
   "\"Quick question.\" Narrator: it was not quick.",
-  // Design
-  "Helvetica and Times New Roman walk into a bar. The bartender says: we don't serve your type here.",
-  "How many designers does it take to change a light bulb? Does it have to be a light bulb?",
-  // Data / Analytics
-  "There are two types of people: those who can extrapolate from incomplete data.",
-  "Correlation does not imply causation, but it does waggle its eyebrows suggestively.",
-  "In God we trust. All others must bring data. \u2014 W. Edwards Deming",
-  // Productivity
-  "The secret to getting ahead is getting started. \u2014 Mark Twain",
-  "I'll stop procrastinating. Starting tomorrow.",
-  "My to-do list is really just a wish list at this point.",
-  "Focus is not about saying yes. It's about saying no. \u2014 Steve Jobs",
-  "Done is better than perfect. \u2014 Sheryl Sandberg",
-  // Ads
-  "I'm not saying your Google Ads account needs work, but your quality score just filed for bankruptcy.",
-  "Client: I want to rank #1 for everything. Budget: $200/month. Timeline: yesterday.",
-  // More agency
   "Scope creep isn't a bug, it's a feature nobody asked for.",
   "The WiFi went down for five minutes so I had to talk to my coworkers. They seem nice.",
-  "I put the 'pro' in procrastination.",
+  // Procrastination (real quotes)
+  "I love deadlines. I like the whooshing sound they make as they fly by. : Douglas Adams",
+  "Procrastinate now, don't put it off. : Ellen DeGeneres",
+  "Never put off till tomorrow what you can do the day after tomorrow. : Mark Twain",
+  "The sooner I fall behind, the more time I have to catch up.",
+  "Tomorrow is often the busiest day of the week.",
+  "Procrastination is the art of keeping up with yesterday. : Don Marquis",
+  // PPC & Ads
+  "Why does it take PPC managers so long to get to work? They can't help but create traffic.",
+  "Client: I want to rank #1 for everything. Budget: $200/month. Timeline: yesterday.",
+  "How do Jedi get leads? They use the Sales Force.",
+  // Design
+  "Helvetica and Times New Roman walk into a bar. Bartender says: we don't serve your type here.",
+  "How many designers does it take to change a light bulb? Does it have to be a light bulb?",
+  // Productivity
+  "The secret to getting ahead is getting started. : Mark Twain",
+  "Focus is not about saying yes. It's about saying no. : Steve Jobs",
+  "Done is better than perfect. : Sheryl Sandberg",
+  "In God we trust. All others must bring data. : W. Edwards Deming",
 ];
 
 let quoteIdx = 0;
 let quoteTimer = null;
+
+/* -- TEAM PHOTOS -- */
+const TEAM_PHOTOS = [
+  'GRAVITATEDIGITAL_STAFF_1995_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_1998_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2000_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2004_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2007_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2008_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2009_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2011_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2013_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2016_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2019_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2021_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2023_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2025_V2_WEB.jpg',
+  'GRAVITATEDIGITAL_STAFF_2026_V2_WEB.jpg',
+];
+
+let photoBgTimer = null;
+let currentPhotoIdx = 0;
+
+function pickRandomPhotoIdx() {
+  return Math.floor(Math.random() * TEAM_PHOTOS.length);
+}
+
+function applyBgMode() {
+  const mode = (S && S.bgMode) || 'gradient';
+  const photoBg = document.getElementById('photo-bg');
+  const unicodeBg = document.getElementById('unicode-bg');
+  const blobs = document.querySelectorAll('.blob');
+
+  if (photoBgTimer) { clearInterval(photoBgTimer); photoBgTimer = null; }
+
+  if (mode === 'photos') {
+    blobs.forEach(b => b.style.display = 'none');
+    unicodeBg.style.opacity = '0';
+    currentPhotoIdx = pickRandomPhotoIdx();
+    photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
+    photoBg.style.opacity = '1';
+    photoBgTimer = setInterval(() => cyclePhoto(), 60000);
+  } else if (mode === 'unicode') {
+    blobs.forEach(b => b.style.display = 'none');
+    photoBg.style.opacity = '0';
+    renderUnicodeBg();
+    unicodeBg.style.opacity = '1';
+  } else {
+    // gradient (default)
+    blobs.forEach(b => b.style.display = '');
+    photoBg.style.opacity = '0';
+    unicodeBg.style.opacity = '0';
+  }
+}
+
+function cyclePhoto() {
+  const photoBg = document.getElementById('photo-bg');
+  photoBg.style.opacity = '0';
+  setTimeout(() => {
+    currentPhotoIdx = (currentPhotoIdx + 1) % TEAM_PHOTOS.length;
+    photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
+    photoBg.style.opacity = '1';
+  }, 1600);
+}
+
+function renderUnicodeBg() {
+  const el = document.getElementById('unicode-bg');
+  const isLight = document.body.dataset.light === '1';
+  const color = isLight ? 'rgba(0,25,61,' : 'rgba(106,167,255,';
+  const symbols = ['\u25CE', '\u25B2', '\u25C8'];
+  const cols = 60;
+  const rows = 28;
+  let html = '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="position:absolute;inset:0">';
+  const seed = 42;
+  let si = seed;
+  function rng() { si = (si * 1664525 + 1013904223) & 0xffffffff; return (si >>> 0) / 0xffffffff; }
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const sym = symbols[Math.floor(rng() * symbols.length)];
+      const op = (0.04 + rng() * 0.04).toFixed(3);
+      const x = (c / cols * 100).toFixed(1);
+      const y = (r / rows * 100).toFixed(1);
+      html += '<text x="' + x + '%" y="' + y + '%" fill="' + color + op + ')" font-size="16" font-family="-apple-system,sans-serif">' + sym + '</text>';
+    }
+  }
+  html += '</svg>';
+  el.innerHTML = html;
+}
 
 /* -- ROLE PRESETS -- */
 const ROLE_PRESETS = {
@@ -1196,6 +1311,7 @@ const DEFAULT_STATE = {
     {id:4, text:'CallRail audit, Luxe',       done:false},
   ],
   coach:{on:true, sensitivity:'med', switchCount:0},
+  bgMode: 'gradient',
   oneThingId: 2,
   topPriorities: [],
   firstRun: true,
@@ -1224,6 +1340,8 @@ function loadState() {
     if (!merged.role) merged.role = 'custom';
     // Auto-theme migration
     if (merged.autoTheme === undefined) merged.autoTheme = true;
+    // bgMode migration
+    if (!merged.bgMode) merged.bgMode = 'gradient';
     // Top priorities migration
     if (!merged.topPriorities) merged.topPriorities = [];
     if (merged.oneThingId && merged.topPriorities.length === 0) {
@@ -1820,6 +1938,20 @@ function renderSettings() {
     });
   });
 
+  // Background mode buttons
+  const bgRow = document.getElementById('bg-mode-row');
+  if (bgRow) {
+    bgRow.querySelectorAll('.sens-opt').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.bgmode === (S.bgMode || 'gradient'));
+      btn.onclick = () => {
+        S.bgMode = btn.dataset.bgmode;
+        save();
+        applyBgMode();
+        renderSettings();
+      };
+    });
+  }
+
   const ct = document.getElementById('coach-toggle');
   ct.className = 'toggle' + (S.coach.on ? ' on' : '');
 
@@ -1986,6 +2118,8 @@ function setLight(on) {
   document.body.dataset.light = on ? '1' : '0';
   document.getElementById('btn-light').classList.toggle('active', on);
   save();
+  // Re-render unicode bg color if active
+  if ((S.bgMode || 'gradient') === 'unicode') renderUnicodeBg();
 }
 
 
@@ -2619,6 +2753,7 @@ function init() {
 
   setupWsName();
   renderAll();
+  applyBgMode();
   renderFocusSession();
   renderModeSwitcher();
 
