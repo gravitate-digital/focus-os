@@ -487,6 +487,19 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* Auto theme option in theme grid */
 .theme-opt .theme-swatch-auto{width:28px;height:28px;border-radius:8px;margin:0 auto 6px;border:1px solid rgba(255,255,255,.1);background:conic-gradient(from 180deg,#faf6ef 0deg,#f0f2f8 90deg,#1a1028 180deg,#050a14 270deg,#faf6ef 360deg)}
 
+/* -- FLOW STEP DOTS -- */
+.flow-steps{display:flex;justify-content:center;gap:6px;margin-bottom:20px}
+.flow-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:background .2s}
+.flow-dot.active{background:var(--accent)}
+.flow-dot.done{background:var(--ok)}
+
+/* Intention gate subgreeting */
+#ig-subgreeting{font-size:13px;color:var(--mu);margin-top:4px;font-weight:300}
+
+/* Intention gate section labels */
+.ig-section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:12px 0 6px;text-align:left}
+.ig-section-label:first-child{margin-top:0}
+
 /* Hero next meeting preview */
 #hero-next-mtg{font-size:12px;color:var(--dim);text-align:center;margin-bottom:10px}
 #hero-next-mtg .mtg-accent{color:var(--accent)}
@@ -807,10 +820,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <div id="intention-gate">
   <div class="ig-box">
     <div class="ig-greeting" id="ig-greeting">Good morning</div>
-    <div class="ig-title">What are your top priorities today?</div>
+    <div id="ig-subgreeting"></div>
+    <div class="ig-title">Today's Focus</div>
     <div class="ig-sub">Pick up to 3 tasks that would make today a win.</div>
     <div class="ig-counter" id="ig-counter"></div>
-    <div class="ig-pick-label">Pick From Today's Tasks</div>
     <div class="ig-tasks" id="ig-tasks"></div>
     <div class="ig-or">or add something new</div>
     <div class="ig-add-row">
@@ -826,6 +839,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <div id="first-run">
   <div class="fr-box">
     <div class="fr-logo">&#x25CE;</div>
+    <div class="flow-steps" id="fr-flow-dots"></div>
     <!-- Step 1: Name -->
     <div class="fr-step active" id="fr-step-1">
       <div class="fr-title">Welcome to Gravitate Focus</div>
@@ -847,6 +861,20 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <div class="fr-app-counter" id="fr-app-counter"></div>
       <div class="fr-app-grid" id="fr-app-grid"></div>
       <button class="fr-btn" id="fr-go">Get Started</button>
+    </div>
+    <!-- Step 4: Priorities (embedded intention gate) -->
+    <div class="fr-step" id="fr-step-4">
+      <div class="fr-title">Set Your Priorities</div>
+      <div class="fr-sub">Pick up to 3 tasks for today. You'll see these front and centre on your dashboard.</div>
+      <div class="ig-counter" id="fr-ig-counter"></div>
+      <div class="ig-pick-label">Your tasks</div>
+      <div class="ig-tasks" id="fr-ig-tasks"></div>
+      <div class="ig-or">or add something new</div>
+      <div class="ig-add-row">
+        <input class="ig-custom" id="fr-ig-custom" placeholder="Type a priority..." spellcheck="false" />
+        <button class="ig-add-btn" id="fr-ig-add-btn">Add</button>
+      </div>
+      <button class="fr-btn" id="fr-ig-go">Let's Go</button>
     </div>
   </div>
 </div>
@@ -966,6 +994,17 @@ const THEMES = [
   {id:'dawn',     label:'Dawn',     swatch:'linear-gradient(135deg,#1a1008,#200810)'},
   {id:'deep',     label:'Deep',     swatch:'linear-gradient(135deg,#020408,#040818)'},
   {id:'noir',     label:'Noir',     swatch:'linear-gradient(135deg,#000,#0a0a0a)'},
+];
+
+const MORNING_VIBES = [
+  "Fresh day, fresh start. What matters most?",
+  "Coffee's ready. What's the plan?",
+  "New day, new wins. Pick your top 3.",
+  "Let's make today count. What's the focus?",
+  "The team's counting on you. What's first?",
+  "Clear mind, clear priorities. Let's go.",
+  "You've got this. What needs doing today?",
+  "Another day to ship something great.",
 ];
 
 const COACH_MSGS = [
@@ -2236,14 +2275,27 @@ function commitRock() {
   inp.classList.remove('show');
 }
 
+/* -- FLOW STEP DOTS -- */
+
+function renderFlowDots(containerId, step, total) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = Array.from({length: total}, (_, i) => {
+    const cls = i < step ? 'done' : i === step ? 'active' : '';
+    return '<div class="flow-dot ' + cls + '"></div>';
+  }).join('');
+}
+
 /* -- FIRST RUN (multi-step with app picker) -- */
 
 let frRole = null;
 let frSelectedApps = [];
+let frIgSelectedIds = [];
 
 function showFirstRun() {
   document.getElementById('first-run').classList.add('show');
   renderFrRoles();
+  renderFlowDots('fr-flow-dots', 0, 4);
   setTimeout(() => document.getElementById('fr-name').focus(), 300);
 }
 
@@ -2267,6 +2319,7 @@ function frNextStep() {
   document.getElementById('ws-name').textContent = name;
   document.getElementById('fr-step-1').classList.remove('active');
   document.getElementById('fr-step-2').classList.add('active');
+  renderFlowDots('fr-flow-dots', 1, 4);
 }
 
 function frSelectRole(role) {
@@ -2279,6 +2332,7 @@ function frGoToStep3() {
   if (!frRole) return;
   document.getElementById('fr-step-2').classList.remove('active');
   document.getElementById('fr-step-3').classList.add('active');
+  renderFlowDots('fr-flow-dots', 2, 4);
 
   // Pre-select role defaults
   const preset = ROLE_PRESETS[frRole];
@@ -2348,9 +2402,61 @@ function completeFirstRun() {
   S.topPriorities = [];
   S.firstRun = false;
   save();
+
+  // Transition to step 4 (priorities) inside the same overlay
+  document.getElementById('fr-step-3').classList.remove('active');
+  document.getElementById('fr-step-4').classList.add('active');
+  renderFlowDots('fr-flow-dots', 3, 4);
+
+  // Render task list for step 4
+  frIgSelectedIds = [];
+  renderFrIgTasks();
+  document.getElementById('fr-ig-custom').value = '';
+}
+
+function renderFrIgTasks() {
+  const el = document.getElementById('fr-ig-tasks');
+  if (!el) return;
+  const incomplete = S.tasks.filter(t => !t.done);
+  if (!incomplete.length) {
+    el.innerHTML = '<div style="font-size:12px;color:var(--dim);padding:8px;text-align:center">No tasks yet. Add one below.</div>';
+  } else {
+    el.innerHTML = incomplete.map(t => {
+      const selIdx = frIgSelectedIds.indexOf(t.id);
+      const isSel = selIdx !== -1;
+      return '<div class="ig-task' + (isSel ? ' sel' : '') + '" data-tid="' + t.id + '">' +
+        (isSel ? '<span class="ig-task-badge">' + (selIdx + 1) + '</span>' : '<span class="ig-task-plus">+</span>') +
+        '<span class="ig-task-text">' + esc(t.text) + '</span></div>';
+    }).join('');
+  }
+  el.querySelectorAll('.ig-task').forEach(row => {
+    row.addEventListener('click', () => {
+      const id = +row.dataset.tid;
+      const idx = frIgSelectedIds.indexOf(id);
+      if (idx !== -1) {
+        frIgSelectedIds.splice(idx, 1);
+      } else if (frIgSelectedIds.length < 3) {
+        frIgSelectedIds.push(id);
+      }
+      updateFrIgCounter();
+      renderFrIgTasks();
+    });
+  });
+  updateFrIgCounter();
+}
+
+function updateFrIgCounter() {
+  const counter = document.getElementById('fr-ig-counter');
+  if (counter) counter.innerHTML = '<span class="ig-count-num">' + frIgSelectedIds.length + '</span> of 3 selected';
+}
+
+function frCompletePriorities() {
+  S.topPriorities = [...frIgSelectedIds];
+  S.oneThingId = S.topPriorities[0] || null;
+  S.intentionDate = todayStr();
+  save();
   document.getElementById('first-run').classList.remove('show');
   renderAll();
-  showIntentionGate();
 }
 
 /* -- FOCUS SESSION -- */
@@ -2551,10 +2657,43 @@ function showIntentionGate() {
   if (!needsIntention()) return;
   const gate = document.getElementById('intention-gate');
   const period = getTimePeriod();
-  const greetMap = {morning:'Good morning',afternoon:'Good afternoon',evening:'Good evening',night:'Working late'};
-  set('ig-greeting', greetMap[period] || 'Good morning');
+
+  // Personalised greeting with name
+  const firstName = (S.wsName && S.wsName.toLowerCase() !== 'focus') ? S.wsName.split(' ')[0] : '';
+  const greetMap = {
+    morning:   'Good morning' + (firstName ? ', ' + firstName : ''),
+    afternoon: 'Good afternoon' + (firstName ? ', ' + firstName : ''),
+    evening:   'Good evening' + (firstName ? ', ' + firstName : ''),
+    night:     'Working late' + (firstName ? ', ' + firstName : ''),
+  };
+  set('ig-greeting', greetMap[period] || greetMap.morning);
+
+  // Warm subgreeting: only for morning
+  const subEl = document.getElementById('ig-subgreeting');
+  if (subEl) {
+    if (period === 'morning') {
+      subEl.textContent = MORNING_VIBES[Math.floor(Math.random() * MORNING_VIBES.length)];
+    } else {
+      subEl.textContent = '';
+    }
+  }
+
+  // Pre-select yesterday's incomplete priorities as carry-overs
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toISOString().slice(0, 10);
+  const wasYesterday = S.intentionDate === yesterdayStr;
 
   let selectedIds = [];
+  if (wasYesterday && S.topPriorities && S.topPriorities.length > 0) {
+    // Pre-select yesterday's priorities that are still incomplete
+    selectedIds = S.topPriorities.filter(id => {
+      const t = S.tasks.find(x => x.id === id);
+      return t && !t.done;
+    });
+  }
+
+  const yesterdayCarryIds = [...selectedIds];
 
   function renderIgTasks() {
     const el = document.getElementById('ig-tasks');
@@ -2562,13 +2701,33 @@ function showIntentionGate() {
     if (!incomplete.length) {
       el.innerHTML = '<div style="font-size:12px;color:var(--dim);padding:8px;text-align:center">No tasks yet. Add one below.</div>';
     } else {
-      el.innerHTML = incomplete.map(t => {
-        const selIdx = selectedIds.indexOf(t.id);
-        const isSel = selIdx !== -1;
-        return '<div class="ig-task'+(isSel?' sel':'')+'" data-tid="'+t.id+'">' +
-          (isSel ? '<span class="ig-task-badge">'+(selIdx+1)+'</span>' : '<span class="ig-task-plus">+</span>') +
-          '<span class="ig-task-text">'+esc(t.text)+'</span></div>';
-      }).join('');
+      // Split: carry-overs vs today's other tasks
+      const carryIds = yesterdayCarryIds;
+      const carryTasks = incomplete.filter(t => carryIds.includes(t.id));
+      const otherTasks = incomplete.filter(t => !carryIds.includes(t.id));
+
+      let html = '';
+      if (carryTasks.length > 0) {
+        html += '<div class="ig-section-label">Yesterday\'s unfinished</div>';
+        html += carryTasks.map(t => {
+          const selIdx = selectedIds.indexOf(t.id);
+          const isSel = selIdx !== -1;
+          return '<div class="ig-task' + (isSel ? ' sel' : '') + '" data-tid="' + t.id + '">' +
+            (isSel ? '<span class="ig-task-badge">' + (selIdx + 1) + '</span>' : '<span class="ig-task-plus">+</span>') +
+            '<span class="ig-task-text">' + esc(t.text) + '</span></div>';
+        }).join('');
+      }
+      if (otherTasks.length > 0) {
+        html += '<div class="ig-section-label">Today\'s tasks</div>';
+        html += otherTasks.map(t => {
+          const selIdx = selectedIds.indexOf(t.id);
+          const isSel = selIdx !== -1;
+          return '<div class="ig-task' + (isSel ? ' sel' : '') + '" data-tid="' + t.id + '">' +
+            (isSel ? '<span class="ig-task-badge">' + (selIdx + 1) + '</span>' : '<span class="ig-task-plus">+</span>') +
+            '<span class="ig-task-text">' + esc(t.text) + '</span></div>';
+        }).join('');
+      }
+      el.innerHTML = html;
     }
 
     el.querySelectorAll('.ig-task').forEach(row => {
@@ -2600,6 +2759,7 @@ function showIntentionGate() {
   }
 
   renderIgTasks();
+  updateIgState();
 
   const customInput = document.getElementById('ig-custom');
   customInput.value = '';
@@ -2871,13 +3031,30 @@ function init() {
     ov.addEventListener('click', e => { if (e.target===ov) ov.classList.remove('open'); });
   });
 
-  // First run (3-step with app picker)
+  // First run (4-step with app picker and priorities)
   document.getElementById('fr-next-1').addEventListener('click', frNextStep);
   document.getElementById('fr-name').addEventListener('keydown', e => {
     if (e.key === 'Enter') { e.preventDefault(); frNextStep(); }
   });
   document.getElementById('fr-next-2').addEventListener('click', frGoToStep3);
   document.getElementById('fr-go').addEventListener('click', completeFirstRun);
+
+  // Step 4: priorities
+  document.getElementById('fr-ig-add-btn').addEventListener('click', () => {
+    const inp = document.getElementById('fr-ig-custom');
+    const txt = inp.value.trim();
+    if (!txt || frIgSelectedIds.length >= 3) return;
+    const id = Math.max(0, ...S.tasks.map(t => t.id)) + 1;
+    S.tasks.push({id, text: txt, done: false});
+    frIgSelectedIds.push(id);
+    inp.value = '';
+    save();
+    renderFrIgTasks();
+  });
+  document.getElementById('fr-ig-custom').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('fr-ig-add-btn').click(); }
+  });
+  document.getElementById('fr-ig-go').addEventListener('click', frCompletePriorities);
 
   setupKeyboard();
 
