@@ -378,22 +378,22 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .export-import-row .btn{flex:1;text-align:center;font-size:12px;padding:7px 10px}
 
 /* First-run overlay */
-#first-run{position:fixed;inset:0;z-index:1000;background:rgba(5,10,20,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+#first-run{position:fixed;inset:0;z-index:1000;background:rgba(5,10,20,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;overflow-y:auto;padding:20px}
 #first-run.show{opacity:1;pointer-events:all}
-.fr-box{text-align:center;max-width:520px;padding:40px}
-.fr-logo{width:48px;height:48px;color:var(--accent);margin:0 auto 20px;filter:drop-shadow(0 0 16px rgba(106,167,255,.4))}
-.fr-title{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:8px}
-.fr-sub{font-size:14px;color:var(--mu);line-height:1.6;margin-bottom:28px}
-.fr-input{width:100%;padding:12px 16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:var(--tx);font-size:16px;font-family:var(--font);outline:none;text-align:center;margin-bottom:16px;transition:border-color .2s}
+.fr-box{text-align:center;width:100%;max-width:580px;padding:30px 24px;margin:auto}
+.fr-logo{width:40px;height:40px;color:var(--accent);margin:0 auto 16px;filter:drop-shadow(0 0 16px rgba(106,167,255,.4))}
+.fr-title{font-size:clamp(22px,4vw,28px);font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+.fr-sub{font-size:13px;color:var(--mu);line-height:1.55;margin-bottom:20px}
+.fr-input{width:100%;padding:10px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:var(--tx);font-size:15px;font-family:var(--font);outline:none;text-align:center;margin-bottom:14px;transition:border-color .2s}
 .fr-input:focus{border-color:var(--accent)}
 .fr-btn{padding:11px 32px;border-radius:12px;background:rgba(106,167,255,.2);border:1px solid rgba(106,167,255,.3);color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s}
 .fr-btn:hover{background:rgba(106,167,255,.35)}
 .fr-btn:disabled{opacity:.3;cursor:not-allowed}
 
 /* -- DAILY INTENTION GATE -- */
-#intention-gate{position:fixed;inset:0;z-index:950;background:rgba(5,10,20,.94);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+#intention-gate{position:fixed;inset:0;z-index:950;background:rgba(5,10,20,.94);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s;overflow-y:auto;padding:20px}
 #intention-gate.show{opacity:1;pointer-events:all}
-.ig-box{text-align:center;max-width:440px;padding:40px 30px}
+.ig-box{text-align:center;width:100%;max-width:440px;padding:30px 20px;margin:auto}
 .ig-greeting{font-size:14px;color:var(--dim);margin-bottom:8px;font-weight:300}
 .ig-title{font-size:32px;font-weight:600;letter-spacing:-.025em;margin-bottom:6px;line-height:1.2}
 .ig-sub{font-size:14px;color:var(--mu);line-height:1.6;margin-bottom:28px}
@@ -416,14 +416,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* -- ROLE PICKER (first-run step 2) -- */
 .fr-step{display:none}
 .fr-step.active{display:block}
-.fr-roles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;text-align:left}
-.fr-role{padding:14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid transparent;cursor:pointer;transition:background .14s,border-color .14s}
+.fr-roles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-bottom:16px;text-align:left}
+.fr-role{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .14s,border-color .14s;display:flex;align-items:center;gap:10px}
 .fr-role:hover{background:rgba(255,255,255,.08)}
 .fr-role.sel{background:rgba(106,167,255,.1);border-color:rgba(106,167,255,.25)}
-.fr-role-icon{font-size:22px;margin-bottom:6px}
-.fr-role-name{font-size:13px;font-weight:600;color:var(--tx)}
+.fr-role-icon{font-size:18px;flex-shrink:0;line-height:1}
+.fr-role-body{min-width:0;flex:1}
+.fr-role-name{font-size:12px;font-weight:600;color:var(--tx)}
 .fr-role.sel .fr-role-name{color:var(--accent)}
-.fr-role-desc{font-size:10.5px;color:var(--dim);margin-top:3px;line-height:1.4}
+.fr-role-desc{font-size:9.5px;color:var(--dim);margin-top:2px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* -- APP PICKER (first-run step 3) -- */
 .fr-app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;text-align:left;max-height:50vh;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
@@ -2541,8 +2542,8 @@ function renderFrRoles() {
   el.innerHTML = ROLE_META.map(r =>
     '<div class="fr-role'+(frSelectedDepts.includes(r.id)?' sel':'')+'" data-role="'+r.id+'">' +
     '<div class="fr-role-icon">'+r.icon+'</div>' +
-    '<div class="fr-role-name">'+r.name+'</div>' +
-    '<div class="fr-role-desc">'+r.desc+'</div></div>'
+    '<div class="fr-role-body"><div class="fr-role-name">'+r.name+'</div>' +
+    '<div class="fr-role-desc">'+r.desc+'</div></div></div>'
   ).join('');
   el.querySelectorAll('.fr-role').forEach(r => {
     r.addEventListener('click', () => frToggleDept(r.dataset.role));
@@ -3071,8 +3072,8 @@ function renderModalDeptGrid() {
   el.innerHTML = ROLE_META.map(r =>
     '<div class="fr-role'+(modalDeptSelected.includes(r.id)?' sel':'')+'" data-role="'+r.id+'">' +
     '<div class="fr-role-icon">'+r.icon+'</div>' +
-    '<div class="fr-role-name">'+r.name+'</div>' +
-    '<div class="fr-role-desc">'+r.desc+'</div></div>'
+    '<div class="fr-role-body"><div class="fr-role-name">'+r.name+'</div>' +
+    '<div class="fr-role-desc">'+r.desc+'</div></div></div>'
   ).join('');
   el.querySelectorAll('.fr-role').forEach(r => {
     r.addEventListener('click', () => {
