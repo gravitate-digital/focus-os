@@ -14,7 +14,7 @@
   --line:rgba(255,255,255,.08);
   --accent:#6aa7ff;
   --warn:#ffd86b;
-  --ok:#7fe3a2;
+  --ok:#6DAAFF;
   --danger:#ff7878;
   --r:16px;
   --gap:8px;
@@ -160,8 +160,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 @media(prefers-reduced-motion:no-preference){#tb-timer .pulse{animation:pulse 1.5s ease-in-out infinite}}
 
 /* -- BOTTOM DOCK -- */
-#dock{flex-shrink:0;padding:8px 16px 12px;display:flex;justify-content:center;z-index:40}
+#dock{flex-shrink:0;padding:8px 16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:40;position:relative}
 #dock-strip{display:flex;flex-wrap:wrap;max-width:90vw;gap:6px;padding:6px 14px;border-radius:18px;background:rgba(255,255,255,.055);backdrop-filter:blur(40px) saturate(220%);-webkit-backdrop-filter:blur(40px) saturate(220%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 20px rgba(0,0,0,.2);justify-content:center}
+#dock-expand{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);width:auto;max-width:90vw;padding:12px 16px;border-radius:16px;background:rgba(7,13,26,.92);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:1px solid rgba(255,255,255,.1);box-shadow:0 -8px 40px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:opacity .18s ease;z-index:60;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+#dock-expand.show{opacity:1;pointer-events:all}
+[data-light="1"] #dock-expand{background:rgba(245,247,255,.92)}
+#dock-dept-bar{display:flex;justify-content:center;gap:4px;margin-top:6px;flex-wrap:wrap}
+.dept-pill{padding:3px 10px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:var(--dim);font-size:9.5px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s;white-space:nowrap}
+.dept-pill:hover{background:rgba(255,255,255,.1);color:var(--tx)}
 .dock-item{width:56px;height:56px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:background .15s,transform .15s,border-color .15s;position:relative;text-decoration:none}
 .dock-item:hover{background:rgba(255,255,255,.1);transform:translateY(-3px);border-color:rgba(255,255,255,.14)}
 .dock-emoji{font-size:22px;line-height:1;pointer-events:none}
@@ -656,8 +662,9 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
   <!-- BOTTOM DOCK -->
   <nav id="dock">
-    <div id="dock-tabs"></div>
+    <div id="dock-expand"></div>
     <div id="dock-strip"></div>
+    <div id="dock-dept-bar"></div>
   </nav>
 
 </div>
@@ -1036,7 +1043,11 @@ const PRESETS = [
   {id:'proposals', name:'Proposals',         url:'https://proposals.gravitatedigital.com.au', emoji:'\u{1F4DD}', cat:'gravitate'},
   {id:'pace',      name:'Pace Timekeeping',  url:'https://pace-os.vercel.app',               emoji:'\u23F1\uFE0F', cat:'gravitate'},
   {id:'space',     name:'Gravitate Space',   url:'https://gravitatespace.com.au',             emoji:'\u{1F3E2}', cat:'gravitate'},
-  {id:'gfocus',    name:'Focus',   url:'https://focus-os-snowy-nu.vercel.app',      emoji:'\u25CE', cat:'gravitate'},
+  {id:'gfocus',    name:'Focus',             url:'https://focus-os-snowy-nu.vercel.app',      emoji:'\u25CE', cat:'gravitate'},
+  {id:'gdigital',  name:'Gravitate Digital', url:'https://gravitatedigital.com.au',           emoji:'\u25B2', cat:'gravitate'},
+  {id:'gstudio',   name:'Gravitate Studio',  url:'https://gravitatestudio.com.au',            emoji:'\u25C8', cat:'gravitate'},
+  // Email Marketing (additional)
+  {id:'zoho',      name:'Zoho',              url:'https://mail.zoho.com',                     emoji:'\u{1F4E7}', cat:'email'},
 ];
 
 const CAT_LABELS = {
@@ -1250,7 +1261,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','asana','gmail','slack','ga4','whatagraph','callrail','gads','meta','sheets','calendar'],
     modes: [
       {id:'morning',name:'Morning',desc:'Email, calendar, tasks',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'},{preset:'slack'}],layout:'quad'},
-      {id:'client',name:'Client Work',desc:'Reporting, calls, tasks',color:'#7fe3a2',panels:[{preset:'ga4'},{preset:'callrail'},{preset:'asana'},{preset:'sheets'}],layout:'quad'},
+      {id:'client',name:'Client Work',desc:'Reporting, calls, tasks',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'callrail'},{preset:'asana'},{preset:'sheets'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Sheets, Drive, Slack',color:'#ffd86b',panels:[{preset:'sheets'},{preset:'drive'},{preset:'slack'}],layout:'trio'},
     ],
     rocks:['Hit Q2 revenue target','Onboard 2 new clients','Reduce churn by 10%'],
@@ -1264,7 +1275,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','hubspot','gmail','calendar','slack','sheets','loom','meet','linkedin'],
     modes: [
       {id:'prospect',name:'Prospecting',desc:'CRM, email, research',color:'#6DAAFF',panels:[{preset:'hubspot'},{preset:'gmail'},{preset:'linkedin'}],layout:'feat3'},
-      {id:'followup',name:'Follow-up',desc:'Email, calendar, CRM',color:'#7fe3a2',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'hubspot'},{preset:'slack'}],layout:'quad'},
+      {id:'followup',name:'Follow-up',desc:'Email, calendar, CRM',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'hubspot'},{preset:'slack'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Sheets, Slack, Drive',color:'#ffd86b',panels:[{preset:'sheets'},{preset:'slack'},{preset:'loom'}],layout:'trio'},
     ],
     rocks:['Close 3 new deals this quarter','Build outreach playbook','Pipeline to $50K MRR'],
@@ -1278,7 +1289,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','figma','canva','adobe','notion','asana','loom','drive','claude-d'],
     modes: [
       {id:'design',name:'Design',desc:'Figma, Canva, Adobe',color:'#c4a2f0',panels:[{preset:'figma'},{preset:'canva'},{preset:'adobe'}],layout:'feat3'},
-      {id:'review',name:'Review',desc:'Loom, Asana, Notion',color:'#7fe3a2',panels:[{preset:'loom'},{preset:'asana'},{preset:'notion'},{preset:'figma'}],layout:'quad'},
+      {id:'review',name:'Review',desc:'Loom, Asana, Notion',color:'#6DAAFF',panels:[{preset:'loom'},{preset:'asana'},{preset:'notion'},{preset:'figma'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Email, Drive, Claude',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'drive'},{preset:'claude-d'}],layout:'trio'},
     ],
     rocks:['Ship rebrand assets','Build design system v2','Clear review backlog'],
@@ -1292,7 +1303,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','semrush','sfrog','ga4','gsc','asana','sheets','notion'],
     modes: [
       {id:'research',name:'Research',desc:'SEMrush, Search Console, Google',color:'#6DAAFF',panels:[{preset:'semrush'},{preset:'gsc'},{preset:'google'}],layout:'feat3'},
-      {id:'audit',name:'Audit',desc:'Screaming Frog, Analytics, Sheets',color:'#7fe3a2',panels:[{preset:'sfrog'},{preset:'ga4'},{preset:'sheets'},{preset:'gsc'}],layout:'quad'},
+      {id:'audit',name:'Audit',desc:'Screaming Frog, Analytics, Sheets',color:'#6DAAFF',panels:[{preset:'sfrog'},{preset:'ga4'},{preset:'sheets'},{preset:'gsc'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Asana, Notion, Sheets',color:'#ffd86b',panels:[{preset:'asana'},{preset:'notion'},{preset:'sheets'}],layout:'trio'},
     ],
     rocks:['Increase organic traffic 20%','Complete technical audit','Build link strategy'],
@@ -1306,7 +1317,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','gads','meta','tiktok','bing','ga4','whatagraph','asana','sheets'],
     modes: [
       {id:'optimise',name:'Optimise',desc:'Google Ads, Meta Ads, Analytics',color:'#6DAAFF',panels:[{preset:'gads'},{preset:'meta'},{preset:'ga4'}],layout:'feat3'},
-      {id:'report',name:'Reporting',desc:'Whatagraph, Analytics, Sheets',color:'#7fe3a2',panels:[{preset:'whatagraph'},{preset:'ga4'},{preset:'sheets'},{preset:'asana'}],layout:'quad'},
+      {id:'report',name:'Reporting',desc:'Whatagraph, Analytics, Sheets',color:'#6DAAFF',panels:[{preset:'whatagraph'},{preset:'ga4'},{preset:'sheets'},{preset:'asana'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Asana, Sheets, TikTok',color:'#ffd86b',panels:[{preset:'asana'},{preset:'sheets'},{preset:'tiktok'}],layout:'trio'},
     ],
     rocks:['Hit ROAS targets across accounts','Launch new campaign structure','Reduce CPA by 15%'],
@@ -1320,7 +1331,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','facebook','instagram','canva','notion','asana','linkedin','slack','tiktok'],
     modes: [
       {id:'create',name:'Create',desc:'Canva, Notion, Instagram',color:'#c4a2f0',panels:[{preset:'canva'},{preset:'notion'},{preset:'instagram'}],layout:'feat3'},
-      {id:'engage',name:'Engage',desc:'Facebook, Instagram, LinkedIn',color:'#7fe3a2',panels:[{preset:'facebook'},{preset:'instagram'},{preset:'linkedin'},{preset:'slack'}],layout:'quad'},
+      {id:'engage',name:'Engage',desc:'Facebook, Instagram, LinkedIn',color:'#6DAAFF',panels:[{preset:'facebook'},{preset:'instagram'},{preset:'linkedin'},{preset:'slack'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Asana, Notion, Slack',color:'#ffd86b',panels:[{preset:'asana'},{preset:'notion'},{preset:'slack'}],layout:'trio'},
     ],
     rocks:['Grow followers by 25%','Launch content calendar','Improve engagement rate'],
@@ -1334,7 +1345,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','klaviyo','mailchimp','canva','sheets','asana','ga4','gmail','drive'],
     modes: [
       {id:'build',name:'Build',desc:'Klaviyo, Canva, Sheets',color:'#6DAAFF',panels:[{preset:'klaviyo'},{preset:'canva'},{preset:'sheets'}],layout:'feat3'},
-      {id:'analyse',name:'Analyse',desc:'Analytics, Klaviyo, Mailchimp',color:'#7fe3a2',panels:[{preset:'ga4'},{preset:'klaviyo'},{preset:'mailchimp'},{preset:'sheets'}],layout:'quad'},
+      {id:'analyse',name:'Analyse',desc:'Analytics, Klaviyo, Mailchimp',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'klaviyo'},{preset:'mailchimp'},{preset:'sheets'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Asana, Gmail, Drive',color:'#ffd86b',panels:[{preset:'asana'},{preset:'gmail'},{preset:'drive'}],layout:'trio'},
     ],
     rocks:['Increase open rate to 30%','Build 3 new flows','Grow subscriber list 20%'],
@@ -1348,7 +1359,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','asana','sheets','ga4','linear','slack','gmail','calendar','notion'],
     modes: [
       {id:'strategy',name:'Strategy',desc:'Metrics, Notion, Sheets',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'sheets'},{preset:'notion'}],layout:'feat3'},
-      {id:'ops',name:'Operations',desc:'Tasks, Linear, Slack',color:'#7fe3a2',panels:[{preset:'asana'},{preset:'linear'},{preset:'slack'},{preset:'sheets'}],layout:'quad'},
+      {id:'ops',name:'Operations',desc:'Tasks, Linear, Slack',color:'#6DAAFF',panels:[{preset:'asana'},{preset:'linear'},{preset:'slack'},{preset:'sheets'}],layout:'quad'},
       {id:'comms',name:'Comms',desc:'Email, calendar, Slack',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'slack'}],layout:'trio'},
     ],
     rocks:['Team at full capacity','Revenue target on track','Ship Gravitate OS v1'],
@@ -1362,7 +1373,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','linear','claude','notion','slack','gmail','figma','drive','chatgpt'],
     modes: [
       {id:'deep',name:'Deep Work',desc:'Code, docs, Linear',color:'#6DAAFF',panels:[{preset:'linear'},{preset:'claude'}],layout:'duoV'},
-      {id:'collab',name:'Collab',desc:'Slack, Figma, Linear',color:'#7fe3a2',panels:[{preset:'slack'},{preset:'figma'},{preset:'linear'},{preset:'notion'}],layout:'quad'},
+      {id:'collab',name:'Collab',desc:'Slack, Figma, Linear',color:'#6DAAFF',panels:[{preset:'slack'},{preset:'figma'},{preset:'linear'},{preset:'notion'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'slack'}],layout:'trio'},
     ],
     rocks:['Ship Phase 1 on time','Zero critical bugs','Documentation complete'],
@@ -1376,7 +1387,7 @@ const ROLE_PRESETS = {
     defaultApps: ['google','gmail','asana','slack','calendar','sheets','drive','notion'],
     modes: [
       {id:'morning',name:'Morning',desc:'Start your day',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'asana'},{preset:'slack'},{preset:'calendar'}],layout:'quad'},
-      {id:'deep',name:'Deep Work',desc:'Focused work',color:'#7fe3a2',panels:[{preset:'asana'},{preset:'notion'}],layout:'duoV'},
+      {id:'deep',name:'Deep Work',desc:'Focused work',color:'#6DAAFF',panels:[{preset:'asana'},{preset:'notion'}],layout:'duoV'},
       {id:'admin',name:'Admin',desc:'Admin tasks',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'slack'},{preset:'sheets'}],layout:'trio'},
     ],
     rocks:['Launch Focus to the team','Q2 agency revenue target','SEO playbook shipped'],
@@ -1519,31 +1530,6 @@ function getFavicon(url, size) {
 
 const EDIT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
 
-function renderDockTabs() {
-  const el = document.getElementById('dock-tabs');
-  if (!el) return;
-  if (!S.departments || S.departments.length <= 1) { el.innerHTML = ''; return; }
-
-  const tabs = [{id:'all', label:'All'}];
-  tabs.push({id:'fav', label:'\u2605 Favourites'});
-  S.departments.forEach(deptId => {
-    const meta = ROLE_META.find(r => r.id === deptId);
-    if (meta) tabs.push({id: deptId, label: meta.name});
-  });
-
-  el.innerHTML = tabs.map(t =>
-    '<button class="dock-tab'+(S.dockFilter === t.id ? ' active' : '')+'" data-filter="'+t.id+'">'+t.label+'</button>'
-  ).join('');
-
-  el.querySelectorAll('.dock-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      S.dockFilter = btn.dataset.filter;
-      save();
-      renderDock();
-    });
-  });
-}
-
 function getPanelDepts(p) {
   // Returns an array of department IDs that claim this panel's preset
   const depts = [];
@@ -1558,50 +1544,50 @@ function getPanelDepts(p) {
 }
 
 function renderDock() {
-  renderDockTabs();
-
   const strip = document.getElementById('dock-strip');
   strip.innerHTML = '';
 
-  const filter = S.dockFilter || 'all';
+  // Build main strip: Google first, then favourites, then fill if needed
+  let dockPanels = [];
 
-  const count = S.panels.length;
-  let visibleIdx = 0;
-  for (let idx = 0; idx < count; idx++) {
-    const p = getPanel(idx);
-    if (!p) continue;
+  const google = PRESETS.find(pr => pr.id === 'google');
+  if (google) dockPanels.push(google);
 
-    // Apply filter
-    if (filter === 'fav') {
-      if (!S.favourites || !S.favourites.includes(p.id)) continue;
-    } else if (filter !== 'all') {
-      const depts = getPanelDepts(p);
-      if (!depts.includes(filter)) continue;
-    }
+  S.favourites.forEach(fid => {
+    if (fid === 'google') return;
+    const pr = PRESETS.find(p => p.id === fid);
+    if (pr) dockPanels.push(pr);
+  });
 
-    const dispNum = visibleIdx + 1;
-    visibleIdx++;
+  // If no favourites beyond Google, fill from panels
+  if (dockPanels.length <= 1) {
+    S.panels.forEach((panelEntry, idx) => {
+      const pr = getPanel(idx);
+      if (pr && pr.id !== 'google' && !dockPanels.find(d => d.id === pr.id)) dockPanels.push(pr);
+    });
+    dockPanels = dockPanels.slice(0, 8);
+  }
 
-    const faviconUrl = getFavicon(p.url, 32);
-    const isFav = S.favourites && S.favourites.includes(p.id);
+  dockPanels.forEach((p, i) => {
+    const isFav = S.favourites.includes(p.id);
     const item = document.createElement('div');
     item.className = 'dock-item';
-    item.dataset.idx = idx;
+    item.dataset.idx = i;
     item.dataset.tooltip = p.name + ' \u00B7 ' + getDomain(p.url);
     item.title = p.name + ', ' + getDomain(p.url);
+    const faviconUrl = getFavicon(p.url, 32);
     item.innerHTML =
-      '<span class="dock-badge">' + dispNum + '</span>' +
+      '<span class="dock-badge">' + (i + 1) + '</span>' +
       '<button class="dock-fav' + (isFav ? ' on' : '') + '" data-fid="' + (p.id||'') + '" title="Favourite">' + (isFav ? '\u2605' : '\u2606') + '</button>' +
       (faviconUrl
         ? '<img class="dock-logo" src="' + faviconUrl + '" alt="" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'" />' +
           '<span class="dock-emoji-fb">' + p.emoji + '</span>'
         : '<span class="dock-emoji">' + p.emoji + '</span>') +
-      '<span class="dock-name">' + esc(p.name) + '</span>' +
-      '<span class="dock-edit" data-idx="' + idx + '">\u270E</span>';
+      '<span class="dock-name">' + esc(p.name) + '</span>';
 
     item.addEventListener('click', e => {
-      if (e.target.closest('.dock-edit') || e.target.closest('.dock-fav')) return;
-      openPanel(idx);
+      if (e.target.closest('.dock-fav')) return;
+      if (p.url) window.open(p.url, '_blank', 'noopener');
     });
 
     item.querySelector('.dock-fav').addEventListener('click', e => {
@@ -1617,22 +1603,82 @@ function renderDock() {
       renderDock();
     });
 
-    const editBtn = item.querySelector('.dock-edit');
-    editBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      openEditModal(idx);
-    });
-
     strip.appendChild(item);
+  });
+
+  // "+" add custom app button
+  const addBtn = document.createElement('div');
+  addBtn.className = 'dock-item';
+  addBtn.dataset.tooltip = 'Add custom app';
+  addBtn.title = 'Add custom app';
+  addBtn.innerHTML = '<span style="font-size:20px;color:var(--dim);line-height:1">+</span><span class="dock-name">Add</span>';
+  addBtn.addEventListener('click', () => openAddModal());
+  strip.appendChild(addBtn);
+
+  renderDockDeptBar();
+}
+
+function renderDockDeptBar() {
+  const bar = document.getElementById('dock-dept-bar');
+  if (!bar) return;
+  if (!S.departments || S.departments.length === 0) { bar.innerHTML = ''; return; }
+
+  let html = '<span class="dept-pill" data-dept="all">All Apps</span>';
+  S.departments.forEach(deptId => {
+    const meta = ROLE_META.find(r => r.id === deptId);
+    if (meta) html += '<span class="dept-pill" data-dept="' + deptId + '">' + esc(meta.name) + '</span>';
+  });
+  bar.innerHTML = html;
+
+  const expand = document.getElementById('dock-expand');
+  let hideTimeout = null;
+
+  bar.querySelectorAll('.dept-pill').forEach(pill => {
+    pill.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      const deptId = pill.dataset.dept;
+      showDockExpand(deptId);
+    });
+    pill.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => expand.classList.remove('show'), 200);
+    });
+  });
+
+  expand.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+  expand.addEventListener('mouseleave', () => {
+    hideTimeout = setTimeout(() => expand.classList.remove('show'), 200);
+  });
+}
+
+function showDockExpand(deptId) {
+  const expand = document.getElementById('dock-expand');
+  let apps = [];
+
+  if (deptId === 'all') {
+    apps = [...PRESETS];
+  } else {
+    const preset = ROLE_PRESETS[deptId];
+    if (preset) {
+      const defaultIds = preset.defaultApps || preset.panels.map(p => p.preset);
+      apps = defaultIds.map(id => PRESETS.find(p => p.id === id)).filter(Boolean);
+    }
   }
 
-  // Empty state for filtered views
-  if (visibleIdx === 0) {
-    const empty = document.createElement('div');
-    empty.style.cssText = 'font-size:11px;color:var(--dim);padding:16px 8px;';
-    empty.textContent = filter === 'fav' ? 'No favourites yet. Hover an app and click the star.' : 'No apps in this department.';
-    strip.appendChild(empty);
-  }
+  expand.innerHTML = apps.map(p =>
+    '<div class="dock-item" data-url="' + esc(p.url) + '" data-tooltip="' + esc(p.name) + '" tabindex="0">' +
+    '<img class="dock-logo" src="' + getFavicon(p.url, 32) + '" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+    '<span class="dock-emoji-fb" style="display:none">' + p.emoji + '</span>' +
+    '<span class="dock-name">' + esc(p.name) + '</span></div>'
+  ).join('');
+
+  expand.querySelectorAll('.dock-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const url = item.dataset.url;
+      if (url) window.open(url, '_blank', 'noopener');
+    });
+  });
+
+  expand.classList.add('show');
 }
 
 /* -- RENDER: HERO CLOCK + GREETING -- */
@@ -2090,7 +2136,7 @@ function saveEdit() {
     S.panels[editIdx] = {
       custom: true, name,
       url: url.startsWith('http') ? url : 'https://' + url,
-      emoji, lastOpen: S.panels[editIdx]?.lastOpen,
+      emoji, lastOpen: (S.panels[editIdx] || {}).lastOpen,
     };
   }
   save();
@@ -2108,6 +2154,47 @@ function deletePanel() {
   renderDock();
   closeModal('modal-edit');
   editIdx = null;
+}
+
+function openAddModal() {
+  // Open edit modal in "add" mode: blank fields, will push a new panel
+  editIdx = S.panels.length; // new index at end
+  editSelectedPreset = null;
+  document.getElementById('edit-name').value = '';
+  document.getElementById('edit-url').value = '';
+
+  const list = document.getElementById('edit-app-list');
+  list.innerHTML = PRESETS.map(pr =>
+    '<div class="edit-app-item" data-pid="' + pr.id + '">' +
+    '<img src="' + getFavicon(pr.url, 20) + '" alt="" onerror="this.style.display=\'none\'">' +
+    '<span class="ea-name">' + esc(pr.name) + '</span>' +
+    '<span class="ea-domain">' + esc(getDomain(pr.url)) + '</span></div>'
+  ).join('');
+  list.querySelectorAll('.edit-app-item').forEach(item => {
+    item.addEventListener('click', () => {
+      list.querySelectorAll('.edit-app-item').forEach(i => i.classList.remove('sel'));
+      item.classList.add('sel');
+      const pr = PRESETS.find(p => p.id === item.dataset.pid);
+      if (pr) {
+        editSelectedPreset = pr.id;
+        document.getElementById('edit-name').value = pr.name;
+        document.getElementById('edit-url').value = pr.url;
+      }
+    });
+  });
+
+  const grid = document.getElementById('emoji-grid');
+  grid.innerHTML = EMOJIS.map(e =>
+    '<div class="emoji-opt" data-e="' + e + '">' + e + '</div>'
+  ).join('');
+  grid.querySelectorAll('.emoji-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      grid.querySelectorAll('.emoji-opt').forEach(o => o.classList.remove('sel'));
+      opt.classList.add('sel');
+    });
+  });
+
+  openModal('modal-edit');
 }
 
 /* -- MEETING MODAL -- */
@@ -2672,10 +2759,15 @@ function renderFrIgTasks() {
   if (!incomplete.length) {
     el.innerHTML = '<div style="font-size:12px;color:var(--dim);padding:8px;text-align:center">No tasks yet. Add one below.</div>';
   } else {
-    el.innerHTML = incomplete.map(t => {
+    // Sort: selected tasks first (in selection order), then unselected
+    const selected = frIgSelectedIds.map(id => incomplete.find(t => t.id === id)).filter(Boolean);
+    const unselected = incomplete.filter(t => !frIgSelectedIds.includes(t.id));
+    const sorted = [...selected, ...unselected];
+
+    el.innerHTML = sorted.map(t => {
       const selIdx = frIgSelectedIds.indexOf(t.id);
       const isSel = selIdx !== -1;
-      return '<div class="ig-task' + (isSel ? ' sel' : '') + '" data-tid="' + t.id + '">' +
+      return '<div class="ig-task' + (isSel ? ' sel' : '') + '" data-tid="' + t.id + '" style="' + (isSel ? 'border-color:rgba(106,167,255,.4);background:rgba(106,167,255,.14);' : '') + '">' +
         (isSel ? '<span class="ig-task-badge">' + (selIdx + 1) + '</span>' : '<span class="ig-task-plus">+</span>') +
         '<span class="ig-task-text">' + esc(t.text) + '</span></div>';
     }).join('');
@@ -2952,32 +3044,44 @@ function showIntentionGate() {
     if (!incomplete.length) {
       el.innerHTML = '<div style="font-size:12px;color:var(--dim);padding:8px;text-align:center">No tasks yet. Add one below.</div>';
     } else {
-      // Split: carry-overs vs today's other tasks
+      // Selected tasks first (in selection order), then unselected
+      // Within unselected: carry-overs before other tasks
       const carryIds = yesterdayCarryIds;
-      const carryTasks = incomplete.filter(t => carryIds.includes(t.id));
-      const otherTasks = incomplete.filter(t => !carryIds.includes(t.id));
+      const selTasks = selectedIds.map(id => incomplete.find(t => t.id === id)).filter(Boolean);
+      const unselected = incomplete.filter(t => !selectedIds.includes(t.id));
+      const unselCarry = unselected.filter(t => carryIds.includes(t.id));
+      const unselOther = unselected.filter(t => !carryIds.includes(t.id));
 
       let html = '';
-      if (carryTasks.length > 0) {
+
+      if (selTasks.length > 0) {
+        html += '<div class="ig-section-label">Selected priorities</div>';
+        html += selTasks.map(t => {
+          const selIdx = selectedIds.indexOf(t.id);
+          return '<div class="ig-task sel" data-tid="' + t.id + '" style="border-color:rgba(106,167,255,.4);background:rgba(106,167,255,.14);">' +
+            '<span class="ig-task-badge">' + (selIdx + 1) + '</span>' +
+            '<span class="ig-task-text">' + esc(t.text) + '</span></div>';
+        }).join('');
+      }
+
+      if (unselCarry.length > 0) {
         html += '<div class="ig-section-label">Yesterday\'s unfinished</div>';
-        html += carryTasks.map(t => {
-          const selIdx = selectedIds.indexOf(t.id);
-          const isSel = selIdx !== -1;
-          return '<div class="ig-task' + (isSel ? ' sel' : '') + '" data-tid="' + t.id + '">' +
-            (isSel ? '<span class="ig-task-badge">' + (selIdx + 1) + '</span>' : '<span class="ig-task-plus">+</span>') +
-            '<span class="ig-task-text">' + esc(t.text) + '</span></div>';
-        }).join('');
+        html += unselCarry.map(t =>
+          '<div class="ig-task" data-tid="' + t.id + '">' +
+          '<span class="ig-task-plus">+</span>' +
+          '<span class="ig-task-text">' + esc(t.text) + '</span></div>'
+        ).join('');
       }
-      if (otherTasks.length > 0) {
+
+      if (unselOther.length > 0) {
         html += '<div class="ig-section-label">Today\'s tasks</div>';
-        html += otherTasks.map(t => {
-          const selIdx = selectedIds.indexOf(t.id);
-          const isSel = selIdx !== -1;
-          return '<div class="ig-task' + (isSel ? ' sel' : '') + '" data-tid="' + t.id + '">' +
-            (isSel ? '<span class="ig-task-badge">' + (selIdx + 1) + '</span>' : '<span class="ig-task-plus">+</span>') +
-            '<span class="ig-task-text">' + esc(t.text) + '</span></div>';
-        }).join('');
+        html += unselOther.map(t =>
+          '<div class="ig-task" data-tid="' + t.id + '">' +
+          '<span class="ig-task-plus">+</span>' +
+          '<span class="ig-task-text">' + esc(t.text) + '</span></div>'
+        ).join('');
       }
+
       el.innerHTML = html;
     }
 
