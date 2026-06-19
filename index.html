@@ -1888,6 +1888,7 @@ function renderPriorities() {
   }
 
   const allDone = priorities.every(t => t.done);
+  if (!allDone) S._allDonePlayed = false;
 
   let html = priorities.map((t, i) =>
     '<div class="hero-pri-item'+(t.done?' pri-done':'')+'" data-tid="'+t.id+'">' +
@@ -1897,6 +1898,11 @@ function renderPriorities() {
 
   if (allDone) {
     html += '<div class="hero-pri-done-msg">All priorities done. What a day.</div>';
+    // Play Halo victory chord when all done (only once per completion)
+    if (S.streaksOn && !S._allDonePlayed) {
+      S._allDonePlayed = true;
+      const a = new Audio('sounds/halo_3_piano_chord.mp3'); a.volume = 0.5; a.play().catch(() => {});
+    }
   }
 
   // Always show add input (especially when all done)
@@ -3619,13 +3625,18 @@ function applyHeroPos() {
 /* -- KILL STREAKS -- */
 
 const STREAKS = [
-  {min:2, text:'Double Kill', color:'#6DAAFF', sound:'sounds/halo-1-double-kill.mp3'},
-  {min:3, text:'Triple Kill', color:'#00ccff', sound:'sounds/halo-reach-3-triple-kill.mp3'},
-  {min:4, text:'Overkill', color:'#ff6600', sound:'sounds/overkill.mp3'},
-  {min:5, text:'Killtacular', color:'#ff00ff'},
-  {min:6, text:'Killtrocity', color:'#ff0000'},
-  {min:7, text:'Killimanjaro', color:'#ffcc00'},
-  {min:10,text:'Unstoppable', color:'#ff3333'},
+  // Multi-kills (quick succession)
+  {min:2,  text:'Double Kill',      color:'#6DAAFF', sound:'sounds/halo-1-double-kill.mp3'},
+  {min:3,  text:'Triple Kill',      color:'#00ccff', sound:'sounds/halo-reach-3-triple-kill.mp3'},
+  {min:4,  text:'Overkill',         color:'#ff6600', sound:'sounds/overkill.mp3'},
+  {min:5,  text:'Killtacular',      color:'#ff00ff', sound:'sounds/halo-reach-killing-spree.mp3'},
+  {min:6,  text:'Killtrocity',      color:'#ff0000', sound:'sounds/extermination.mp3'},
+  {min:7,  text:'Killimanjaro',     color:'#ffcc00', sound:'sounds/killjoy.mp3'},
+  {min:8,  text:'Killtastrophe',    color:'#ff3366', sound:'sounds/juggernaut_aOeUFTi.mp3'},
+  {min:9,  text:'Killpocalypse',    color:'#cc00ff', sound:'sounds/invincible_Gud6aoH.mp3'},
+  {min:10, text:'Killionaire',      color:'#ffaa00', sound:'sounds/perfection_joIshZa.mp3'},
+  // Legendary
+  {min:15, text:'Unfrigginbelievable', color:'#ff0000', sound:'sounds/halo-reach-unfrigginbelievable-voice.mp3'},
 ];
 
 function trackStreak() {
