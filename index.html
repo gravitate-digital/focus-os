@@ -701,6 +701,199 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
   .dock-item{animation:panelIn .4s ease both}
   .dock-item:nth-child(1){animation-delay:.04s}.dock-item:nth-child(2){animation-delay:.08s}.dock-item:nth-child(3){animation-delay:.12s}.dock-item:nth-child(4){animation-delay:.16s}.dock-item:nth-child(5){animation-delay:.2s}.dock-item:nth-child(6){animation-delay:.24s}.dock-item:nth-child(7){animation-delay:.28s}.dock-item:nth-child(8){animation-delay:.32s}
 }
+
+/* -- RESPONSIVE -- */
+
+/* Tablet and below */
+@media (max-width: 1024px) {
+  #hero-clock{font-size:60px}
+  #hero-date{font-size:14px;margin-bottom:16px}
+  #hero-onething{max-width:420px;padding:16px 20px}
+  .hero-pri-text{font-size:15px}
+  #hero-focus{max-width:420px}
+  #dock-dept-bar{max-width:80vw}
+  .dept-pill{font-size:9px;padding:3px 7px}
+}
+
+/* Mobile landscape and small tablets */
+@media (max-width: 768px) {
+  #topbar{padding:0 10px;gap:8px;height:38px}
+  .tb-btn{height:26px;min-width:26px;padding:0 6px;font-size:11px}
+  .tb-btn .lbl{display:none}
+  .brand-name{font-size:12px}
+  #ws-name{font-size:13px;max-width:100px}
+  .cmd-hint{display:none}
+  #tb-clock{font-size:11px}
+  #dock-dept-bar{max-width:95vw;gap:2px}
+  .dept-pill{font-size:8px;padding:2px 6px}
+
+  #hero{padding:12px 12px 70px}
+  #hero-clock{font-size:48px;margin-bottom:2px}
+  #hero-date{font-size:12px;margin-bottom:12px}
+  #hero-onething{max-width:100%;padding:14px 16px;border-radius:14px;margin-bottom:8px}
+  .hero-ot-label{font-size:8px;margin-bottom:6px}
+  .hero-pri-text{font-size:14px}
+  .hero-pri-num{width:20px;height:20px;font-size:10px}
+  #hero-next-mtg{font-size:11px;margin-bottom:8px}
+  #hero-focus{max-width:100%}
+  .hero-fs-ring{width:48px;height:48px}
+  .hero-fs-ring svg{width:48px;height:48px}
+  .hero-fs-time{font-size:13px}
+  .hero-fs-task{font-size:12px}
+  .hero-fs-sessions{font-size:10px}
+  .hero-fs-controls{max-width:280px}
+  .fs-btn{padding:6px 0;font-size:11px}
+  .fs-preset{padding:4px 8px;font-size:10px}
+  #hero-quote{font-size:11px;bottom:8px;max-width:90vw;padding:0 10px}
+
+  #dock{padding:4px 8px 8px}
+  #dock-strip{padding:4px 8px;border-radius:12px;gap:4px}
+  .dock-item{width:42px;height:42px;border-radius:9px}
+  .dock-logo{width:20px;height:20px}
+  .dock-name{font-size:8px;max-width:38px}
+  .dock-badge{width:12px;height:12px;font-size:7px}
+
+  /* Side panel full width on mobile */
+  #side-panel{width:100%;max-width:100%}
+
+  /* Modals */
+  .modal-box{padding:20px;border-radius:16px;max-width:95vw}
+  .modal-title{font-size:15px}
+  .f-input{padding:8px 10px;font-size:13px}
+
+  /* Settings */
+  .theme-grid{grid-template-columns:repeat(3,1fr);gap:5px}
+  .theme-swatch{width:24px;height:24px}
+  .theme-name{font-size:9px}
+
+  /* First run */
+  .fr-box{padding:20px 16px}
+  .fr-title{font-size:22px}
+  .fr-sub{font-size:12px;margin-bottom:16px}
+  .fr-input{font-size:14px;padding:10px 12px}
+  .fr-roles{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:4px}
+  .fr-role{padding:8px 10px}
+  .fr-role-icon{font-size:16px}
+  .fr-role-name{font-size:11px}
+  .fr-role-desc{font-size:8.5px}
+
+  /* Intention gate */
+  .ig-box{padding:20px 16px}
+  .ig-title{font-size:24px}
+  .ig-sub{font-size:12px;margin-bottom:16px}
+  .ig-task{padding:8px 10px}
+
+  /* Hero position toggle */
+  #hero-pos-toggle{bottom:8px;right:8px}
+  .pos-btn{width:24px;height:24px;font-size:9px}
+
+  /* Left/right positioning: less aggressive on mobile */
+  [data-hero-pos="left"] #hero{padding-left:3vw;padding-right:3vw}
+  [data-hero-pos="right"] #hero{padding-right:3vw;padding-left:3vw}
+  [data-hero-pos="left"] #dock{padding-left:3vw}
+  [data-hero-pos="right"] #dock{padding-right:3vw}
+}
+
+/* Mobile portrait */
+@media (max-width: 480px) {
+  #topbar{height:36px;padding:0 8px;gap:6px}
+  .tb-btn{height:24px;min-width:24px;padding:0 5px;border-radius:6px}
+  .tb-btn svg{width:12px;height:12px}
+  .brand-name{font-size:11px}
+  #ws-name{font-size:12px;max-width:70px}
+  .tb-sep{height:12px}
+  .logo-mark{width:16px;height:16px}
+  #dock-dept-bar{display:none}
+
+  #hero{padding:8px 10px 60px}
+  #hero-clock{font-size:40px}
+  #hero-date{font-size:11px;margin-bottom:10px}
+  #hero-onething{padding:12px 14px;border-radius:12px}
+  .hero-ot-label{font-size:7.5px}
+  .hero-pri-text{font-size:13px}
+  .hero-pri-num{width:18px;height:18px;font-size:9px;border-radius:6px}
+  .hero-pri-add input{font-size:12px;padding:6px 10px}
+
+  .hero-fs-display{gap:12px}
+  .hero-fs-ring{width:40px;height:40px}
+  .hero-fs-ring svg{width:40px;height:40px}
+  .hero-fs-time{font-size:11px}
+  .hero-fs-controls{max-width:240px}
+  .hero-fs-presets{gap:3px}
+  .fs-preset{padding:3px 6px;font-size:9px}
+
+  #dock{padding:3px 6px 6px}
+  #dock-strip{padding:3px 6px;gap:3px;border-radius:10px}
+  .dock-item{width:36px;height:36px;border-radius:8px;gap:2px}
+  .dock-logo{width:18px;height:18px}
+  .dock-name{font-size:7px;max-width:32px}
+  .dock-badge{display:none}
+  .dock-item::after{display:none!important}
+
+  #hero-quote{font-size:10px;bottom:4px}
+  #hero-pos-toggle{bottom:4px;right:4px}
+  .pos-btn{width:20px;height:20px;font-size:8px}
+
+  /* Mega-nav full width on mobile */
+  #dock-expand{max-width:100%;border-radius:0 0 12px 12px;padding:10px}
+  #dock-expand .dock-item{width:40px;height:40px}
+
+  /* Widgets */
+  .widget{padding:12px;border-radius:12px}
+  .widget-label{font-size:8px}
+
+  /* Coach toast */
+  #coach-toast{width:220px;padding:10px 12px;border-radius:12px;top:44px;right:8px}
+
+  /* Streak overlay */
+  .streak-text{font-size:clamp(28px,7vw,56px)}
+  .finish-him-text{font-size:clamp(32px,8vw,64px)}
+
+  /* Command palette */
+  #cmdk{border-radius:14px}
+  .cmdk-input-row{padding:12px 14px}
+  #cmdk-input{font-size:14px}
+  .cmdk-item{padding:8px 10px}
+
+  /* First run: prevent content touching edges */
+  #first-run{padding:16px}
+  .fr-app-grid{grid-template-columns:repeat(3,1fr);gap:4px}
+
+  /* Edit app list: ensure usable height on mobile */
+  .edit-app-list{max-height:140px}
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  #hero-clock{font-size:34px}
+  .hero-pri-text{font-size:12px}
+  .dock-item{width:32px;height:32px}
+  .dock-logo{width:16px;height:16px}
+  .dock-name{display:none}
+  .fr-app-grid{grid-template-columns:repeat(2,1fr);gap:4px}
+  .edit-app-list{max-height:110px}
+}
+
+/* Large screens: cap content width */
+@media (min-width: 1600px) {
+  #hero-onething{max-width:520px}
+  #hero-focus{max-width:520px}
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) {
+  #hero{padding:8px 16px 50px}
+  #hero-clock{font-size:36px;margin-bottom:2px}
+  #hero-date{font-size:11px;margin-bottom:8px}
+  #hero-onething{padding:10px 14px;margin-bottom:6px}
+  .hero-pri-text{font-size:13px}
+  #hero-focus{margin-bottom:0}
+  .hero-fs-ring{width:36px;height:36px}
+  .hero-fs-ring svg{width:36px;height:36px}
+  #hero-quote{display:none}
+  #dock{padding:2px 8px 4px}
+  .dock-item{width:36px;height:36px}
+}
 </style>
 </head>
 <body>
