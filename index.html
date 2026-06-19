@@ -3143,8 +3143,8 @@ function focusTick() {
   }
   if (S.focus.remaining === 300) {
     // 5-minute warning
-    const a = new Audio('sounds/ding-sound-effect_2.mp3');
-    a.volume = 0.3;
+    const a = new Audio('sounds/five_mins_remaining.mp3');
+    a.volume = 0.5;
     a.play().catch(() => {});
     const toast = document.getElementById('coach-toast');
     set('coach-msg', '5 minutes remaining. Start wrapping up.');
@@ -3619,9 +3619,9 @@ function applyHeroPos() {
 /* -- KILL STREAKS -- */
 
 const STREAKS = [
-  {min:2, text:'Double Kill', color:'#6DAAFF'},
-  {min:3, text:'Triple Kill', color:'#00ccff'},
-  {min:4, text:'Overkill', color:'#ff6600'},
+  {min:2, text:'Double Kill', color:'#6DAAFF', sound:'sounds/halo-1-double-kill.mp3'},
+  {min:3, text:'Triple Kill', color:'#00ccff', sound:'sounds/halo-reach-3-triple-kill.mp3'},
+  {min:4, text:'Overkill', color:'#ff6600', sound:'sounds/overkill.mp3'},
   {min:5, text:'Killtacular', color:'#ff00ff'},
   {min:6, text:'Killtrocity', color:'#ff0000'},
   {min:7, text:'Killimanjaro', color:'#ffcc00'},
@@ -3646,6 +3646,12 @@ function trackStreak() {
 }
 
 function showStreak(streak) {
+  // Play Halo voice clip
+  if (streak.sound) {
+    const a = new Audio(streak.sound);
+    a.volume = 0.6;
+    a.play().catch(() => {});
+  }
   const overlay = document.createElement('div');
   overlay.className = 'streak-overlay';
   overlay.innerHTML = '<div class="streak-text" style="color:'+streak.color+'">'+streak.text+'</div>';
