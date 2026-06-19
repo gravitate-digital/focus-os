@@ -116,9 +116,9 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-hero-pos="left"] #hero-clock,[data-hero-pos="left"] #hero-date{text-align:left}
 [data-hero-pos="right"] #hero-clock,[data-hero-pos="right"] #hero-date{text-align:right}
 /* Position toggle */
-#hero-pos-toggle{position:absolute;bottom:16px;right:16px;display:flex;gap:2px;z-index:5;opacity:.4;transition:opacity .2s}
-#hero-pos-toggle:hover{opacity:.8}
-.pos-btn{width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--dim);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);transition:background .14s,color .14s}
+#hero-pos-toggle{position:absolute;bottom:16px;right:16px;display:flex;gap:2px;z-index:5;opacity:.5;transition:opacity .2s}
+#hero-pos-toggle:hover{opacity:1}
+.pos-btn{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:var(--mu);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);transition:background .14s,color .14s}
 .pos-btn:hover{background:rgba(255,255,255,.12);color:var(--tx)}
 .pos-btn.active{background:rgba(106,167,255,.15);border-color:rgba(106,167,255,.25);color:var(--accent)}
 
@@ -628,33 +628,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-display="arcade"] .hero-ot-label{color:#00ffff}
 [data-display="arcade"] .fs-btn.pri{background:rgba(255,0,255,.2);border-color:rgba(255,0,255,.4);color:#ff00ff}
 [data-display="arcade"] .widget{background:rgba(10,0,20,.6);border-color:rgba(255,0,255,.15)}
-/* Tasks warm and swell over time: contained, no overflow, glass droplet feel */
-#hero-onething{overflow:hidden}
-.hero-pri-item:not(.pri-done){animation:taskWarm var(--grow-speed,1800s) linear forwards;transition:background .3s}
-@keyframes taskWarm{
-  0%{padding:6px 0;background:transparent;box-shadow:none}
-  30%{padding:8px 8px;background:rgba(106,167,255,.03);border-radius:10px}
-  60%{padding:10px 12px;background:rgba(106,167,255,.06);border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-  100%{padding:14px 16px;background:rgba(106,167,255,.1);border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 16px rgba(106,167,255,.08)}
-}
-.hero-pri-item:not(.pri-done) .hero-pri-text{transition:font-size .3s}
-.hero-pri-item:not(.pri-done):hover{padding:6px 0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important}
-
-/* Growth speed variants */
-[data-grow="off"] .hero-pri-item:not(.pri-done){animation:none}
-[data-grow="gentle"] .hero-pri-item:not(.pri-done){--grow-speed:3600s}
-[data-grow="medium"] .hero-pri-item:not(.pri-done){--grow-speed:1800s}
-[data-grow="intense"] .hero-pri-item:not(.pri-done){--grow-speed:600s}
-[data-grow="chaos"] .hero-pri-item:not(.pri-done){--grow-speed:120s}
-
-/* Arcade: neon warmth, still contained */
-[data-display="arcade"] .hero-pri-item:not(.pri-done){animation:arcadeWarm var(--grow-speed,900s) linear forwards}
-@keyframes arcadeWarm{
-  0%{padding:6px 0;background:transparent;box-shadow:none}
-  50%{padding:12px 14px;background:rgba(255,0,255,.06);border-radius:12px;box-shadow:inset 0 0 20px rgba(255,0,255,.08)}
-  100%{padding:18px 20px;background:rgba(255,0,255,.12);border-radius:16px;box-shadow:inset 0 0 30px rgba(255,0,255,.12),0 0 20px rgba(255,0,255,.1)}
-}
-[data-display="arcade"] .hero-pri-item:not(.pri-done):hover{padding:6px 0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important}
+/* Kill streak overlay */
+.streak-overlay{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);opacity:0;transition:opacity .2s;pointer-events:none}
+.streak-overlay.show{opacity:1}
+.streak-text{font-size:clamp(36px,8vw,72px);font-weight:900;text-transform:uppercase;letter-spacing:.06em;text-shadow:0 0 30px currentColor,0 0 60px currentColor;opacity:0;transform:scale(1.8)}
+.streak-overlay.show .streak-text{animation:streakSlam .35s .1s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes streakSlam{0%{opacity:0;transform:scale(1.8)}100%{opacity:1;transform:scale(1)}}
 
 [data-display="retro"]{--bg:#1a1c2c;--tx:#f4f4f4;--mu:#a7a7c5;--dim:#5d5d8a;--line:rgba(93,93,138,.2);--accent:#41a6f6;--ok:#73eff7;--warn:#ffcd75;--glass-bg:rgba(44,46,68,.7);--glass-bo:rgba(65,166,246,.2);--glass-hi:rgba(115,239,247,.1)}
 [data-display="retro"] .b1{background:rgba(65,166,246,.12)}
@@ -1008,9 +987,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
 
     <div class="settings-group">
-      <div class="settings-group-label">Task Growth (Procrastination Nudge)</div>
-      <div style="font-size:11px;color:var(--dim);margin-bottom:8px">Uncompleted priorities balloon over time, pushing you to act.</div>
-      <div class="sens-row" id="grow-speed-picker"></div>
+      <div class="settings-group-label">Kill Streaks</div>
+      <div style="font-size:11px;color:var(--dim);margin-bottom:8px">Complete multiple tasks in a row for Halo-style streak announcements.</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Enable kill streaks<small>Double Kill, Triple Kill, Overkill and more</small></div>
+        <button class="toggle" id="streak-toggle"></button>
+      </div>
     </div>
 
     <div class="settings-group">
@@ -1390,6 +1372,8 @@ function applyBgMode() {
     photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
     photoBg.style.opacity = '1';
     photoBgTimer = setInterval(() => cyclePhoto(), 60000);
+    // Auto-shift hero left so photos aren't covered (user can override)
+    if (S.heroPos === 'center') { S.heroPos = 'left'; save(); applyHeroPos(); }
   } else if (mode === 'unicode') {
     blobs.forEach(b => b.style.display = 'none');
     photoBg.style.opacity = '0';
@@ -1587,7 +1571,9 @@ const DEFAULT_STATE = {
   soundEffect: 'ding',
   soundMuted: false,
   displayTheme: 'default',
-  growSpeed: 'medium',
+  streaksOn: true,
+  streakCount: 0,
+  lastStreakTime: 0,
   heroPos: 'center',
   bgMode: 'photos',
   oneThingId: 2,
@@ -1639,7 +1625,9 @@ function loadState() {
     if (merged.soundMuted === undefined) merged.soundMuted = false;
     // displayTheme migration
     if (!merged.displayTheme) merged.displayTheme = 'default';
-    if (!merged.growSpeed) merged.growSpeed = 'medium';
+    if (merged.streaksOn === undefined) merged.streaksOn = true;
+    if (!merged.streakCount) merged.streakCount = 0;
+    if (!merged.lastStreakTime) merged.lastStreakTime = 0;
     if (!merged.heroPos) merged.heroPos = 'center';
     return merged;
   } catch { return clone(DEFAULT_STATE); }
@@ -2476,21 +2464,11 @@ function renderSettings() {
     });
   }
 
-  // Grow speed picker
-  const growPicker = document.getElementById('grow-speed-picker');
-  if (growPicker) {
-    const speeds = [{id:'off',name:'Off'},{id:'gentle',name:'Gentle'},{id:'medium',name:'Medium'},{id:'intense',name:'Intense'},{id:'chaos',name:'Chaos'}];
-    growPicker.innerHTML = speeds.map(sp =>
-      '<div class="sens-opt'+(S.growSpeed===sp.id?' active':'')+'" data-gsp="'+sp.id+'">'+sp.name+'</div>'
-    ).join('');
-    growPicker.querySelectorAll('.sens-opt').forEach(opt => {
-      opt.addEventListener('click', () => {
-        S.growSpeed = opt.dataset.gsp;
-        save();
-        applyGrowSpeed();
-        renderSettings();
-      });
-    });
+  // Streak toggle
+  const streakToggle = document.getElementById('streak-toggle');
+  if (streakToggle) {
+    streakToggle.className = 'toggle' + (S.streaksOn ? ' on' : '');
+    streakToggle.onclick = () => { S.streaksOn = !S.streaksOn; save(); renderSettings(); };
   }
 
   const tg = document.getElementById('theme-grid');
@@ -3586,6 +3564,7 @@ function playTaskSound() {
   audio.play().catch(() => {});
   audio.addEventListener('ended', () => { if (currentPreviewAudio === audio) currentPreviewAudio = null; });
   if (S.soundEffect === 'finish-him') showFinishHim();
+  trackStreak();
 }
 
 function showFinishHim() {
@@ -3638,8 +3617,45 @@ function applyHeroPos() {
   });
 }
 
-function applyGrowSpeed() {
-  document.body.dataset.grow = S.growSpeed || 'medium';
+/* -- KILL STREAKS -- */
+
+const STREAKS = [
+  {min:2, text:'Double Kill', color:'#6DAAFF'},
+  {min:3, text:'Triple Kill', color:'#00ccff'},
+  {min:4, text:'Overkill', color:'#ff6600'},
+  {min:5, text:'Killtacular', color:'#ff00ff'},
+  {min:6, text:'Killtrocity', color:'#ff0000'},
+  {min:7, text:'Killimanjaro', color:'#ffcc00'},
+  {min:10,text:'Unstoppable', color:'#ff3333'},
+];
+
+function trackStreak() {
+  if (!S.streaksOn) return;
+  const now = Date.now();
+  // Streak resets if more than 10 minutes between completions
+  if (now - S.lastStreakTime > 600000) S.streakCount = 0;
+  S.streakCount++;
+  S.lastStreakTime = now;
+  save();
+
+  // Find matching streak
+  let streak = null;
+  for (let i = STREAKS.length - 1; i >= 0; i--) {
+    if (S.streakCount >= STREAKS[i].min) { streak = STREAKS[i]; break; }
+  }
+  if (streak) showStreak(streak);
+}
+
+function showStreak(streak) {
+  const overlay = document.createElement('div');
+  overlay.className = 'streak-overlay';
+  overlay.innerHTML = '<div class="streak-text" style="color:'+streak.color+'">'+streak.text+'</div>';
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('show'));
+  setTimeout(() => {
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.remove(), 400);
+  }, 1800);
 }
 
 /* -- RENDER ALL -- */
