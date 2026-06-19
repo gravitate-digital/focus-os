@@ -61,7 +61,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-theme="noir"]{--bg:#000}
 
 /* Photo + Unicode backgrounds */
-#photo-bg{position:absolute;inset:-20px;background-size:cover;background-position:center 25%;opacity:0;transition:opacity 1.5s ease;z-index:1}
+#photo-bg{position:absolute;inset:-20px;background-size:cover;background-position:center 30%;opacity:0;transition:opacity 1.5s ease;z-index:1}
 @media(prefers-reduced-motion:no-preference){#photo-bg{animation:photoFloat 30s ease-in-out infinite}}
 @keyframes photoFloat{0%,100%{transform:translate(0,0) scale(1.02)}25%{transform:translate(4px,-3px) scale(1.03)}50%{transform:translate(-3px,4px) scale(1.02)}75%{transform:translate(3px,2px) scale(1.03)}}
 #photo-bg::after{content:'';position:absolute;inset:-20px;background:rgba(5,10,20,.5);pointer-events:none}
@@ -111,10 +111,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
 /* -- HERO SECTION -- */
 #hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 20px 90px;overflow:hidden;min-height:0;position:relative;gap:0;transition:align-items .3s}
-[data-hero-pos="left"] #hero{align-items:flex-start;padding-left:5vw}
-[data-hero-pos="right"] #hero{align-items:flex-end;padding-right:5vw}
-[data-hero-pos="left"] #hero-clock,[data-hero-pos="left"] #hero-date{text-align:left}
-[data-hero-pos="right"] #hero-clock,[data-hero-pos="right"] #hero-date{text-align:right}
+[data-hero-pos="left"] #hero{align-items:flex-start;padding-left:6vw;padding-right:50vw}
+[data-hero-pos="right"] #hero{align-items:flex-end;padding-right:6vw;padding-left:50vw}
+[data-hero-pos="left"] #hero-clock,[data-hero-pos="left"] #hero-date,[data-hero-pos="left"] #hero-quote{text-align:left}
+[data-hero-pos="right"] #hero-clock,[data-hero-pos="right"] #hero-date,[data-hero-pos="right"] #hero-quote{text-align:right}
 /* Position toggle */
 #hero-pos-toggle{position:absolute;bottom:16px;right:16px;display:flex;gap:2px;z-index:5;opacity:.5;transition:opacity .2s}
 #hero-pos-toggle:hover{opacity:1}
@@ -764,7 +764,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div class="fs-preset" data-dur="30">30m</div>
         <div class="fs-preset active" data-dur="25">25m</div>
         <div class="fs-preset" data-dur="15">15m</div>
-        <div class="fs-preset" data-dur="6">6m break</div>
+        <div class="fs-preset" data-dur="5">5m break</div>
       </div>
     </div>
 
@@ -1373,8 +1373,7 @@ function applyBgMode() {
     photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
     photoBg.style.opacity = '1';
     photoBgTimer = setInterval(() => cyclePhoto(), 60000);
-    // Auto-shift hero left so photos aren't covered (user can override)
-    if (S.heroPos === 'center') { S.heroPos = 'left'; save(); applyHeroPos(); }
+    // User controls position via the toggle (bottom-right arrows)
   } else if (mode === 'unicode') {
     blobs.forEach(b => b.style.display = 'none');
     photoBg.style.opacity = '0';
@@ -3833,7 +3832,7 @@ function init() {
   document.getElementById('fs-reset').addEventListener('click', resetFocusSession);
   document.getElementById('fs-time').addEventListener('click', () => {
     if (S.focus.running) return; // don't change during active session
-    const durations = [60,30,25,15,6];
+    const durations = [60,30,25,15,5];
     const idx = durations.indexOf(S.focus.duration);
     const next = durations[(idx + 1) % durations.length];
     setFocusDuration(next);
