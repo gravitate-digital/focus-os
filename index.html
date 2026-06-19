@@ -979,6 +979,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
     <div id="hero-quote" class="hero-enter"></div>
     <div id="hero-pos-toggle">
+      <button class="pos-btn" data-pos="random" title="Random (fits photo)">&#8635;</button>
       <button class="pos-btn" data-pos="left" title="Align left">&#9664;</button>
       <button class="pos-btn active" data-pos="center" title="Center">&#9679;</button>
       <button class="pos-btn" data-pos="right" title="Align right">&#9654;</button>
@@ -1193,6 +1194,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div class="f-label" style="margin-bottom:7px">Sensitivity</div>
         <div class="sens-row" id="coach-sens-row"></div>
       </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">Layout Position</div>
+      <div style="font-size:11px;color:var(--dim);margin-bottom:8px">Where the clock, priorities, and timer sit on screen.</div>
+      <div class="sens-row" id="layout-pos-picker"></div>
     </div>
 
     <div class="settings-group">
@@ -1612,6 +1619,7 @@ function cyclePhoto() {
     currentPhotoIdx = (currentPhotoIdx + 1) % TEAM_PHOTOS.length;
     photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
     photoBg.style.opacity = '1';
+    onPhotoCycle();
   }, 1600);
 }
 
@@ -2683,6 +2691,23 @@ function renderSettings() {
         S.displayTheme = opt.dataset.dtid;
         save();
         applyDisplayTheme();
+        renderSettings();
+      });
+    });
+  }
+
+  // Layout position picker
+  const layoutPosPicker = document.getElementById('layout-pos-picker');
+  if (layoutPosPicker) {
+    const positions = [{id:'random',name:'Random'},{id:'left',name:'Left'},{id:'center',name:'Centre'},{id:'right',name:'Right'}];
+    layoutPosPicker.innerHTML = positions.map(p =>
+      '<div class="sens-opt'+(S.heroPos===p.id?' active':'')+'" data-hpos="'+p.id+'">'+p.name+'</div>'
+    ).join('');
+    layoutPosPicker.querySelectorAll('.sens-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        S.heroPos = opt.dataset.hpos;
+        save();
+        applyHeroPos();
         renderSettings();
       });
     });
@@ -3834,11 +3859,19 @@ function applyDisplayTheme() {
 }
 
 function applyHeroPos() {
-  document.body.dataset.heroPos = S.heroPos || 'center';
+  let pos = S.heroPos || 'center';
+  if (pos === 'random') {
+    const opts = ['left','center','center','center','right']; // 60% center bias
+    pos = opts[Math.floor(Math.random() * opts.length)];
+  }
+  document.body.dataset.heroPos = pos;
   document.querySelectorAll('#hero-pos-toggle .pos-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.pos === (S.heroPos || 'center'));
   });
 }
+
+// Re-randomize position when photo cycles
+function onPhotoCycle() { if (S.heroPos === 'random') applyHeroPos(); }
 
 /* -- KILL STREAKS -- */
 
