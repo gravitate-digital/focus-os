@@ -610,16 +610,17 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-display="arcade"] .hero-ot-label{color:#00ffff}
 [data-display="arcade"] .fs-btn.pri{background:rgba(255,0,255,.2);border-color:rgba(255,0,255,.4);color:#ff00ff}
 [data-display="arcade"] .widget{background:rgba(10,0,20,.6);border-color:rgba(255,0,255,.15)}
-/* Tasks balloon over time: padding, blur, scale all grow like a glass blister */
-.hero-pri-item:not(.pri-done){animation:taskBalloon var(--grow-speed,1800s) linear forwards;transform-origin:center}
-@keyframes taskBalloon{
-  0%{transform:scale(1);padding:6px 0;backdrop-filter:none;box-shadow:none;border-radius:0}
-  25%{transform:scale(1.02);padding:8px 6px;backdrop-filter:blur(2px);border-radius:8px}
-  50%{transform:scale(1.06);padding:12px 10px;backdrop-filter:blur(6px);box-shadow:0 4px 20px rgba(106,167,255,.1);border-radius:12px;background:rgba(106,167,255,.04)}
-  75%{transform:scale(1.12);padding:16px 14px;backdrop-filter:blur(10px);box-shadow:0 8px 32px rgba(106,167,255,.15);border-radius:14px;background:rgba(106,167,255,.06)}
-  100%{transform:scale(1.2);padding:22px 18px;backdrop-filter:blur(16px) saturate(180%);box-shadow:0 12px 48px rgba(106,167,255,.2),inset 0 1px 0 rgba(255,255,255,.15);border-radius:16px;background:rgba(106,167,255,.08)}
+/* Tasks warm and swell over time: contained, no overflow, glass droplet feel */
+#hero-onething{overflow:hidden}
+.hero-pri-item:not(.pri-done){animation:taskWarm var(--grow-speed,1800s) linear forwards;transition:background .3s}
+@keyframes taskWarm{
+  0%{padding:6px 0;background:transparent;box-shadow:none}
+  30%{padding:8px 8px;background:rgba(106,167,255,.03);border-radius:10px}
+  60%{padding:10px 12px;background:rgba(106,167,255,.06);border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+  100%{padding:14px 16px;background:rgba(106,167,255,.1);border-radius:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 16px rgba(106,167,255,.08)}
 }
-.hero-pri-item:not(.pri-done):hover{transform:scale(1)!important;padding:6px 0!important;backdrop-filter:none!important;box-shadow:none!important;border-radius:0!important;background:transparent!important}
+.hero-pri-item:not(.pri-done) .hero-pri-text{transition:font-size .3s}
+.hero-pri-item:not(.pri-done):hover{padding:6px 0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important}
 
 /* Growth speed variants */
 [data-grow="off"] .hero-pri-item:not(.pri-done){animation:none}
@@ -628,14 +629,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-grow="intense"] .hero-pri-item:not(.pri-done){--grow-speed:600s}
 [data-grow="chaos"] .hero-pri-item:not(.pri-done){--grow-speed:120s}
 
-/* Arcade: neon blister */
-[data-display="arcade"] .hero-pri-item:not(.pri-done){animation:arcadeBalloon var(--grow-speed,900s) linear forwards}
-@keyframes arcadeBalloon{
-  0%{transform:scale(1);padding:6px 0;box-shadow:none;border-radius:0}
-  50%{transform:scale(1.15);padding:16px 14px;box-shadow:0 0 30px rgba(255,0,255,.2);border-radius:14px;background:rgba(255,0,255,.06)}
-  100%{transform:scale(1.35);padding:26px 22px;box-shadow:0 0 60px rgba(255,0,255,.35),0 0 120px rgba(0,255,255,.15);border-radius:18px;background:rgba(255,0,255,.1)}
+/* Arcade: neon warmth, still contained */
+[data-display="arcade"] .hero-pri-item:not(.pri-done){animation:arcadeWarm var(--grow-speed,900s) linear forwards}
+@keyframes arcadeWarm{
+  0%{padding:6px 0;background:transparent;box-shadow:none}
+  50%{padding:12px 14px;background:rgba(255,0,255,.06);border-radius:12px;box-shadow:inset 0 0 20px rgba(255,0,255,.08)}
+  100%{padding:18px 20px;background:rgba(255,0,255,.12);border-radius:16px;box-shadow:inset 0 0 30px rgba(255,0,255,.12),0 0 20px rgba(255,0,255,.1)}
 }
-[data-display="arcade"] .hero-pri-item:not(.pri-done):hover{transform:scale(1)!important;padding:6px 0!important;box-shadow:none!important;border-radius:0!important;background:transparent!important}
+[data-display="arcade"] .hero-pri-item:not(.pri-done):hover{padding:6px 0!important;background:transparent!important;box-shadow:none!important;border-radius:0!important}
 
 [data-display="retro"]{--bg:#1a1c2c;--tx:#f4f4f4;--mu:#a7a7c5;--dim:#5d5d8a;--line:rgba(93,93,138,.2);--accent:#41a6f6;--ok:#73eff7;--warn:#ffcd75;--glass-bg:rgba(44,46,68,.7);--glass-bo:rgba(65,166,246,.2);--glass-hi:rgba(115,239,247,.1)}
 [data-display="retro"] .b1{background:rgba(65,166,246,.12)}
@@ -748,7 +749,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <div class="hero-fs-display">
         <div class="hero-fs-ring">
           <svg viewBox="0 0 64 64"><circle class="hero-fs-ring-bg" cx="32" cy="32" r="28"/><circle class="hero-fs-ring-fill" id="fs-ring-fill" cx="32" cy="32" r="28" stroke-dasharray="175.93" stroke-dashoffset="0"/></svg>
-          <div class="hero-fs-time" id="fs-time">25:00</div>
+          <div class="hero-fs-time" id="fs-time" title="Click to change duration" style="cursor:pointer">25:00</div>
         </div>
         <div class="hero-fs-info">
           <div class="hero-fs-task" id="fs-task-label">Ready to focus</div>
@@ -760,10 +761,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <button class="fs-btn" id="fs-reset">Reset</button>
       </div>
       <div class="hero-fs-presets" id="fs-presets">
+        <div class="fs-preset" data-dur="60">60m</div>
+        <div class="fs-preset" data-dur="30">30m</div>
         <div class="fs-preset active" data-dur="25">25m</div>
         <div class="fs-preset" data-dur="15">15m</div>
-        <div class="fs-preset" data-dur="50">50m</div>
-        <div class="fs-preset" data-dur="5">5m break</div>
+        <div class="fs-preset" data-dur="6">6m break</div>
       </div>
     </div>
 
@@ -3759,6 +3761,13 @@ function init() {
   // Focus session controls
   document.getElementById('fs-start').addEventListener('click', toggleFocusSession);
   document.getElementById('fs-reset').addEventListener('click', resetFocusSession);
+  document.getElementById('fs-time').addEventListener('click', () => {
+    if (S.focus.running) return; // don't change during active session
+    const durations = [60,30,25,15,6];
+    const idx = durations.indexOf(S.focus.duration);
+    const next = durations[(idx + 1) % durations.length];
+    setFocusDuration(next);
+  });
   document.querySelectorAll('.fs-preset').forEach(p => {
     p.addEventListener('click', () => setFocusDuration(+p.dataset.dur));
   });
