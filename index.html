@@ -610,14 +610,32 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-display="arcade"] .hero-ot-label{color:#00ffff}
 [data-display="arcade"] .fs-btn.pri{background:rgba(255,0,255,.2);border-color:rgba(255,0,255,.4);color:#ff00ff}
 [data-display="arcade"] .widget{background:rgba(10,0,20,.6);border-color:rgba(255,0,255,.15)}
-/* Tasks grow subtly over time on all themes to nudge completion */
-.hero-pri-item:not(.pri-done){animation:taskGrow 1800s linear forwards}
-@keyframes taskGrow{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1.15)}}
-.hero-pri-item:not(.pri-done):hover{transform:scale(1)!important}
-/* Arcade: more aggressive growth + neon glow */
-[data-display="arcade"] .hero-pri-item:not(.pri-done){animation:arcadeGrow 900s linear forwards}
-@keyframes arcadeGrow{0%{transform:scale(1);box-shadow:none}50%{transform:scale(1.15);box-shadow:0 0 20px rgba(255,0,255,.2)}100%{transform:scale(1.35);box-shadow:0 0 40px rgba(255,0,255,.4)}}
-[data-display="arcade"] .hero-pri-item:not(.pri-done):hover{transform:scale(1)!important;box-shadow:none!important}
+/* Tasks balloon over time: padding, blur, scale all grow like a glass blister */
+.hero-pri-item:not(.pri-done){animation:taskBalloon var(--grow-speed,1800s) linear forwards;transform-origin:center}
+@keyframes taskBalloon{
+  0%{transform:scale(1);padding:6px 0;backdrop-filter:none;box-shadow:none;border-radius:0}
+  25%{transform:scale(1.02);padding:8px 6px;backdrop-filter:blur(2px);border-radius:8px}
+  50%{transform:scale(1.06);padding:12px 10px;backdrop-filter:blur(6px);box-shadow:0 4px 20px rgba(106,167,255,.1);border-radius:12px;background:rgba(106,167,255,.04)}
+  75%{transform:scale(1.12);padding:16px 14px;backdrop-filter:blur(10px);box-shadow:0 8px 32px rgba(106,167,255,.15);border-radius:14px;background:rgba(106,167,255,.06)}
+  100%{transform:scale(1.2);padding:22px 18px;backdrop-filter:blur(16px) saturate(180%);box-shadow:0 12px 48px rgba(106,167,255,.2),inset 0 1px 0 rgba(255,255,255,.15);border-radius:16px;background:rgba(106,167,255,.08)}
+}
+.hero-pri-item:not(.pri-done):hover{transform:scale(1)!important;padding:6px 0!important;backdrop-filter:none!important;box-shadow:none!important;border-radius:0!important;background:transparent!important}
+
+/* Growth speed variants */
+[data-grow="off"] .hero-pri-item:not(.pri-done){animation:none}
+[data-grow="gentle"] .hero-pri-item:not(.pri-done){--grow-speed:3600s}
+[data-grow="medium"] .hero-pri-item:not(.pri-done){--grow-speed:1800s}
+[data-grow="intense"] .hero-pri-item:not(.pri-done){--grow-speed:600s}
+[data-grow="chaos"] .hero-pri-item:not(.pri-done){--grow-speed:120s}
+
+/* Arcade: neon blister */
+[data-display="arcade"] .hero-pri-item:not(.pri-done){animation:arcadeBalloon var(--grow-speed,900s) linear forwards}
+@keyframes arcadeBalloon{
+  0%{transform:scale(1);padding:6px 0;box-shadow:none;border-radius:0}
+  50%{transform:scale(1.15);padding:16px 14px;box-shadow:0 0 30px rgba(255,0,255,.2);border-radius:14px;background:rgba(255,0,255,.06)}
+  100%{transform:scale(1.35);padding:26px 22px;box-shadow:0 0 60px rgba(255,0,255,.35),0 0 120px rgba(0,255,255,.15);border-radius:18px;background:rgba(255,0,255,.1)}
+}
+[data-display="arcade"] .hero-pri-item:not(.pri-done):hover{transform:scale(1)!important;padding:6px 0!important;box-shadow:none!important;border-radius:0!important;background:transparent!important}
 
 [data-display="retro"]{--bg:#1a1c2c;--tx:#f4f4f4;--mu:#a7a7c5;--dim:#5d5d8a;--line:rgba(93,93,138,.2);--accent:#41a6f6;--ok:#73eff7;--warn:#ffcd75;--glass-bg:rgba(44,46,68,.7);--glass-bo:rgba(65,166,246,.2);--glass-hi:rgba(115,239,247,.1)}
 [data-display="retro"] .b1{background:rgba(65,166,246,.12)}
@@ -959,6 +977,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div class="f-label" style="margin-bottom:7px">Sensitivity</div>
         <div class="sens-row" id="coach-sens-row"></div>
       </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">Task Growth (Procrastination Nudge)</div>
+      <div style="font-size:11px;color:var(--dim);margin-bottom:8px">Uncompleted priorities balloon over time, pushing you to act.</div>
+      <div class="sens-row" id="grow-speed-picker"></div>
     </div>
 
     <div class="settings-group">
@@ -1535,6 +1559,7 @@ const DEFAULT_STATE = {
   soundEffect: 'ding',
   soundMuted: false,
   displayTheme: 'default',
+  growSpeed: 'medium',
   bgMode: 'photos',
   oneThingId: 2,
   topPriorities: [],
@@ -1585,6 +1610,7 @@ function loadState() {
     if (merged.soundMuted === undefined) merged.soundMuted = false;
     // displayTheme migration
     if (!merged.displayTheme) merged.displayTheme = 'default';
+    if (!merged.growSpeed) merged.growSpeed = 'medium';
     return merged;
   } catch { return clone(DEFAULT_STATE); }
 }
@@ -2414,6 +2440,23 @@ function renderSettings() {
         S.displayTheme = opt.dataset.dtid;
         save();
         applyDisplayTheme();
+        renderSettings();
+      });
+    });
+  }
+
+  // Grow speed picker
+  const growPicker = document.getElementById('grow-speed-picker');
+  if (growPicker) {
+    const speeds = [{id:'off',name:'Off'},{id:'gentle',name:'Gentle'},{id:'medium',name:'Medium'},{id:'intense',name:'Intense'},{id:'chaos',name:'Chaos'}];
+    growPicker.innerHTML = speeds.map(sp =>
+      '<div class="sens-opt'+(S.growSpeed===sp.id?' active':'')+'" data-gsp="'+sp.id+'">'+sp.name+'</div>'
+    ).join('');
+    growPicker.querySelectorAll('.sens-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        S.growSpeed = opt.dataset.gsp;
+        save();
+        applyGrowSpeed();
         renderSettings();
       });
     });
@@ -3554,6 +3597,11 @@ function applyDisplayTheme() {
     const btn = document.getElementById('btn-light');
     if (btn) btn.classList.toggle('active', !!S.light);
   }
+  applyGrowSpeed();
+}
+
+function applyGrowSpeed() {
+  document.body.dataset.grow = S.growSpeed || 'medium';
 }
 
 /* -- RENDER ALL -- */
