@@ -111,14 +111,26 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
 /* -- HERO SECTION -- */
 #hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 20px 90px;overflow:hidden;min-height:0;position:relative;gap:0;transition:align-items .3s}
-[data-hero-pos="left"] #hero{align-items:flex-start;padding-left:6vw;padding-right:50vw}
-[data-hero-pos="right"] #hero{align-items:flex-end;padding-right:6vw;padding-left:50vw}
-[data-hero-pos="left"] #hero-clock,[data-hero-pos="left"] #hero-date,[data-hero-pos="left"] #hero-quote{text-align:left}
-[data-hero-pos="left"] #dock{justify-content:flex-start;padding-left:6vw}
-[data-hero-pos="left"] #hero-quote{left:6vw;transform:none}
-[data-hero-pos="right"] #hero-clock,[data-hero-pos="right"] #hero-date,[data-hero-pos="right"] #hero-quote{text-align:right}
-[data-hero-pos="right"] #dock{justify-content:flex-end;padding-right:6vw}
-[data-hero-pos="right"] #hero-quote{left:auto;right:6vw;transform:none}
+/* Left: everything shifts left, same widths, aligned */
+[data-hero-pos="left"] #hero{align-items:flex-start;padding-left:4vw;padding-right:4vw}
+[data-hero-pos="left"] #hero-clock,[data-hero-pos="left"] #hero-date{text-align:left;width:100%;max-width:480px}
+[data-hero-pos="left"] #hero-onething,[data-hero-pos="left"] #hero-focus{align-self:flex-start}
+[data-hero-pos="left"] #hero-next-mtg{text-align:left;width:100%;max-width:480px}
+[data-hero-pos="left"] #hero-quote{left:4vw;right:auto;transform:none;text-align:left;max-width:480px}
+[data-hero-pos="left"] #hero-focus{align-items:flex-start}
+[data-hero-pos="left"] .hero-fs-controls{justify-content:flex-start}
+[data-hero-pos="left"] .hero-fs-presets{justify-content:flex-start}
+[data-hero-pos="left"] #dock{justify-content:flex-start;padding-left:4vw}
+/* Right: mirror of left */
+[data-hero-pos="right"] #hero{align-items:flex-end;padding-right:4vw;padding-left:4vw}
+[data-hero-pos="right"] #hero-clock,[data-hero-pos="right"] #hero-date{text-align:right;width:100%;max-width:480px}
+[data-hero-pos="right"] #hero-onething,[data-hero-pos="right"] #hero-focus{align-self:flex-end}
+[data-hero-pos="right"] #hero-next-mtg{text-align:right;width:100%;max-width:480px}
+[data-hero-pos="right"] #hero-quote{right:4vw;left:auto;transform:none;text-align:right;max-width:480px}
+[data-hero-pos="right"] #hero-focus{align-items:flex-end}
+[data-hero-pos="right"] .hero-fs-controls{justify-content:flex-end}
+[data-hero-pos="right"] .hero-fs-presets{justify-content:flex-end}
+[data-hero-pos="right"] #dock{justify-content:flex-end;padding-right:4vw}
 /* Position toggle */
 #hero-pos-toggle{position:absolute;bottom:16px;right:16px;display:flex;gap:2px;z-index:5;opacity:.5;transition:opacity .2s}
 #hero-pos-toggle:hover{opacity:1}
