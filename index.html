@@ -3952,6 +3952,12 @@ function init() {
   if (S.firstRun) {
     showFirstRun();
   } else if (needsIntention()) {
+    // New day: play "game over" intro if streaks are on
+    if (S.streaksOn) {
+      const a = new Audio('sounds/game_over.mp3');
+      a.volume = 0.4;
+      a.play().catch(() => {});
+    }
     showIntentionGate();
   }
 }
