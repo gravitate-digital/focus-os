@@ -110,7 +110,17 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .mode-auto-label{flex:1}
 
 /* -- HERO SECTION -- */
-#hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 20px 90px;overflow:hidden;min-height:0;position:relative;gap:0}
+#hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 20px 90px;overflow:hidden;min-height:0;position:relative;gap:0;transition:align-items .3s}
+[data-hero-pos="left"] #hero{align-items:flex-start;padding-left:5vw}
+[data-hero-pos="right"] #hero{align-items:flex-end;padding-right:5vw}
+[data-hero-pos="left"] #hero-clock,[data-hero-pos="left"] #hero-date{text-align:left}
+[data-hero-pos="right"] #hero-clock,[data-hero-pos="right"] #hero-date{text-align:right}
+/* Position toggle */
+#hero-pos-toggle{position:absolute;bottom:16px;right:16px;display:flex;gap:2px;z-index:5;opacity:.4;transition:opacity .2s}
+#hero-pos-toggle:hover{opacity:.8}
+.pos-btn{width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--dim);font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);transition:background .14s,color .14s}
+.pos-btn:hover{background:rgba(255,255,255,.12);color:var(--tx)}
+.pos-btn.active{background:rgba(106,167,255,.15);border-color:rgba(106,167,255,.25);color:var(--accent)}
 
 /* Hero clock */
 #hero-clock{font-size:82px;font-weight:100;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1;color:var(--tx);text-align:center;margin-bottom:4px}
@@ -778,6 +788,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
 
     <div id="hero-quote" class="hero-enter"></div>
+    <div id="hero-pos-toggle">
+      <button class="pos-btn" data-pos="left" title="Align left">&#9664;</button>
+      <button class="pos-btn active" data-pos="center" title="Center">&#9679;</button>
+      <button class="pos-btn" data-pos="right" title="Align right">&#9654;</button>
+    </div>
   </main>
 
   <!-- BOTTOM DOCK -->
@@ -1570,6 +1585,7 @@ const DEFAULT_STATE = {
   soundMuted: false,
   displayTheme: 'default',
   growSpeed: 'medium',
+  heroPos: 'center',
   bgMode: 'photos',
   oneThingId: 2,
   topPriorities: [],
@@ -1621,6 +1637,7 @@ function loadState() {
     // displayTheme migration
     if (!merged.displayTheme) merged.displayTheme = 'default';
     if (!merged.growSpeed) merged.growSpeed = 'medium';
+    if (!merged.heroPos) merged.heroPos = 'center';
     return merged;
   } catch { return clone(DEFAULT_STATE); }
 }
@@ -3611,6 +3628,13 @@ function applyDisplayTheme() {
   applyGrowSpeed();
 }
 
+function applyHeroPos() {
+  document.body.dataset.heroPos = S.heroPos || 'center';
+  document.querySelectorAll('#hero-pos-toggle .pos-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.pos === (S.heroPos || 'center'));
+  });
+}
+
 function applyGrowSpeed() {
   document.body.dataset.grow = S.growSpeed || 'medium';
 }
@@ -3722,6 +3746,7 @@ function init() {
   }
 
   applyDisplayTheme();
+  applyHeroPos();
   setupWsName();
   renderAll();
   applyBgMode();
@@ -3779,6 +3804,15 @@ function init() {
   });
   document.querySelectorAll('.fs-preset').forEach(p => {
     p.addEventListener('click', () => setFocusDuration(+p.dataset.dur));
+  });
+
+  // Hero position toggle
+  document.querySelectorAll('#hero-pos-toggle .pos-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      S.heroPos = btn.dataset.pos;
+      save();
+      applyHeroPos();
+    });
   });
   document.getElementById('tb-timer').addEventListener('click', () => {
     // Scroll hero focus into view
