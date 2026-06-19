@@ -114,7 +114,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-hero-pos="left"] #hero{align-items:flex-start;padding-left:6vw;padding-right:50vw}
 [data-hero-pos="right"] #hero{align-items:flex-end;padding-right:6vw;padding-left:50vw}
 [data-hero-pos="left"] #hero-clock,[data-hero-pos="left"] #hero-date,[data-hero-pos="left"] #hero-quote{text-align:left}
+[data-hero-pos="left"] #dock{justify-content:flex-start;padding-left:6vw}
+[data-hero-pos="left"] #hero-quote{left:6vw;transform:none}
 [data-hero-pos="right"] #hero-clock,[data-hero-pos="right"] #hero-date,[data-hero-pos="right"] #hero-quote{text-align:right}
+[data-hero-pos="right"] #dock{justify-content:flex-end;padding-right:6vw}
+[data-hero-pos="right"] #hero-quote{left:auto;right:6vw;transform:none}
 /* Position toggle */
 #hero-pos-toggle{position:absolute;bottom:16px;right:16px;display:flex;gap:2px;z-index:5;opacity:.5;transition:opacity .2s}
 #hero-pos-toggle:hover{opacity:1}
@@ -1254,6 +1258,9 @@ const SOUND_EFFECTS = [
   {id:'final-fantasy', name:'Final Fantasy', file:'sounds/final_fantasy_KDr5Pxg.mp3'},
   {id:'deg-deg', name:'Deg Deg', file:'sounds/deg-deg_4M6Cojn.mp3'},
   {id:'jurassic', name:'Jurassic Park', file:'sounds/jurassic-park-celebration.mp3'},
+  {id:'roadrash-win', name:'Road Rash Win', file:'sounds/road-rash-64-first-place.mp3'},
+  {id:'roadrash-lose', name:'Road Rash Lose', file:'sounds/road-rash-64-last-place.mp3'},
+  {id:'applause', name:'Crowd Applause', file:'sounds/crowd-applause-cheer-small-group_tUQjCQt.mp3'},
 ];
 
 const DISPLAY_THEMES = [
