@@ -266,9 +266,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .task-del{width:20px;height:20px;border:none;background:none;color:var(--dim);cursor:pointer;opacity:0;font-size:10px;flex-shrink:0;transition:opacity .15s,color .15s;display:flex;align-items:center;justify-content:center;font-family:var(--font);border-radius:4px}
 .task-row:hover .task-del{opacity:.5}
 .task-del:hover{color:var(--danger);opacity:1!important;background:rgba(255,120,120,.1)}
-#task-add-input{width:100%;margin-top:8px;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--tx);font-size:12px;font-family:var(--font);outline:none;display:none}
-#task-add-input.show{display:block}
+#task-add-input{width:100%;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--tx);font-size:12px;font-family:var(--font);outline:none}
 #task-add-input:focus{border-color:var(--accent)}
+.task-adhoc{font-size:8px;padding:1px 5px;border-radius:4px;background:rgba(255,200,100,.15);color:var(--warn);font-weight:600;letter-spacing:.03em;text-transform:uppercase;flex-shrink:0;margin-left:4px}
+.task-adhoc-toggle{padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--dim);font-size:10px;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s,border-color .14s;flex-shrink:0}
+.task-adhoc-toggle.on{background:rgba(255,200,100,.15);border-color:rgba(255,200,100,.25);color:var(--warn)}
 
 .task-text-link{color:inherit;text-decoration:none;cursor:pointer;display:inline;position:relative}
 .task-text-link:hover{text-decoration:underline;text-underline-offset:2px}
@@ -808,7 +810,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <button class="widget-add" id="task-add-btn" title="Add task">+</button>
     </div>
     <div id="tasks-list"></div>
-    <input id="task-add-input" placeholder="New task, then Enter..." spellcheck="false" />
+    <div id="task-add-wrap" style="display:none">
+      <input id="task-add-input" placeholder="New task, then Enter..." spellcheck="false" style="width:100%;margin-top:8px;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--tx);font-size:12px;font-family:var(--font);outline:none" />
+      <button class="task-adhoc-toggle" id="sidebar-adhoc-toggle" style="margin-top:4px" title="Mark as unplanned">Ad hoc</button>
+    </div>
   </div>
 </aside>
 
@@ -1105,80 +1110,70 @@ const EMOJIS = [
 ];
 
 const PRESETS = [
-  // Core / Always
-  {id:'google',    name:'Google',         url:'https://google.com',              emoji:'\u{1F50D}', cat:'core'},
-  {id:'gmail',     name:'Gmail',          url:'https://mail.google.com',         emoji:'\u2709\uFE0F', cat:'core'},
-  {id:'calendar',  name:'Calendar',       url:'https://calendar.google.com',     emoji:'\u{1F4C5}', cat:'core'},
-  {id:'drive',     name:'Drive',          url:'https://drive.google.com',        emoji:'\u{1F4BE}', cat:'core'},
-  {id:'docs',      name:'Docs',           url:'https://docs.google.com',         emoji:'\u{1F4C4}', cat:'core'},
-  {id:'sheets',    name:'Sheets',         url:'https://sheets.google.com',       emoji:'\u{1F4C8}', cat:'core'},
-  {id:'meet',      name:'Google Meet',    url:'https://meet.google.com',         emoji:'\u{1F3A5}', cat:'core'},
-  {id:'gchat',     name:'Google Chat',    url:'https://chat.google.com',         emoji:'\u{1F4AC}', cat:'core'},
+  // Core (everyone gets these)
+  {id:'google',    name:'Google',           url:'https://google.com',                        emoji:'\u{1F50D}', cat:'core'},
+  {id:'gmail',     name:'Gmail',            url:'https://mail.google.com',                   emoji:'\u2709\uFE0F', cat:'core'},
+  {id:'gchat',     name:'Google Chat',      url:'https://chat.google.com',                   emoji:'\u{1F4AC}', cat:'core'},
+  {id:'calendar',  name:'Calendar',         url:'https://calendar.google.com',               emoji:'\u{1F4C5}', cat:'core'},
+  {id:'drive',     name:'Drive',            url:'https://drive.google.com',                  emoji:'\u{1F4BE}', cat:'core'},
+  {id:'docs',      name:'Docs',             url:'https://docs.google.com',                   emoji:'\u{1F4C4}', cat:'core'},
+  {id:'sheets',    name:'Sheets',           url:'https://sheets.google.com',                 emoji:'\u{1F4C8}', cat:'core'},
+  {id:'meet',      name:'Google Meet',      url:'https://meet.google.com',                   emoji:'\u{1F3A5}', cat:'core'},
+  {id:'asana',     name:'Asana',            url:'https://app.asana.com',                     emoji:'\u{1F4CB}', cat:'core'},
+  {id:'loom',      name:'Loom',             url:'https://loom.com',                          emoji:'\u{1F3AC}', cat:'core'},
   // AI
-  {id:'chatgpt',   name:'ChatGPT',        url:'https://chat.openai.com',         emoji:'\u26A1', cat:'ai'},
-  {id:'claude',    name:'Claude',          url:'https://claude.ai',               emoji:'\u25CE', cat:'ai'},
-  {id:'claude-d',  name:'Claude Design',   url:'https://claude.ai/new',           emoji:'\u{1F3A8}', cat:'ai'},
-  // PM
-  {id:'asana',     name:'Asana',           url:'https://app.asana.com',           emoji:'\u{1F4CB}', cat:'pm'},
-  {id:'linear',    name:'Linear',          url:'https://linear.app',              emoji:'\u25C8', cat:'pm'},
-  {id:'notion',    name:'Notion',          url:'https://notion.so',               emoji:'\u{1F4DD}', cat:'pm'},
-  // Communication
-  {id:'slack',     name:'Slack',           url:'https://app.slack.com',           emoji:'\u{1F4AC}', cat:'comms'},
-  {id:'loom',      name:'Loom',            url:'https://loom.com',                emoji:'\u{1F3AC}', cat:'comms'},
+  {id:'chatgpt',   name:'ChatGPT',          url:'https://chat.openai.com',                   emoji:'\u26A1', cat:'ai'},
+  {id:'claude',    name:'Claude',            url:'https://claude.ai',                         emoji:'\u25CE', cat:'ai'},
+  {id:'claude-d',  name:'Claude Design',     url:'https://claude.ai/new',                     emoji:'\u{1F3A8}', cat:'ai'},
+  {id:'claude-c',  name:'Claude Code',       url:'https://claude.ai/code',                    emoji:'\u{1F4BB}', cat:'ai'},
+  {id:'copilot',   name:'Copilot',           url:'https://copilot.microsoft.com',             emoji:'\u{1F916}', cat:'ai'},
   // Design
-  {id:'figma',     name:'Figma',           url:'https://figma.com',               emoji:'\u{1F3A8}', cat:'design'},
-  {id:'canva',     name:'Canva',           url:'https://canva.com',               emoji:'\u{1F58C}\uFE0F', cat:'design'},
-  {id:'adobe',     name:'Adobe CC',        url:'https://creativecloud.adobe.com', emoji:'\u{1F4F7}', cat:'design'},
+  {id:'figma',     name:'Figma',             url:'https://figma.com',                         emoji:'\u{1F3A8}', cat:'design'},
+  {id:'canva',     name:'Canva',             url:'https://canva.com',                         emoji:'\u{1F58C}\uFE0F', cat:'design'},
+  {id:'adobe',     name:'Adobe CC',          url:'https://creativecloud.adobe.com',           emoji:'\u{1F4F7}', cat:'design'},
+  {id:'webflow',   name:'Webflow',           url:'https://webflow.com',                       emoji:'\u{1F310}', cat:'design'},
   // Reporting / Analytics
-  {id:'ga4',       name:'Analytics',       url:'https://analytics.google.com',    emoji:'\u{1F4CA}', cat:'analytics'},
-  {id:'whatagraph',name:'Whatagraph',      url:'https://app.whatagraph.com',      emoji:'\u{1F4CA}', cat:'analytics'},
-  {id:'gsc',       name:'Search Console',  url:'https://search.google.com/search-console', emoji:'\u{1F50D}', cat:'analytics'},
+  {id:'ga4',       name:'Analytics',         url:'https://analytics.google.com',              emoji:'\u{1F4CA}', cat:'analytics'},
+  {id:'whatagraph',name:'Whatagraph',        url:'https://app.whatagraph.com',                emoji:'\u{1F4CA}', cat:'analytics'},
+  {id:'gsc',       name:'Search Console',    url:'https://search.google.com/search-console', emoji:'\u{1F50D}', cat:'analytics'},
   // Paid Ads
-  {id:'gads',      name:'Google Ads',      url:'https://ads.google.com',          emoji:'\u{1F4B0}', cat:'ads'},
-  {id:'meta',      name:'Meta Ads',        url:'https://business.facebook.com',   emoji:'\u{1F536}', cat:'ads'},
-  {id:'tiktok',    name:'TikTok Ads',      url:'https://ads.tiktok.com',          emoji:'\u{1F3B5}', cat:'ads'},
-  {id:'bing',      name:'Bing Ads',        url:'https://ads.microsoft.com',       emoji:'\u{1F310}', cat:'ads'},
-  {id:'amazon',    name:'Amazon Ads',      url:'https://advertising.amazon.com',  emoji:'\u{1F4E6}', cat:'ads'},
+  {id:'gads',      name:'Google Ads',        url:'https://ads.google.com',                    emoji:'\u{1F4B0}', cat:'ads'},
+  {id:'meta',      name:'Meta Ads',          url:'https://business.facebook.com',             emoji:'\u{1F536}', cat:'ads'},
+  {id:'tiktok',    name:'TikTok Ads',        url:'https://ads.tiktok.com',                    emoji:'\u{1F3B5}', cat:'ads'},
+  {id:'bing',      name:'Bing Ads',          url:'https://ads.microsoft.com',                 emoji:'\u{1F310}', cat:'ads'},
+  {id:'amazon',    name:'Amazon Ads',        url:'https://advertising.amazon.com',            emoji:'\u{1F4E6}', cat:'ads'},
   // SEO
-  {id:'semrush',   name:'SEMrush',         url:'https://www.semrush.com',         emoji:'\u{1F50E}', cat:'seo'},
-  {id:'sfrog',     name:'Screaming Frog',  url:'https://www.screamingfrog.co.uk', emoji:'\u{1F438}', cat:'seo'},
+  {id:'semrush',   name:'SEMrush',           url:'https://www.semrush.com',                   emoji:'\u{1F50E}', cat:'seo'},
+  {id:'sfrog',     name:'Screaming Frog',    url:'https://www.screamingfrog.co.uk',           emoji:'\u{1F438}', cat:'seo'},
   // Email Marketing
-  {id:'klaviyo',   name:'Klaviyo',          url:'https://www.klaviyo.com/login',   emoji:'\u{1F4E7}', cat:'email'},
-  {id:'mailchimp', name:'Mailchimp',        url:'https://login.mailchimp.com',     emoji:'\u{1F412}', cat:'email'},
-  // CRM / Sales
-  {id:'hubspot',   name:'HubSpot',          url:'https://app.hubspot.com',         emoji:'\u{1F536}', cat:'crm'},
-  {id:'callrail',  name:'CallRail',          url:'https://app.callrail.com',        emoji:'\u{1F4DE}', cat:'crm'},
+  {id:'klaviyo',   name:'Klaviyo',            url:'https://www.klaviyo.com/login',             emoji:'\u{1F4E7}', cat:'email'},
+  {id:'mailchimp', name:'Mailchimp',          url:'https://login.mailchimp.com',               emoji:'\u{1F412}', cat:'email'},
+  {id:'zoho',      name:'Zoho',              url:'https://mail.zoho.com',                     emoji:'\u{1F4E7}', cat:'email'},
+  // Call Tracking
+  {id:'callrail',  name:'CallRail',           url:'https://app.callrail.com',                  emoji:'\u{1F4DE}', cat:'crm'},
   // Social
-  {id:'instagram', name:'Instagram',         url:'https://instagram.com',           emoji:'\u{1F4F7}', cat:'social'},
-  {id:'facebook',  name:'Facebook',          url:'https://facebook.com',            emoji:'\u{1F44D}', cat:'social'},
-  {id:'linkedin',  name:'LinkedIn',          url:'https://linkedin.com',            emoji:'\u{1F4BC}', cat:'social'},
+  {id:'instagram', name:'Instagram',          url:'https://instagram.com',                     emoji:'\u{1F4F7}', cat:'social'},
+  {id:'facebook',  name:'Facebook',           url:'https://facebook.com',                      emoji:'\u{1F44D}', cat:'social'},
+  {id:'linkedin',  name:'LinkedIn',           url:'https://linkedin.com',                      emoji:'\u{1F4BC}', cat:'social'},
+  // Scheduling
+  {id:'acuity',    name:'Acuity Scheduling', url:'https://acuityscheduling.com',              emoji:'\u{1F4C5}', cat:'scheduling'},
   // Gravitate Internal
-  {id:'proposals', name:'Proposals',         url:'https://proposals.gravitatedigital.com.au', emoji:'\u{1F4DD}', cat:'gravitate'},
-  {id:'pace',      name:'Pace Timekeeping',  url:'https://pace-os.vercel.app',               emoji:'\u23F1\uFE0F', cat:'gravitate'},
-  {id:'space',     name:'Gravitate Space',   url:'https://gravitatespace.com.au',             emoji:'\u{1F3E2}', cat:'gravitate'},
-  {id:'gfocus',    name:'Focus',             url:'https://focus-os-snowy-nu.vercel.app',      emoji:'\u25CE', cat:'gravitate'},
   {id:'gdigital',  name:'Gravitate Digital', url:'https://gravitatedigital.com.au',           emoji:'\u25B2', cat:'gravitate'},
   {id:'gstudio',   name:'Gravitate Studio',  url:'https://gravitatestudio.com.au',            emoji:'\u25C8', cat:'gravitate'},
-  // Email Marketing (additional)
-  {id:'zoho',      name:'Zoho',              url:'https://mail.zoho.com',                     emoji:'\u{1F4E7}', cat:'email'},
+  {id:'proposals', name:'Proposals',          url:'https://proposals.gravitatedigital.com.au', emoji:'\u{1F4DD}', cat:'gravitate'},
+  {id:'pace',      name:'Pace Timekeeping',  url:'https://pace-os.vercel.app',                emoji:'\u23F1\uFE0F', cat:'gravitate'},
+  {id:'space',     name:'Gravitate Space',   url:'https://gravitatespace.com.au',             emoji:'\u{1F3E2}', cat:'gravitate'},
+  {id:'gfocus',    name:'Focus',             url:'https://focus-os-snowy-nu.vercel.app',     emoji:'\u25CE', cat:'gravitate'},
+  // Dev
+  {id:'linear',    name:'Linear',             url:'https://linear.app',                        emoji:'\u25C8', cat:'dev'},
 ];
 
 const CAT_LABELS = {
-  gravitate: 'Gravitate Apps',
-  core: 'Core / Google',
-  ai: 'AI',
-  pm: 'Project Management',
-  comms: 'Communication',
-  design: 'Design',
-  analytics: 'Reporting / Analytics',
-  ads: 'Paid Ads',
-  seo: 'SEO',
-  email: 'Email Marketing',
-  crm: 'CRM / Sales',
-  social: 'Social',
+  gravitate:'Gravitate Apps', core:'Core', ai:'AI', design:'Design',
+  analytics:'Reporting', ads:'Paid Ads', seo:'SEO', email:'Email Marketing',
+  crm:'Call Tracking', social:'Social', scheduling:'Scheduling', dev:'Development'
 };
-
-const CAT_ORDER = ['gravitate','core','ai','pm','comms','design','analytics','ads','seo','email','crm','social'];
+const CAT_ORDER = ['gravitate','core','ai','design','analytics','ads','seo','email','crm','social','scheduling','dev'];
 
 /* -- LAYOUT CATALOG (kept for mode switching) -- */
 const LAYOUTS = [
@@ -1388,158 +1383,118 @@ function renderUnicodeBg() {
 /* -- ROLE PRESETS -- */
 const ROLE_PRESETS = {
   account_manager: {
-    panels: [
-      {preset:'asana'},{preset:'gmail'},{preset:'slack'},{preset:'ga4'},
-      {preset:'whatagraph'},{preset:'callrail'},{preset:'gads'},{preset:'meta'},
-    ],
-    defaultApps: ['google','asana','gmail','slack','ga4','whatagraph','callrail','gads','meta','sheets','calendar'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','ga4','whatagraph','callrail','gads','meta','sheets'],
     modes: [
-      {id:'morning',name:'Morning',desc:'Email, calendar, tasks',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'},{preset:'slack'}],layout:'quad'},
-      {id:'client',name:'Client Work',desc:'Reporting, calls, tasks',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'callrail'},{preset:'asana'},{preset:'sheets'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Sheets, Drive, Slack',color:'#ffd86b',panels:[{preset:'sheets'},{preset:'drive'},{preset:'slack'}],layout:'trio'},
+      {id:'morning',name:'Morning',desc:'Email, calendar, tasks',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'},{preset:'gchat'}],layout:'quad'},
+      {id:'client',name:'Client Work',desc:'Reporting, calls, tasks',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'callrail'},{preset:'asana'},{preset:'whatagraph'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Sheets, Drive',color:'#ffd86b',panels:[{preset:'sheets'},{preset:'drive'},{preset:'gchat'}],layout:'trio'},
     ],
-    rocks:['Hit Q2 revenue target','Onboard 2 new clients','Reduce churn by 10%'],
-    tasks:['Check campaign pacing','Review client reports','Respond to client emails','Update project status'],
+    rocks:[], tasks:[],
   },
   sales: {
-    panels: [
-      {preset:'hubspot'},{preset:'gmail'},{preset:'calendar'},{preset:'slack'},
-      {preset:'sheets'},{preset:'loom'},{preset:'meet'},{preset:'linkedin'},
-    ],
-    defaultApps: ['google','hubspot','gmail','calendar','slack','sheets','loom','meet','linkedin'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','callrail','meet','sheets','linkedin'],
     modes: [
-      {id:'prospect',name:'Prospecting',desc:'CRM, email, research',color:'#6DAAFF',panels:[{preset:'hubspot'},{preset:'gmail'},{preset:'linkedin'}],layout:'feat3'},
-      {id:'followup',name:'Follow-up',desc:'Email, calendar, CRM',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'hubspot'},{preset:'slack'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Sheets, Slack, Drive',color:'#ffd86b',panels:[{preset:'sheets'},{preset:'slack'},{preset:'loom'}],layout:'trio'},
+      {id:'morning',name:'Morning',desc:'Email, calendar, CRM',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'},{preset:'gchat'}],layout:'quad'},
+      {id:'calls',name:'Calls',desc:'CallRail, Meet',color:'#6DAAFF',panels:[{preset:'callrail'},{preset:'meet'},{preset:'gmail'}],layout:'feat3'},
+      {id:'admin',name:'Admin',desc:'Sheets, email',color:'#ffd86b',panels:[{preset:'sheets'},{preset:'gmail'},{preset:'gchat'}],layout:'trio'},
     ],
-    rocks:['Close 3 new deals this quarter','Build outreach playbook','Pipeline to $50K MRR'],
-    tasks:['Follow up warm leads','Update pipeline in CRM','Prep for discovery call','Send proposal'],
+    rocks:[], tasks:[],
   },
   creative: {
-    panels: [
-      {preset:'figma'},{preset:'canva'},{preset:'adobe'},{preset:'notion'},
-      {preset:'asana'},{preset:'loom'},{preset:'drive'},{preset:'claude-d'},
-    ],
-    defaultApps: ['google','figma','canva','adobe','notion','asana','loom','drive','claude-d'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','figma','canva','adobe','drive','webflow'],
     modes: [
-      {id:'design',name:'Design',desc:'Figma, Canva, Adobe',color:'#c4a2f0',panels:[{preset:'figma'},{preset:'canva'},{preset:'adobe'}],layout:'feat3'},
-      {id:'review',name:'Review',desc:'Loom, Asana, Notion',color:'#6DAAFF',panels:[{preset:'loom'},{preset:'asana'},{preset:'notion'},{preset:'figma'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Email, Drive, Claude',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'drive'},{preset:'claude-d'}],layout:'trio'},
+      {id:'design',name:'Design',desc:'Figma, Canva, Drive',color:'#6DAAFF',panels:[{preset:'figma'},{preset:'canva'},{preset:'drive'}],layout:'feat3'},
+      {id:'review',name:'Review',desc:'Loom, Asana',color:'#6DAAFF',panels:[{preset:'loom'},{preset:'asana'},{preset:'gchat'},{preset:'figma'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'}],layout:'trio'},
     ],
-    rocks:['Ship rebrand assets','Build design system v2','Clear review backlog'],
-    tasks:['Review design feedback','Update brand assets','Record Loom walkthrough','Prep creative brief'],
+    rocks:[], tasks:[],
   },
   seo: {
-    panels: [
-      {preset:'semrush'},{preset:'sfrog'},{preset:'ga4'},{preset:'gsc'},
-      {preset:'asana'},{preset:'sheets'},{preset:'google'},{preset:'notion'},
-    ],
-    defaultApps: ['google','semrush','sfrog','ga4','gsc','asana','sheets','notion'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','semrush','sfrog','ga4','gsc','sheets'],
     modes: [
-      {id:'research',name:'Research',desc:'SEMrush, Search Console, Google',color:'#6DAAFF',panels:[{preset:'semrush'},{preset:'gsc'},{preset:'google'}],layout:'feat3'},
-      {id:'audit',name:'Audit',desc:'Screaming Frog, Analytics, Sheets',color:'#6DAAFF',panels:[{preset:'sfrog'},{preset:'ga4'},{preset:'sheets'},{preset:'gsc'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Asana, Notion, Sheets',color:'#ffd86b',panels:[{preset:'asana'},{preset:'notion'},{preset:'sheets'}],layout:'trio'},
+      {id:'audit',name:'Audit',desc:'SEMrush, Screaming Frog',color:'#6DAAFF',panels:[{preset:'semrush'},{preset:'sfrog'},{preset:'ga4'}],layout:'feat3'},
+      {id:'report',name:'Reporting',desc:'Analytics, Console',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'gsc'},{preset:'sheets'},{preset:'asana'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Email, tasks',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'}],layout:'trio'},
     ],
-    rocks:['Increase organic traffic 20%','Complete technical audit','Build link strategy'],
-    tasks:['Run keyword research','Check ranking movements','Review crawl errors','Update content calendar'],
+    rocks:[], tasks:[],
   },
   paid_media: {
-    panels: [
-      {preset:'gads'},{preset:'meta'},{preset:'tiktok'},{preset:'bing'},
-      {preset:'ga4'},{preset:'whatagraph'},{preset:'asana'},{preset:'sheets'},
-    ],
-    defaultApps: ['google','gads','meta','tiktok','bing','ga4','whatagraph','asana','sheets'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','gads','meta','tiktok','bing','amazon','ga4','whatagraph','sheets'],
     modes: [
-      {id:'optimise',name:'Optimise',desc:'Google Ads, Meta Ads, Analytics',color:'#6DAAFF',panels:[{preset:'gads'},{preset:'meta'},{preset:'ga4'}],layout:'feat3'},
-      {id:'report',name:'Reporting',desc:'Whatagraph, Analytics, Sheets',color:'#6DAAFF',panels:[{preset:'whatagraph'},{preset:'ga4'},{preset:'sheets'},{preset:'asana'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Asana, Sheets, TikTok',color:'#ffd86b',panels:[{preset:'asana'},{preset:'sheets'},{preset:'tiktok'}],layout:'trio'},
+      {id:'campaigns',name:'Campaigns',desc:'Ad platforms',color:'#6DAAFF',panels:[{preset:'gads'},{preset:'meta'},{preset:'tiktok'},{preset:'ga4'}],layout:'quad'},
+      {id:'report',name:'Reporting',desc:'Whatagraph, Analytics',color:'#6DAAFF',panels:[{preset:'whatagraph'},{preset:'ga4'},{preset:'sheets'}],layout:'feat3'},
+      {id:'admin',name:'Admin',desc:'Email, tasks',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'}],layout:'trio'},
     ],
-    rocks:['Hit ROAS targets across accounts','Launch new campaign structure','Reduce CPA by 15%'],
-    tasks:['Check daily spend pacing','Review ad performance','Adjust bidding strategies','Update campaign reports'],
+    rocks:[], tasks:[],
   },
   social_media: {
-    panels: [
-      {preset:'facebook'},{preset:'instagram'},{preset:'canva'},{preset:'notion'},
-      {preset:'asana'},{preset:'linkedin'},{preset:'slack'},{preset:'tiktok'},
-    ],
-    defaultApps: ['google','facebook','instagram','canva','notion','asana','linkedin','slack','tiktok'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','instagram','facebook','canva','linkedin'],
     modes: [
-      {id:'create',name:'Create',desc:'Canva, Notion, Instagram',color:'#c4a2f0',panels:[{preset:'canva'},{preset:'notion'},{preset:'instagram'}],layout:'feat3'},
-      {id:'engage',name:'Engage',desc:'Facebook, Instagram, LinkedIn',color:'#6DAAFF',panels:[{preset:'facebook'},{preset:'instagram'},{preset:'linkedin'},{preset:'slack'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Asana, Notion, Slack',color:'#ffd86b',panels:[{preset:'asana'},{preset:'notion'},{preset:'slack'}],layout:'trio'},
+      {id:'content',name:'Content',desc:'Canva, Instagram, Facebook',color:'#6DAAFF',panels:[{preset:'canva'},{preset:'instagram'},{preset:'facebook'},{preset:'linkedin'}],layout:'quad'},
+      {id:'plan',name:'Planning',desc:'Asana, Canva',color:'#6DAAFF',panels:[{preset:'asana'},{preset:'canva'},{preset:'gchat'}],layout:'feat3'},
+      {id:'admin',name:'Admin',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'}],layout:'trio'},
     ],
-    rocks:['Grow followers by 25%','Launch content calendar','Improve engagement rate'],
-    tasks:['Schedule weekly posts','Review engagement metrics','Create stories content','Reply to comments'],
+    rocks:[], tasks:[],
   },
   email_marketing: {
-    panels: [
-      {preset:'klaviyo'},{preset:'mailchimp'},{preset:'canva'},{preset:'sheets'},
-      {preset:'asana'},{preset:'ga4'},{preset:'gmail'},{preset:'drive'},
-    ],
-    defaultApps: ['google','klaviyo','mailchimp','canva','sheets','asana','ga4','gmail','drive'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','klaviyo','mailchimp','zoho','canva','ga4','sheets'],
     modes: [
-      {id:'build',name:'Build',desc:'Klaviyo, Canva, Sheets',color:'#6DAAFF',panels:[{preset:'klaviyo'},{preset:'canva'},{preset:'sheets'}],layout:'feat3'},
-      {id:'analyse',name:'Analyse',desc:'Analytics, Klaviyo, Mailchimp',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'klaviyo'},{preset:'mailchimp'},{preset:'sheets'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Asana, Gmail, Drive',color:'#ffd86b',panels:[{preset:'asana'},{preset:'gmail'},{preset:'drive'}],layout:'trio'},
+      {id:'campaigns',name:'Campaigns',desc:'Klaviyo, Mailchimp',color:'#6DAAFF',panels:[{preset:'klaviyo'},{preset:'mailchimp'},{preset:'canva'},{preset:'ga4'}],layout:'quad'},
+      {id:'build',name:'Build',desc:'Canva, templates',color:'#6DAAFF',panels:[{preset:'canva'},{preset:'klaviyo'},{preset:'sheets'}],layout:'feat3'},
+      {id:'admin',name:'Admin',desc:'Email, tasks',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'}],layout:'trio'},
     ],
-    rocks:['Increase open rate to 30%','Build 3 new flows','Grow subscriber list 20%'],
-    tasks:['Review campaign performance','Build next email send','Segment audience lists','A/B test subject lines'],
+    rocks:[], tasks:[],
   },
   leadership: {
-    panels: [
-      {preset:'asana'},{preset:'sheets'},{preset:'ga4'},{preset:'linear'},
-      {preset:'slack'},{preset:'gmail'},{preset:'calendar'},{preset:'notion'},
-    ],
-    defaultApps: ['google','asana','sheets','ga4','linear','slack','gmail','calendar','notion'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','ga4','whatagraph','sheets','meet'],
     modes: [
-      {id:'strategy',name:'Strategy',desc:'Metrics, Notion, Sheets',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'sheets'},{preset:'notion'}],layout:'feat3'},
-      {id:'ops',name:'Operations',desc:'Tasks, Linear, Slack',color:'#6DAAFF',panels:[{preset:'asana'},{preset:'linear'},{preset:'slack'},{preset:'sheets'}],layout:'quad'},
-      {id:'comms',name:'Comms',desc:'Email, calendar, Slack',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'slack'}],layout:'trio'},
+      {id:'strategy',name:'Strategy',desc:'Metrics, Sheets',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'whatagraph'},{preset:'sheets'}],layout:'feat3'},
+      {id:'ops',name:'Operations',desc:'Tasks, team',color:'#6DAAFF',panels:[{preset:'asana'},{preset:'gchat'},{preset:'sheets'},{preset:'meet'}],layout:'quad'},
+      {id:'comms',name:'Comms',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'gchat'}],layout:'trio'},
     ],
-    rocks:['Team at full capacity','Revenue target on track','Ship Gravitate OS v1'],
-    tasks:['Review sprint progress','Check team capacity','Prep for 1:1s','Review P&L'],
+    rocks:[], tasks:[],
+  },
+  studio: {
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','figma','canva','adobe','acuity','webflow','drive'],
+    modes: [
+      {id:'shoot',name:'Shoot Day',desc:'Acuity, Drive, Loom',color:'#6DAAFF',panels:[{preset:'acuity'},{preset:'drive'},{preset:'loom'},{preset:'gchat'}],layout:'quad'},
+      {id:'edit',name:'Edit',desc:'Adobe, Figma',color:'#6DAAFF',panels:[{preset:'adobe'},{preset:'figma'},{preset:'canva'}],layout:'feat3'},
+      {id:'admin',name:'Admin',desc:'Email, scheduling',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'acuity'}],layout:'trio'},
+    ],
+    rocks:[], tasks:[],
   },
   developer: {
-    panels: [
-      {preset:'linear'},{preset:'claude'},{preset:'notion'},{preset:'slack'},
-      {preset:'gmail'},{preset:'figma'},{preset:'drive'},{preset:'chatgpt'},
-    ],
-    defaultApps: ['google','linear','claude','notion','slack','gmail','figma','drive','chatgpt'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','linear','claude','claude-c','figma','drive','chatgpt'],
     modes: [
-      {id:'deep',name:'Deep Work',desc:'Code, docs, Linear',color:'#6DAAFF',panels:[{preset:'linear'},{preset:'claude'}],layout:'duoV'},
-      {id:'collab',name:'Collab',desc:'Slack, Figma, Linear',color:'#6DAAFF',panels:[{preset:'slack'},{preset:'figma'},{preset:'linear'},{preset:'notion'}],layout:'quad'},
-      {id:'admin',name:'Admin',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'slack'}],layout:'trio'},
+      {id:'deep',name:'Deep Work',desc:'Code, docs, Linear',color:'#6DAAFF',panels:[{preset:'linear'},{preset:'claude-c'}],layout:'duoV'},
+      {id:'collab',name:'Collab',desc:'Chat, Figma, Linear',color:'#6DAAFF',panels:[{preset:'gchat'},{preset:'figma'},{preset:'linear'},{preset:'asana'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'gchat'}],layout:'trio'},
     ],
-    rocks:['Ship Phase 1 on time','Zero critical bugs','Documentation complete'],
-    tasks:['Review open PRs','Update sprint board','Fix top priority bug','Write tests'],
+    rocks:[], tasks:[],
   },
   custom: {
-    panels: [
-      {preset:'google'},{preset:'gmail'},{preset:'asana'},{preset:'slack'},
-      {preset:'calendar'},{preset:'sheets'},{preset:'drive'},{preset:'notion'},
-    ],
-    defaultApps: ['google','gmail','asana','slack','calendar','sheets','drive','notion'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','drive','sheets'],
     modes: [
-      {id:'morning',name:'Morning',desc:'Start your day',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'asana'},{preset:'slack'},{preset:'calendar'}],layout:'quad'},
-      {id:'deep',name:'Deep Work',desc:'Focused work',color:'#6DAAFF',panels:[{preset:'asana'},{preset:'notion'}],layout:'duoV'},
-      {id:'admin',name:'Admin',desc:'Admin tasks',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'slack'},{preset:'sheets'}],layout:'trio'},
+      {id:'morning',name:'Morning',desc:'Start your day',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'asana'},{preset:'gchat'},{preset:'calendar'}],layout:'quad'},
+      {id:'deep',name:'Deep Work',desc:'Focused work',color:'#6DAAFF',panels:[{preset:'asana'},{preset:'drive'}],layout:'duoV'},
+      {id:'admin',name:'Admin',desc:'Admin tasks',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'gchat'},{preset:'sheets'}],layout:'trio'},
     ],
-    rocks:['Launch Focus to the team','Q2 agency revenue target','SEO playbook shipped'],
-    tasks:['Review sprint 12 progress','Gravitate new-client deck','Weekly team standup','CallRail audit'],
+    rocks:[], tasks:[],
   },
 };
 
 const ROLE_META = [
-  {id:'account_manager', icon:'\u{1F4CA}', name:'Account Manager', desc:'Client reporting, budgets, task management'},
-  {id:'sales',           icon:'\u{1F4DE}', name:'Sales',           desc:'Pipeline, outreach, meetings, CRM'},
-  {id:'creative',        icon:'\u{1F3A8}', name:'Creative / Design', desc:'Design, content, briefs, review'},
-  {id:'seo',             icon:'\u{1F50E}', name:'SEO',             desc:'Rankings, audits, keyword research'},
-  {id:'paid_media',      icon:'\u{1F4B0}', name:'Paid Media',      desc:'Google, Meta, TikTok, Bing ads'},
-  {id:'social_media',    icon:'\u{1F4F7}', name:'Social Media',    desc:'Content, engagement, scheduling'},
-  {id:'email_marketing', icon:'\u{1F4E7}', name:'Email Marketing', desc:'Klaviyo, Mailchimp, flows, campaigns'},
-  {id:'leadership',      icon:'\u{1F3AF}', name:'Leadership',      desc:'Strategy, metrics, team health, ops'},
-  {id:'developer',       icon:'\u{1F4BB}', name:'Developer',       desc:'Code, sprints, PRs, documentation'},
-  {id:'custom',          icon:'\u2699\uFE0F', name:'Custom',       desc:"I'll set it up myself"},
+  {id:'account_manager', name:'Account Manager', icon:'\u{1F4CA}', desc:'Reporting, budgets, client management'},
+  {id:'sales',           name:'Sales',           icon:'\u{1F4DE}', desc:'Pipeline, outreach, meetings'},
+  {id:'creative',        name:'Creative / Design',icon:'\u{1F3A8}', desc:'Design, content, briefs'},
+  {id:'seo',             name:'SEO',             icon:'\u{1F50E}', desc:'Rankings, audits, keyword research'},
+  {id:'paid_media',      name:'Paid Media',      icon:'\u{1F4B0}', desc:'Google, Meta, TikTok, Bing, Amazon'},
+  {id:'social_media',    name:'Social Media',    icon:'\u{1F4F1}', desc:'Content, engagement, scheduling'},
+  {id:'email_marketing', name:'Email Marketing', icon:'\u{1F4E7}', desc:'Klaviyo, Mailchimp, campaigns'},
+  {id:'studio',          name:'Studio',          icon:'\u{1F3AC}', desc:'Photo, video, Acuity, Webflow'},
+  {id:'leadership',      name:'Leadership',      icon:'\u{1F3AF}', desc:'Strategy, metrics, team health'},
+  {id:'developer',       name:'Developer',       icon:'\u{1F4BB}', desc:'Code, sprints, PRs, documentation'},
+  {id:'custom',          name:'Custom',          icon:'\u2699\uFE0F', desc:'Set it up yourself'},
 ];
 
 /* -- MODE COLORS -- */
@@ -1554,9 +1509,9 @@ const DEFAULT_STATE = {
   role:      'custom',
   panels:[
     {preset:'google'},{preset:'gmail'},
-    {preset:'asana'},{preset:'slack'},
+    {preset:'asana'},{preset:'gchat'},
     {preset:'calendar'},{preset:'sheets'},
-    {preset:'drive'},{preset:'notion'},
+    {preset:'drive'},{preset:'loom'},
   ],
   // Context modes
   modes: clone(ROLE_PRESETS.custom.modes),
@@ -1568,22 +1523,9 @@ const DEFAULT_STATE = {
   intentionDate: null,
   // Widgets
   sprint:{name:'Sprint 12', daysLeft:8, progress:68},
-  meetings:[
-    {id:1, time:'09:30', title:'Daily standup'},
-    {id:2, time:'13:00', title:'Luxe, client check-in'},
-    {id:3, time:'15:30', title:'Sprint 12 review'},
-  ],
-  rocks:[
-    {id:1, text:'Launch Focus to the team',  done:false},
-    {id:2, text:'Q2 agency revenue target',  done:false},
-    {id:3, text:'SEO playbook shipped',       done:true},
-  ],
-  tasks:[
-    {id:1, text:'Review sprint 12 progress',  done:false},
-    {id:2, text:'Gravitate new-client deck',  done:false},
-    {id:3, text:'Weekly team standup',        done:true},
-    {id:4, text:'CallRail audit, Luxe',       done:false},
-  ],
+  meetings:[],
+  rocks:[],
+  tasks:[],
   coach:{on:true, sensitivity:'med', switchCount:0},
   soundEffect: 'ding',
   soundMuted: false,
@@ -1679,7 +1621,7 @@ function getPanelDepts(p) {
   S.departments.forEach(deptId => {
     const rp = ROLE_PRESETS[deptId];
     if (!rp) return;
-    const apps = rp.defaultApps || rp.panels.map(x => x.preset);
+    const apps = rp.defaultApps || [];
     if (apps.includes(p.id)) depts.push(deptId);
   });
   return depts;
@@ -1801,7 +1743,7 @@ function showDockExpand(deptId) {
   } else {
     const preset = ROLE_PRESETS[deptId];
     if (preset) {
-      const defaultIds = preset.defaultApps || preset.panels.map(p => p.preset);
+      const defaultIds = preset.defaultApps || [];
       apps = defaultIds.map(id => PRESETS.find(p => p.id === id)).filter(Boolean);
     }
   }
@@ -1910,6 +1852,7 @@ function renderPriorities() {
   // Always show add input (especially when all done)
   html += '<div class="hero-pri-add" style="margin-top:10px;display:flex;gap:6px;align-items:center">' +
     '<input class="hero-pri-input" id="hero-pri-input" placeholder="Add another priority..." spellcheck="false" style="flex:1;padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:var(--tx);font-size:13px;font-family:var(--font);outline:none">' +
+    '<button class="task-adhoc-toggle" id="hero-adhoc-toggle" title="Mark as unplanned">Ad hoc</button>' +
     '<button class="fs-btn pri" id="hero-pri-add-btn" style="flex-shrink:0;padding:8px 14px;font-size:12px">Add</button></div>';
 
   // Share button and Asana link
@@ -1941,15 +1884,21 @@ function renderPriorities() {
   // Add new priority from hero card
   const addBtn = document.getElementById('hero-pri-add-btn');
   const addInput = document.getElementById('hero-pri-input');
+  const adhocToggle = document.getElementById('hero-adhoc-toggle');
+  if (adhocToggle) {
+    adhocToggle.addEventListener('click', () => { adhocToggle.classList.toggle('on'); });
+  }
   if (addBtn && addInput) {
     const doAdd = () => {
       const txt = addInput.value.trim();
       if (!txt) return;
       const id = Math.max(0, ...S.tasks.map(t=>t.id)) + 1;
-      S.tasks.push({id, text: txt, done: false});
+      const isAdhoc = adhocToggle ? adhocToggle.classList.contains('on') : false;
+      S.tasks.push({id, text: txt, done: false, adhoc: isAdhoc});
       if (S.topPriorities.length < 3) S.topPriorities.push(id);
       S.oneThingId = S.topPriorities[0] || null;
       addInput.value = '';
+      if (adhocToggle) adhocToggle.classList.remove('on');
       save(); renderTasks(); renderPriorities();
     };
     addBtn.addEventListener('click', doAdd);
@@ -2111,6 +2060,7 @@ function renderMeetings() {
 function renderHeroMeeting() {
   const el = document.getElementById('hero-next-mtg');
   if (!el) return;
+  if (!S.meetings || S.meetings.length === 0) { el.innerHTML = ''; return; }
   const now = new Date();
   const nowMin = now.getHours()*60 + now.getMinutes();
   const items = [...S.meetings].sort((a,b)=>toMin(a.time)-toMin(b.time));
@@ -2172,7 +2122,9 @@ function renderTasks() {
     }
     return '<div class="task-row'+(t.done?' done':'')+'" data-tid="'+t.id+'">' +
     '<div class="task-box"><span class="task-tick">\u2713</span></div>' +
-    '<span class="task-text"><a class="task-text-link" href="https://app.asana.com/0/my-tasks" target="_blank" rel="noopener" title="Open in Asana" onclick="event.stopPropagation()">'+esc(t.text)+'<span class="task-ext-icon">\u2197</span></a></span>' +
+    '<span class="task-text"><a class="task-text-link" href="https://app.asana.com/0/my-tasks" target="_blank" rel="noopener" title="Open in Asana" onclick="event.stopPropagation()">'+esc(t.text)+'<span class="task-ext-icon">\u2197</span></a>' +
+    (t.adhoc ? '<span class="task-adhoc">ad hoc</span>' : '') +
+    '</span>' +
     '<div class="task-actions-wrap">' +
     priBtnHtml +
     '<button class="task-del" data-tid="'+t.id+'" title="Delete task">\u2715</button>' +
@@ -2805,21 +2757,28 @@ function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 /* -- QUICK ADD TASK -- */
 
 function showTaskAdd() {
+  const wrap = document.getElementById('task-add-wrap');
   const inp = document.getElementById('task-add-input');
-  inp.classList.add('show');
+  const tog = document.getElementById('sidebar-adhoc-toggle');
+  if (wrap) wrap.style.display = 'block';
+  if (tog) tog.classList.remove('on');
   inp.value = '';
   inp.focus();
 }
 function commitTask() {
+  const wrap = document.getElementById('task-add-wrap');
   const inp = document.getElementById('task-add-input');
+  const tog = document.getElementById('sidebar-adhoc-toggle');
   const txt = inp.value.trim();
   if (txt) {
     const id = Math.max(0, ...S.tasks.map(t=>t.id)) + 1;
-    S.tasks.push({id, text:txt, done:false});
+    const isAdhoc = tog ? tog.classList.contains('on') : false;
+    S.tasks.push({id, text:txt, done:false, adhoc: isAdhoc});
     save(); renderTasks(); renderOneThing();
   }
   inp.value = '';
-  inp.classList.remove('show');
+  if (wrap) wrap.style.display = 'none';
+  if (tog) tog.classList.remove('on');
 }
 
 /* -- QUICK ADD ROCK -- */
@@ -2919,7 +2878,7 @@ function frGoToStep3() {
   frSelectedDepts.forEach(deptId => {
     const preset = ROLE_PRESETS[deptId];
     if (preset) {
-      const apps = preset.defaultApps || preset.panels.map(p => p.preset);
+      const apps = preset.defaultApps || [];
       merged = merged.concat(apps);
     }
   });
@@ -3124,6 +3083,17 @@ function focusTick() {
     focusInterval = null;
     save();
     focusComplete();
+  }
+  if (S.focus.remaining === 300) {
+    // 5-minute warning
+    const a = new Audio('sounds/ding-sound-effect_2.mp3');
+    a.volume = 0.3;
+    a.play().catch(() => {});
+    const toast = document.getElementById('coach-toast');
+    set('coach-msg', '5 minutes remaining. Start wrapping up.');
+    document.querySelector('.coach-lbl').textContent = 'FOCUS TIMER';
+    toast.classList.add('show');
+    setTimeout(() => { toast.classList.remove('show'); document.querySelector('.coach-lbl').textContent = 'FOCUS COACH'; }, 4000);
   }
   renderFocusSession();
   if (S.focus.remaining % 10 === 0) save();
@@ -3443,7 +3413,7 @@ function saveDeptsModal() {
   added.forEach(deptId => {
     const rp = ROLE_PRESETS[deptId];
     if (!rp) return;
-    const apps = rp.defaultApps || rp.panels.map(p => p.preset);
+    const apps = rp.defaultApps || [];
     const existing = S.panels.map(p => p.preset);
     apps.forEach(appId => {
       if (!existing.includes(appId)) {
@@ -3787,9 +3757,11 @@ function init() {
   const taskInput = document.getElementById('task-add-input');
   taskInput.addEventListener('keydown', e => {
     if (e.key === 'Enter'){ e.preventDefault(); commitTask(); }
-    else if (e.key === 'Escape'){ taskInput.value=''; taskInput.classList.remove('show'); }
+    else if (e.key === 'Escape'){ taskInput.value=''; const w=document.getElementById('task-add-wrap'); if(w) w.style.display='none'; }
   });
-  taskInput.addEventListener('blur', () => { if (taskInput.value.trim()) commitTask(); else taskInput.classList.remove('show'); });
+  taskInput.addEventListener('blur', () => { if (taskInput.value.trim()) commitTask(); else { const w=document.getElementById('task-add-wrap'); if(w) w.style.display='none'; } });
+  const sidebarAdhocToggle = document.getElementById('sidebar-adhoc-toggle');
+  if (sidebarAdhocToggle) sidebarAdhocToggle.addEventListener('click', () => sidebarAdhocToggle.classList.toggle('on'));
 
   // Quick add rock
   document.getElementById('rock-add-btn').addEventListener('click', showRockAdd);
