@@ -2216,10 +2216,11 @@ function renderDock() {
 function renderDockDeptBar() {
   const bar = document.getElementById('dock-dept-bar');
   if (!bar) return;
-  if (!S.departments || S.departments.length === 0) { bar.innerHTML = ''; return; }
 
+  // Always show All Apps + all departments (user's selected ones first, then the rest)
   let html = '<span class="dept-pill" data-dept="all">All Apps</span>';
-  S.departments.forEach(deptId => {
+  const depts = (S.departments && S.departments.length > 0) ? S.departments : ROLE_META.filter(r => r.id !== 'custom').map(r => r.id);
+  depts.forEach(deptId => {
     const meta = ROLE_META.find(r => r.id === deptId);
     if (meta) html += '<span class="dept-pill" data-dept="' + deptId + '">' + esc(meta.name) + '</span>';
   });
