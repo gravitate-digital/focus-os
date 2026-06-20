@@ -1996,7 +1996,7 @@ function loadState() {
     if (merged.streaksOn === undefined) merged.streaksOn = true;
     if (!merged.streakCount) merged.streakCount = 0;
     if (!merged.lastStreakTime) merged.lastStreakTime = 0;
-    if (!merged.heroPos) merged.heroPos = 'center';
+    if (!merged.heroPos || merged.heroPos === 'left') merged.heroPos = 'center';
     if (!merged.uiScale) merged.uiScale = 100;
     if (!merged.photoCycleSpeed) merged.photoCycleSpeed = 45;
     if (merged.showQuotes === undefined) merged.showQuotes = true;
