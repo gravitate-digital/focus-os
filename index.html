@@ -1126,6 +1126,13 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <button class="task-adhoc-toggle" id="sidebar-adhoc-toggle" style="margin-top:4px" title="Mark as unplanned">Ad hoc</button>
     </div>
   </div>
+
+  <div class="widget" id="w-usage">
+    <div class="widget-head">
+      <div class="widget-label">\uD83D\uDCC8 Usage Stats</div>
+    </div>
+    <div id="usage-stats-body"></div>
+  </div>
 </aside>
 
 <!-- COMMAND PALETTE -->
@@ -1350,6 +1357,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div class="settings-row-label">Water reminders<small>Gentle nudge every 45 minutes to hydrate and move</small></div>
         <button class="toggle" id="water-toggle"></button>
       </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">Content Mix</div>
+      <div class="settings-note">Control what shows up in your feed. Ads have a 5% floor and default to 10%. The rest scales proportionally.</div>
+      <div id="category-pct-grid"></div>
     </div>
 
     <div class="settings-group">
@@ -2014,6 +2027,15 @@ const DEFAULT_STATE = {
   photoTransition: 'fade',
   showQuotes: true,
   waterReminder: true,
+  // Usage stats
+  usage: {
+    firstOpen: null,
+    totalOpens: 0,
+    sessionsLog: [],       // [{date:'2026-06-20',opens:3,minutes:45}]
+    interests: [],         // personalised onboarding interests
+    adPct: 10,             // ad category %, floor 5, max 100
+    categoryPcts: {},      // {news:20, stocks:15, weather:10, ...} user-tuned
+  },
 };
 
 /* -- STATE -- */
@@ -2069,6 +2091,14 @@ function loadState() {
     if (!merged.photoTransition) merged.photoTransition = 'fade';
     if (merged.showQuotes === undefined) merged.showQuotes = true;
     if (merged.waterReminder === undefined) merged.waterReminder = true;
+    // Usage stats migration
+    if (!merged.usage) merged.usage = clone(DEFAULT_STATE.usage);
+    if (!merged.usage.firstOpen) merged.usage.firstOpen = new Date().toISOString();
+    if (!merged.usage.totalOpens) merged.usage.totalOpens = 0;
+    if (!merged.usage.sessionsLog) merged.usage.sessionsLog = [];
+    if (!merged.usage.interests) merged.usage.interests = [];
+    if (merged.usage.adPct === undefined) merged.usage.adPct = 10;
+    if (!merged.usage.categoryPcts) merged.usage.categoryPcts = {};
     return merged;
   } catch { return clone(DEFAULT_STATE); }
 }
@@ -3253,6 +3283,9 @@ function renderSettings() {
       renderSettings();
     };
   }
+
+  // Content mix / category percentages
+  renderCategorySettings();
 }
 
 function applyTheme() {
@@ -4379,6 +4412,7 @@ function renderAll() {
   renderSprint();
   renderRocks();
   renderTasks();
+  renderUsageWidget();
 }
 
 /* -- KEYBOARD -- */
@@ -4459,6 +4493,177 @@ function timeAgo(ts){
 
 /* -- INIT -- */
 
+/* -- USAGE STATS -- */
+
+function trackOpen() {
+  if (!S.usage.firstOpen) S.usage.firstOpen = new Date().toISOString();
+  S.usage.totalOpens++;
+  const today = new Date().toISOString().slice(0,10);
+  let entry = S.usage.sessionsLog.find(e => e.date === today);
+  if (!entry) {
+    entry = {date: today, opens: 0, minutes: 0};
+    S.usage.sessionsLog.push(entry);
+  }
+  entry.opens++;
+  // Keep only last 90 days
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 90);
+  const cutStr = cutoff.toISOString().slice(0,10);
+  S.usage.sessionsLog = S.usage.sessionsLog.filter(e => e.date >= cutStr);
+  save();
+}
+
+function trackMinute() {
+  const today = new Date().toISOString().slice(0,10);
+  let entry = S.usage.sessionsLog.find(e => e.date === today);
+  if (!entry) {
+    entry = {date: today, opens: 0, minutes: 0};
+    S.usage.sessionsLog.push(entry);
+  }
+  entry.minutes++;
+  save();
+}
+
+function getUsageStats() {
+  const log = S.usage.sessionsLog || [];
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0,10);
+  const todayEntry = log.find(e => e.date === todayStr);
+
+  function sumRange(days) {
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - days);
+    const cutStr = cutoff.toISOString().slice(0,10);
+    return log.filter(e => e.date >= cutStr).reduce((a,e) => ({opens: a.opens+e.opens, minutes: a.minutes+e.minutes}), {opens:0,minutes:0});
+  }
+
+  const firstOpen = S.usage.firstOpen ? new Date(S.usage.firstOpen) : now;
+  const daysSinceFirst = Math.max(1, Math.floor((now - firstOpen) / 86400000));
+
+  return {
+    today: todayEntry || {opens:0, minutes:0},
+    threeDays: sumRange(3),
+    week: sumRange(7),
+    month: sumRange(30),
+    allTime: {opens: S.usage.totalOpens, minutes: log.reduce((a,e) => a + e.minutes, 0)},
+    daysSinceFirst,
+    streak: calcStreak(log),
+  };
+}
+
+function calcStreak(log) {
+  if (!log.length) return 0;
+  const dates = [...new Set(log.map(e => e.date))].sort().reverse();
+  const today = new Date().toISOString().slice(0,10);
+  if (dates[0] !== today) return 0;
+  let streak = 1;
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(dates[i-1]); prev.setDate(prev.getDate() - 1);
+    if (dates[i] === prev.toISOString().slice(0,10)) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function fmtMins(m) {
+  if (m < 60) return m + 'm';
+  const h = Math.floor(m / 60);
+  const r = m % 60;
+  return r ? h + 'h ' + r + 'm' : h + 'h';
+}
+
+function renderUsageWidget() {
+  const el = document.getElementById('usage-stats-body');
+  if (!el) return;
+  const u = getUsageStats();
+  const rows = [
+    {label:'Today', opens: u.today.opens, time: fmtMins(u.today.minutes)},
+    {label:'3 Days', opens: u.threeDays.opens, time: fmtMins(u.threeDays.minutes)},
+    {label:'This Week', opens: u.week.opens, time: fmtMins(u.week.minutes)},
+    {label:'This Month', opens: u.month.opens, time: fmtMins(u.month.minutes)},
+    {label:'All Time', opens: u.allTime.opens, time: fmtMins(u.allTime.minutes)},
+  ];
+  el.innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr auto auto;gap:4px 12px;font-size:11.5px;line-height:1.8">' +
+    '<div style="color:var(--dim);font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase">Period</div>' +
+    '<div style="color:var(--dim);font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;text-align:right">Opens</div>' +
+    '<div style="color:var(--dim);font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;text-align:right">Time</div>' +
+    rows.map(r =>
+      '<div style="color:var(--mu)">'+r.label+'</div>' +
+      '<div style="color:var(--tx);text-align:right;font-variant-numeric:tabular-nums">'+r.opens+'</div>' +
+      '<div style="color:var(--tx);text-align:right;font-variant-numeric:tabular-nums">'+r.time+'</div>'
+    ).join('') +
+    '</div>' +
+    (u.streak > 1 ? '<div style="margin-top:8px;font-size:11px;color:var(--ac)">'+u.streak+'-day streak</div>' : '') +
+    '<div style="margin-top:4px;font-size:10px;color:var(--dim)">Using Focus for '+u.daysSinceFirst+' day'+(u.daysSinceFirst!==1?'s':'')+'</div>';
+}
+
+/* -- AD / CATEGORY PERCENTAGE CONTROLS -- */
+
+const STAT_CATEGORIES = [
+  {id:'news',    name:'News',        icon:'\uD83D\uDCF0', default:20},
+  {id:'stocks',  name:'Stocks',      icon:'\uD83D\uDCC8', default:15},
+  {id:'weather', name:'Weather',     icon:'\u2600\uFE0F', default:15},
+  {id:'sports',  name:'Sports',      icon:'\u26BD',       default:10},
+  {id:'tech',    name:'Tech',        icon:'\uD83D\uDCBB', default:10},
+  {id:'quotes',  name:'Quotes',      icon:'\uD83D\uDCAC', default:10},
+  {id:'trivia',  name:'Trivia',      icon:'\uD83E\uDDE0', default:10},
+  {id:'ads',     name:'Ads',         icon:'\uD83D\uDCE2', default:10},
+];
+
+function getCategoryPcts() {
+  const pcts = {};
+  let adsVal = Math.max(5, Math.min(100, S.usage.adPct || 10));
+  STAT_CATEGORIES.forEach(c => {
+    if (c.id === 'ads') {
+      pcts.ads = adsVal;
+    } else {
+      pcts[c.id] = S.usage.categoryPcts[c.id] !== undefined ? S.usage.categoryPcts[c.id] : c.default;
+    }
+  });
+  // Normalise non-ads to fill remaining
+  const nonAdsKeys = Object.keys(pcts).filter(k => k !== 'ads');
+  const nonAdsTotal = nonAdsKeys.reduce((a,k) => a + pcts[k], 0);
+  const remaining = 100 - adsVal;
+  if (nonAdsTotal > 0) {
+    nonAdsKeys.forEach(k => { pcts[k] = Math.round((pcts[k] / nonAdsTotal) * remaining); });
+  }
+  return pcts;
+}
+
+function renderCategorySettings() {
+  const el = document.getElementById('category-pct-grid');
+  if (!el) return;
+  const pcts = getCategoryPcts();
+  el.innerHTML = STAT_CATEGORIES.map(c => {
+    const val = c.id === 'ads' ? (S.usage.adPct || 10) : (S.usage.categoryPcts[c.id] !== undefined ? S.usage.categoryPcts[c.id] : c.default);
+    const isAds = c.id === 'ads';
+    return '<div class="settings-row" style="padding:6px 0">' +
+      '<div class="settings-row-label" style="font-size:12px">' + c.icon + ' ' + c.name +
+        (isAds ? '<small>Floor: 5%. Default: 10%</small>' : '') +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:6px">' +
+        '<input type="range" min="'+(isAds?5:0)+'" max="'+(isAds?100:50)+'" value="'+val+'" ' +
+          'data-cat="'+c.id+'" class="cat-pct-slider" ' +
+          'style="width:80px;accent-color:var(--ac)">' +
+        '<span class="cat-pct-val" style="font-size:11px;color:var(--tx);min-width:28px;text-align:right;font-variant-numeric:tabular-nums">'+val+'%</span>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  el.querySelectorAll('.cat-pct-slider').forEach(slider => {
+    slider.addEventListener('input', () => {
+      const cat = slider.dataset.cat;
+      const v = parseInt(slider.value);
+      if (cat === 'ads') {
+        S.usage.adPct = Math.max(5, v);
+      } else {
+        S.usage.categoryPcts[cat] = v;
+      }
+      slider.nextElementSibling.textContent = v + '%';
+      save();
+    });
+  });
+}
+
 function init() {
   S = loadState();
 
@@ -4471,6 +4676,7 @@ function init() {
     applyTheme();
   }
 
+  trackOpen();
   applyDisplayTheme();
   applyHeroPos();
   applyUiScale();
@@ -4484,6 +4690,11 @@ function init() {
   renderModeSwitcher();
 
   setInterval(() => { renderClock(); renderMeetings(); renderHeroMeeting(); }, 1000);
+
+  // Track usage minutes (every 60s)
+  setInterval(trackMinute, 60000);
+  // Refresh usage widget every 5 minutes
+  setInterval(renderUsageWidget, 300000);
 
   // Resume focus session if it was running
   if (S.focus.running && S.focus.remaining > 0) {
