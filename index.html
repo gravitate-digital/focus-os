@@ -89,17 +89,21 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
   background-size:4px 4px}
 [data-texture="1"] #photo-texture{opacity:1}
 
-/* Big Head Mode */
-[data-bighead="1"] #hero-clock{font-size:140px!important}
-[data-bighead="1"] .hero-pri-text{font-size:28px!important}
-[data-bighead="1"] .hero-pri-num{width:36px!important;height:36px!important;font-size:18px!important}
-[data-bighead="1"] .dock-item{width:72px!important;height:72px!important}
-[data-bighead="1"] .dock-logo{width:40px!important;height:40px!important}
-[data-bighead="1"] .dock-name{font-size:12px!important}
-[data-bighead="1"] .hero-fs-ring{width:100px!important;height:100px!important}
-[data-bighead="1"] .hero-fs-ring svg{width:100px!important;height:100px!important}
-[data-bighead="1"] .hero-fs-time{font-size:28px!important}
-[data-bighead="1"] #hero-quote{font-size:20px!important}
+/* Comical Mode: comic fonts + task section takes over screen */
+[data-bighead="1"]{font-family:'Comic Sans MS','Chalkboard SE','Comic Neue',cursive!important}
+[data-bighead="1"] *{font-family:inherit!important}
+[data-bighead="1"] #hero-clock{font-family:'Comic Sans MS','Chalkboard SE',cursive!important;font-weight:700!important;letter-spacing:0!important}
+[data-bighead="1"] #hero-onething{animation:bigHeadGrow 300s linear forwards;transform-origin:center;position:relative}
+@keyframes bigHeadGrow{
+  0%{transform:scale(1)}
+  25%{transform:scale(1.1)}
+  50%{transform:scale(1.3);box-shadow:0 0 40px rgba(255,0,0,.15)}
+  75%{transform:scale(1.6);box-shadow:0 0 60px rgba(255,0,0,.2)}
+  100%{transform:scale(2.2);box-shadow:0 0 100px rgba(255,0,0,.3)}
+}
+[data-bighead="1"] .hero-pri-text{font-weight:800!important}
+[data-bighead="1"] #hero-onething::after{content:'\1F446';position:absolute;bottom:-30px;left:50%;transform:translateX(-50%);font-size:30px;animation:bigHeadPoint 1s ease-in-out infinite alternate}
+@keyframes bigHeadPoint{0%{transform:translateX(-50%) translateY(0)}100%{transform:translateX(-50%) translateY(-8px)}}
 
 /* -- APP SHELL -- */
 #app{position:relative;z-index:10;display:flex;flex-direction:column;height:100vh;width:100vw}
@@ -1256,7 +1260,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
     <div class="settings-group">
       <div class="settings-group-label">Sound Theme</div>
-      <div id="sound-theme-picker" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
+      <div class="theme-grid" id="sound-theme-picker"></div>
     </div>
 
     <div class="settings-group">
@@ -1271,7 +1275,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     <div class="settings-group">
       <div class="settings-group-label">Fun Stuff</div>
       <div class="settings-row">
-        <div class="settings-row-label">Big Head Mode<small>GoldenEye 007 style. Makes everything comically large.</small></div>
+        <div class="settings-row-label">Comical Mode<small>Comic Sans fonts. Your tasks grow until they take over the screen.</small></div>
         <button class="toggle" id="bighead-toggle"></button>
       </div>
     </div>
@@ -2873,11 +2877,11 @@ function renderSettings() {
   const soundPicker = document.getElementById('sound-picker');
   if (soundPicker) {
     soundPicker.innerHTML = SOUND_EFFECTS.map(sfx =>
-      '<button class="sens-opt'+(S.soundEffect===sfx.id?' active':'')+'" data-sfx="'+sfx.id+'" style="font-size:11px;padding:6px">'+esc(sfx.name)+'</button>'
+      '<button class="sens-opt'+(S.soundEffect===sfx.id?' active':'')+'" data-sfx="'+sfx.id+'" style="font-size:10px;padding:8px 4px;text-align:center;white-space:normal;line-height:1.3">'+esc(sfx.name)+'</button>'
     ).join('');
-    soundPicker.style.display = 'flex';
-    soundPicker.style.flexWrap = 'wrap';
-    soundPicker.style.gap = '5px';
+    soundPicker.style.display = 'grid';
+    soundPicker.style.gridTemplateColumns = 'repeat(auto-fill, minmax(90px, 1fr))';
+    soundPicker.style.gap = '4px';
     soundPicker.querySelectorAll('.sens-opt').forEach(btn => {
       btn.addEventListener('click', () => {
         S.soundEffect = btn.dataset.sfx;
@@ -2910,12 +2914,11 @@ function renderSettings() {
   const soundThemePicker = document.getElementById('sound-theme-picker');
   if (soundThemePicker) {
     soundThemePicker.innerHTML = SOUND_THEMES.map(t =>
-      '<button class="sens-opt' + (S.soundTheme === t.id ? ' active' : '') + '" data-stid="' + t.id + '" style="font-size:11px;padding:6px;flex-direction:column;gap:2px;height:auto">' +
-      '<span style="font-weight:600">' + esc(t.name) + '</span>' +
-      '<span style="font-size:9px;opacity:.7">' + esc(t.desc) + '</span>' +
-      '</button>'
+      '<div class="theme-opt'+(S.soundTheme===t.id?' active':'')+'" data-stid="'+t.id+'">' +
+      '<div class="theme-name">'+esc(t.name)+'</div>' +
+      '<div style="font-size:9px;color:var(--dim);margin-top:2px">'+esc(t.desc)+'</div></div>'
     ).join('');
-    soundThemePicker.querySelectorAll('.sens-opt').forEach(btn => {
+    soundThemePicker.querySelectorAll('.theme-opt').forEach(btn => {
       btn.addEventListener('click', () => {
         S.soundTheme = btn.dataset.stid;
         const theme = SOUND_THEMES.find(t => t.id === S.soundTheme);
