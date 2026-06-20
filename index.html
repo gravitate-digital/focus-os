@@ -530,35 +530,46 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .fr-app-counter .fr-count-warn{color:var(--warn)}
 
 /* -- LIGHT MODE -- */
-[data-light="1"]{--bg:#e8eaf2;--tx:rgba(0,0,0,.84);--mu:rgba(0,0,0,.55);--dim:rgba(0,0,0,.38);--line:rgba(0,0,0,.07);--glass-bg:rgba(255,255,255,.52);--glass-bo:rgba(0,0,0,.06);--glass-hi:rgba(255,255,255,.95)}
+[data-light="1"]{--bg:#FAF9F6;--tx:#00193D;--mu:rgba(0,25,61,.6);--dim:rgba(0,25,61,.38);--line:rgba(0,25,61,.08);--glass-bg:rgba(250,249,246,.65);--glass-bo:rgba(0,25,61,.06);--glass-hi:rgba(255,255,255,.95);--accent:#0048AD}
 [data-light="1"] .b1{background:rgba(120,170,255,.3)}
 [data-light="1"] .b2{background:rgba(160,120,240,.22)}
 [data-light="1"] .b3{background:rgba(80,140,240,.18)}
-[data-light="1"] #topbar{background:rgba(255,255,255,.6);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border-bottom-color:rgba(0,0,0,.06)}
-[data-light="1"] .widget{background:rgba(255,255,255,.55);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border-color:rgba(0,0,0,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 4px 16px rgba(0,0,0,.06)}
+[data-light="1"] #topbar{background:rgba(250,249,246,.82);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border-bottom-color:rgba(0,25,61,.06)}
+[data-light="1"] .widget{background:rgba(250,249,246,.7);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border-color:rgba(0,25,61,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 4px 16px rgba(0,25,61,.06)}
 [data-light="1"] #side-panel{background:rgba(245,247,255,.92);border-left-color:rgba(0,0,0,.06)}
 [data-light="1"] #side-panel-overlay{background:rgba(0,0,0,.15)}
-[data-light="1"] #dock-strip{background:rgba(255,255,255,.5);border-color:rgba(0,0,0,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 4px 20px rgba(0,0,0,.06)}
+[data-light="1"] #dock-strip{background:rgba(250,249,246,.6);border-color:rgba(0,25,61,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 4px 20px rgba(0,25,61,.06)}
 [data-light="1"] .dock-item{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.04)}
 [data-light="1"] .dock-item:hover{background:rgba(0,0,0,.06)}
 [data-light="1"] .dock-name{color:rgba(0,0,0,.6)}
 [data-light="1"] #hero-onething{background:linear-gradient(180deg,rgba(0,72,173,.08),rgba(0,72,173,.03));border-color:rgba(0,72,173,.15)}
-[data-light="1"] #coach-toast,[data-light="1"] #cmdk,[data-light="1"] .modal-box{background:rgba(245,247,255,.92);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%)}
+[data-light="1"] #coach-toast,[data-light="1"] #cmdk,[data-light="1"] .modal-box{background:rgba(250,249,246,.94);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%)}
 [data-light="1"] .mtg-title,[data-light="1"] .cmdk-name{color:rgba(0,0,0,.84)}
-[data-light="1"] .f-input{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.84)}
-[data-light="1"] .theme-opt{background:rgba(0,0,0,.03)}
-[data-light="1"] .sens-opt{background:rgba(0,0,0,.03)}
-[data-light="1"] .toggle{background:rgba(0,0,0,.1)}
-[data-light="1"] .toggle::after{background:white}
+[data-light="1"] .f-input{background:rgba(237,233,222,.4);border-color:rgba(0,25,61,.1);color:#00193D}
+[data-light="1"] .theme-opt{background:rgba(237,233,222,.35)}
+[data-light="1"] .sens-opt{background:rgba(237,233,222,.35)}
+[data-light="1"] .toggle{background:rgba(0,25,61,.12)}
+[data-light="1"] .toggle::after{background:#FAF9F6}
+[data-light="1"] .settings-row-label{color:#00193D}
+[data-light="1"] .settings-row-label small{color:rgba(0,25,61,.45)}
+[data-light="1"] .settings-group-label{color:rgba(0,25,61,.45)}
 [data-light="1"] #first-run{background:rgba(232,234,242,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 [data-light="1"] .fr-input{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.84)}
 [data-light="1"] .inline-add{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.84)}
-[data-light="1"] #photo-speed-select{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.84)}
+/* photo speed slider inherits accent-color */
 [data-light="1"] #intention-gate{background:rgba(232,234,242,.95)}
 [data-light="1"] .ig-task{background:rgba(0,0,0,.03)}
 [data-light="1"] .ig-custom{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.84)}
 [data-light="1"] #mode-pop{background:rgba(245,247,255,.96)}
-[data-light="1"] .fr-role{background:rgba(0,0,0,.03)}
+[data-light="1"] .fr-role{background:rgba(237,233,222,.3)}
+[data-light="1"] .ig-task{background:rgba(237,233,222,.3)}
+[data-light="1"] .ig-custom{background:rgba(237,233,222,.3);border-color:rgba(0,25,61,.1);color:#00193D}
+[data-light="1"] .inline-add{background:rgba(237,233,222,.3);border-color:rgba(0,25,61,.08);color:#00193D}
+[data-light="1"] .fr-input{background:rgba(237,233,222,.35);border-color:rgba(0,25,61,.1);color:#00193D}
+[data-light="1"] #side-panel{background:rgba(250,249,246,.94);border-left-color:rgba(0,25,61,.06)}
+[data-light="1"] #first-run{background:rgba(250,249,246,.94)}
+[data-light="1"] #intention-gate{background:rgba(250,249,246,.95)}
+[data-light="1"] #mode-pop{background:rgba(250,249,246,.96)}
 [data-light="1"] .fr-app-tile{background:rgba(0,0,0,.03)}
 
 /* -- TIME-AWARE THEMES -- */
@@ -1210,14 +1221,13 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <button class="sens-opt" data-bgmode="unicode">Unicode Pattern</button>
       </div>
       <div class="settings-row">
-        <div class="settings-row-label">Photo cycle speed<small>How often the background photo changes</small></div>
-        <select id="photo-speed-select" style="background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:6px;color:var(--tx);font-size:12px;padding:4px 8px;font-family:var(--font);outline:none">
-          <option value="30">30 seconds</option>
-          <option value="45">45 seconds</option>
-          <option value="60">1 minute</option>
-          <option value="120">2 minutes</option>
-          <option value="300">5 minutes</option>
-        </select>
+        <div class="settings-row-label">Photo cycle speed</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
+        <span style="font-size:10px;color:var(--dim)">10s</span>
+        <input type="range" id="photo-speed-slider" min="10" max="300" step="10" style="flex:1;accent-color:var(--accent)" />
+        <span style="font-size:10px;color:var(--dim)">5m</span>
+        <span id="photo-speed-val" style="font-size:11px;color:var(--mu);min-width:30px;text-align:center"></span>
       </div>
       <div class="settings-row">
         <div class="settings-row-label">Texture overlay<small>Subtle dither for better text readability on photos</small></div>
@@ -1725,13 +1735,25 @@ function applyBgMode() {
 
 function cyclePhoto() {
   const photoBg = document.getElementById('photo-bg');
-  photoBg.style.opacity = '0';
-  setTimeout(() => {
-    currentPhotoIdx = (currentPhotoIdx + 1) % TEAM_PHOTOS.length;
-    photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
-    photoBg.style.opacity = '1';
-    onPhotoCycle();
-  }, 1600);
+  const nextIdx = (currentPhotoIdx + 1) % TEAM_PHOTOS.length;
+  const nextUrl = 'photos/' + TEAM_PHOTOS[nextIdx];
+  // Preload the next image before transitioning
+  const img = new Image();
+  img.onload = () => {
+    photoBg.style.opacity = '0';
+    setTimeout(() => {
+      currentPhotoIdx = nextIdx;
+      photoBg.style.backgroundImage = 'url("' + nextUrl + '")';
+      photoBg.style.opacity = '1';
+      onPhotoCycle();
+    }, 1600);
+  };
+  img.onerror = () => {
+    // Skip broken images
+    currentPhotoIdx = nextIdx;
+    cyclePhoto();
+  };
+  img.src = nextUrl;
 }
 
 function renderUnicodeBg() {
@@ -3057,11 +3079,16 @@ function renderSettings() {
   }
 
   // Photo cycle speed
-  const photoSpeed = document.getElementById('photo-speed-select');
-  if (photoSpeed) {
-    photoSpeed.value = S.photoCycleSpeed || 45;
-    photoSpeed.onchange = () => {
-      S.photoCycleSpeed = +photoSpeed.value;
+  const photoSlider = document.getElementById('photo-speed-slider');
+  const photoVal = document.getElementById('photo-speed-val');
+  if (photoSlider) {
+    const spd = S.photoCycleSpeed || 45;
+    photoSlider.value = spd;
+    photoVal.textContent = spd < 60 ? spd+'s' : Math.round(spd/60)+'m';
+    photoSlider.oninput = () => {
+      S.photoCycleSpeed = +photoSlider.value;
+      const v = S.photoCycleSpeed;
+      photoVal.textContent = v < 60 ? v+'s' : Math.round(v/60)+'m';
       save();
       applyBgMode();
     };
