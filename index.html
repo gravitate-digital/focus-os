@@ -82,8 +82,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-bg="photos"] .hero-fs-time{color:rgba(255,255,255,.92)}
 [data-bg="photos"] #hero-onething{background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);border-color:rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 20px rgba(0,0,0,.12)}
 [data-bg="photos"] .dock-name{color:rgba(255,255,255,.7)!important}
-[data-bg="photos"] .dept-pill{color:rgba(255,255,255,.5)}
+[data-bg="photos"] .dept-pill{color:rgba(255,255,255,.6)}
 [data-bg="photos"] .dept-pill:hover,[data-bg="photos"] .dept-pill.active{color:var(--accent)}
+[data-bg="photos"] #topbar{background:rgba(5,10,20,.5);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px)}
+[data-bg="photos"] .brand-name,[data-bg="photos"] #ws-name,[data-bg="photos"] #tb-clock,[data-bg="photos"] .tb-btn{color:rgba(255,255,255,.8)}
+[data-bg="photos"] .tb-btn:hover{color:#fff}
+[data-bg="photos"] .mode-dot+.lbl{color:rgba(255,255,255,.7)}
 #unicode-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:1;overflow:hidden;pointer-events:none}
 
 /* Texture overlay */
@@ -214,7 +218,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .fs-btn.pri:hover{background:rgba(106,167,255,.25)}
 .fs-btn.stop{background:rgba(255,120,120,.1);border-color:rgba(255,120,120,.15);color:var(--danger)}
 .hero-fs-presets{display:flex;gap:5px}
-.fs-preset{padding:5px 12px;border-radius:7px;border:1px solid transparent;background:rgba(255,255,255,.03);color:var(--dim);font-size:11px;cursor:pointer;text-align:center;font-family:var(--font);transition:background .12s,border-color .12s}
+.fs-preset{padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--mu);font-size:11px;cursor:pointer;text-align:center;font-family:var(--font);transition:background .12s,border-color .12s;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 2px 6px rgba(0,0,0,.08)}
 .fs-preset:hover{background:rgba(255,255,255,.07)}
 .fs-preset.active{background:rgba(106,167,255,.1);border-color:rgba(106,167,255,.2);color:var(--accent)}
 
@@ -1007,13 +1011,6 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     <div id="hero-clock" class="hero-enter">00:00</div>
     <div id="hero-date" class="hero-enter">Loading...</div>
 
-    <div id="hero-onething" class="hero-enter">
-      <div class="hero-ot-label">Today's Priorities</div>
-      <div id="hero-onething-body"></div>
-    </div>
-
-    <div id="hero-next-mtg" class="hero-enter"></div>
-
     <div id="hero-focus" class="hero-enter">
       <div class="hero-fs-display">
         <div class="hero-fs-ring">
@@ -1037,7 +1034,19 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div class="fs-preset" data-dur="15">15m</div>
         <div class="fs-preset" data-dur="5">5m break</div>
       </div>
+      <div style="display:flex;align-items:center;gap:8px;width:100%;max-width:320px">
+        <input type="range" id="fs-custom-slider" min="1" max="120" step="1" value="25" style="flex:1;accent-color:var(--accent)" />
+        <span id="fs-custom-val" style="font-size:11px;color:var(--mu);min-width:30px;font-variant-numeric:tabular-nums"></span>
+        <button class="fs-btn" id="fs-custom-set" style="flex:0;padding:5px 10px;font-size:10px">Set</button>
+      </div>
     </div>
+
+    <div id="hero-onething" class="hero-enter">
+      <div class="hero-ot-label">Today's Priorities</div>
+      <div id="hero-onething-body"></div>
+    </div>
+
+    <div id="hero-next-mtg" class="hero-enter"></div>
 
     <div id="hero-quote" class="hero-enter"></div>
     <div id="hero-pos-toggle">
@@ -4541,6 +4550,17 @@ function init() {
   document.querySelectorAll('.fs-preset').forEach(p => {
     p.addEventListener('click', () => setFocusDuration(+p.dataset.dur));
   });
+
+  // Custom timer slider
+  const csSlider = document.getElementById('fs-custom-slider');
+  const csVal = document.getElementById('fs-custom-val');
+  const csSet = document.getElementById('fs-custom-set');
+  if (csSlider && csVal && csSet) {
+    csSlider.value = S.focus.duration || 25;
+    csVal.textContent = (S.focus.duration || 25) + 'm';
+    csSlider.oninput = () => { csVal.textContent = csSlider.value + 'm'; };
+    csSet.addEventListener('click', () => setFocusDuration(+csSlider.value));
+  }
 
   // Hero position toggle
   document.querySelectorAll('#hero-pos-toggle .pos-btn').forEach(btn => {
