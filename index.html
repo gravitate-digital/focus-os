@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Focus</title>
 <style>
+@font-face{font-family:'Aspekta';src:url('fonts/Aspekta-400.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'Aspekta';src:url('fonts/Aspekta-500.ttf') format('truetype');font-weight:500;font-display:swap}
+@font-face{font-family:'Aspekta';src:url('fonts/Aspekta-600.ttf') format('truetype');font-weight:600;font-display:swap}
+@font-face{font-family:'Aspekta';src:url('fonts/Aspekta-700.ttf') format('truetype');font-weight:700;font-display:swap}
+@font-face{font-family:'Aspekta';src:url('fonts/Aspekta-800.ttf') format('truetype');font-weight:800;font-display:swap}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#050a14;
@@ -22,7 +27,7 @@
   --glass-bo:rgba(255,255,255,.12);
   --glass-hi:rgba(255,255,255,.18);
   --mono:'SF Mono','Menlo',ui-monospace,monospace;
-  --font:-apple-system,'SF Pro Display','SF Pro Text','Helvetica Neue',sans-serif;
+  --font:'Aspekta',-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;
 }
 html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:var(--tx);font-family:var(--font);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 
@@ -77,6 +82,24 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-bg="photos"] .dept-pill{color:rgba(255,255,255,.5)}
 [data-bg="photos"] .dept-pill:hover,[data-bg="photos"] .dept-pill.active{color:var(--accent)}
 #unicode-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:1;overflow:hidden;pointer-events:none}
+
+/* Texture overlay */
+#photo-texture{position:absolute;inset:-20px;z-index:2;pointer-events:none;opacity:0;transition:opacity .5s;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><circle cx='1' cy='1' r='0.4' fill='%23000000' opacity='0.06'/><circle cx='3' cy='3' r='0.4' fill='%23000000' opacity='0.06'/></svg>");
+  background-size:4px 4px}
+[data-texture="1"] #photo-texture{opacity:1}
+
+/* Big Head Mode */
+[data-bighead="1"] #hero-clock{font-size:140px!important}
+[data-bighead="1"] .hero-pri-text{font-size:28px!important}
+[data-bighead="1"] .hero-pri-num{width:36px!important;height:36px!important;font-size:18px!important}
+[data-bighead="1"] .dock-item{width:72px!important;height:72px!important}
+[data-bighead="1"] .dock-logo{width:40px!important;height:40px!important}
+[data-bighead="1"] .dock-name{font-size:12px!important}
+[data-bighead="1"] .hero-fs-ring{width:100px!important;height:100px!important}
+[data-bighead="1"] .hero-fs-ring svg{width:100px!important;height:100px!important}
+[data-bighead="1"] .hero-fs-time{font-size:28px!important}
+[data-bighead="1"] #hero-quote{font-size:20px!important}
 
 /* -- APP SHELL -- */
 #app{position:relative;z-index:10;display:flex;flex-direction:column;height:100vh;width:100vw}
@@ -149,11 +172,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .pos-btn.active{background:rgba(106,167,255,.15);border-color:rgba(106,167,255,.25);color:var(--accent)}
 
 /* Hero clock */
-#hero-clock{font-size:82px;font-weight:100;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1;color:var(--tx);text-align:center;margin-bottom:4px}
+#hero-clock{font-size:82px;font-weight:100;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1;color:var(--tx);text-align:center;margin-bottom:4px;font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif}
 #hero-date{font-size:16px;color:var(--mu);font-weight:300;letter-spacing:-.01em;text-align:center;margin-bottom:20px}
 
 /* Hero One Thing card */
-#hero-onething{width:100%;max-width:480px;padding:20px 24px;border-radius:18px;background:linear-gradient(180deg,rgba(106,167,255,.12),rgba(106,167,255,.04));backdrop-filter:blur(40px) saturate(220%);-webkit-backdrop-filter:blur(40px) saturate(220%);border:1px solid rgba(106,167,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 6px 24px rgba(0,0,0,.18);margin-bottom:12px;text-align:left;transition:opacity .3s}
+#hero-onething{position:relative;width:100%;max-width:480px;padding:20px 24px;border-radius:18px;background:linear-gradient(180deg,rgba(106,167,255,.12),rgba(106,167,255,.04));backdrop-filter:blur(40px) saturate(250%) brightness(1.08);-webkit-backdrop-filter:blur(40px) saturate(250%) brightness(1.08);border:1px solid rgba(106,167,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 6px 24px rgba(0,0,0,.18);margin-bottom:12px;text-align:left;transition:opacity .3s}
+#hero-onething::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.12) 0%,transparent 50%);pointer-events:none}
 .hero-ot-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
 .hero-ot-task{display:flex;align-items:flex-start;gap:14px;cursor:pointer}
 .hero-ot-check{width:22px;height:22px;border-radius:7px;border:1.5px solid rgba(106,167,255,.5);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
@@ -908,7 +932,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 </head>
 <body>
 
-<div id="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div id="photo-bg"></div><div id="unicode-bg"></div></div>
+<div id="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div id="photo-bg"></div><div id="photo-texture"></div><div id="unicode-bg"></div></div>
 
 <div id="app">
 
@@ -977,6 +1001,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <div class="hero-fs-controls" id="fs-controls">
         <button class="fs-btn pri" id="fs-start">Start</button>
         <button class="fs-btn" id="fs-reset">Reset</button>
+        <a class="fs-btn" href="https://open.spotify.com" target="_blank" rel="noopener" title="Open Spotify" style="flex:0;padding:8px 12px;text-decoration:none;display:flex;align-items:center;gap:4px;font-size:11px">&#9835; Music</a>
       </div>
       <div class="hero-fs-presets" id="fs-presets">
         <div class="fs-preset" data-dur="60">60m</div>
@@ -1175,6 +1200,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <button class="sens-opt" data-bgmode="photos">Team Photos</button>
         <button class="sens-opt" data-bgmode="unicode">Unicode Pattern</button>
       </div>
+      <div class="settings-row">
+        <div class="settings-row-label">Texture overlay<small>Subtle dither for better text readability on photos</small></div>
+        <button class="toggle" id="texture-toggle"></button>
+      </div>
     </div>
 
     <div class="settings-group">
@@ -1222,12 +1251,25 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
 
     <div class="settings-group">
+      <div class="settings-group-label">Sound Theme</div>
+      <div id="sound-theme-picker" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px"></div>
+    </div>
+
+    <div class="settings-group">
       <div class="settings-group-label">Task Completion Sound</div>
       <div class="settings-row">
         <div class="settings-row-label">Mute all sounds</div>
         <button class="toggle" id="sound-mute-toggle"></button>
       </div>
       <div id="sound-picker" style="margin-top:8px"></div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">Fun Stuff</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Big Head Mode<small>GoldenEye 007 style. Makes everything comically large.</small></div>
+        <button class="toggle" id="bighead-toggle"></button>
+      </div>
     </div>
 
     <div class="settings-group">
@@ -1491,6 +1533,15 @@ const SOUND_EFFECTS = [
   {id:'random-funny', name:'Random Funny', file:'sounds/rpreplay_final1614990347.mp3'},
 ];
 
+const SOUND_THEMES = [
+  {id:'clean', name:'Clean', desc:'Professional, subtle', taskSound:'ding', intro:null},
+  {id:'halo', name:'Halo', desc:'Kill streaks, game over intro', taskSound:'ding', intro:'sounds/game_over.mp3'},
+  {id:'office', name:'The Office', desc:'Michael Scott energy', taskSound:'office-theme', intro:'sounds/well-well-well-how-the-turntables.mp3'},
+  {id:'celebration', name:'Celebration', desc:'Applause, cheers', taskSound:'applause', intro:'sounds/jurassic-park-celebration.mp3'},
+  {id:'gaming', name:'Gaming', desc:'Retro game vibes', taskSound:'final-fantasy', intro:'sounds/play_ball.mp3'},
+  {id:'custom', name:'Custom', desc:'Pick your own below', taskSound:null, intro:null},
+];
+
 const DISPLAY_THEMES = [
   {id:'default', name:'Default', desc:'Clean midnight glass'},
   {id:'ivory', name:'Ivory', desc:'Light Gravitate cream'},
@@ -1561,6 +1612,17 @@ const QUOTES = [
   "Focus is not about saying yes. It's about saying no. : Steve Jobs",
   "Done is better than perfect. : Sheryl Sandberg",
   "In God we trust. All others must bring data. : W. Edwards Deming",
+  // Motivational
+  "Success is not final, failure is not fatal: it is the courage to continue that counts. : Winston Churchill",
+  "The only way to do great work is to love what you do. : Steve Jobs",
+  "It always seems impossible until it's done. : Nelson Mandela",
+  "The harder I work, the luckier I get. : Gary Player",
+  "What you do today can improve all your tomorrows. : Ralph Marston",
+  "Action is the foundational key to all success. : Pablo Picasso",
+  "Don't watch the clock; do what it does. Keep going. : Sam Levenson",
+  "You don't have to be great to start, but you have to start to be great. : Zig Ziglar",
+  "The way to get started is to quit talking and begin doing. : Walt Disney",
+  "Believe you can and you're halfway there. : Theodore Roosevelt",
 ];
 
 let quoteIdx = 0;
@@ -1808,6 +1870,9 @@ const DEFAULT_STATE = {
   coach:{on:true, sensitivity:'med', switchCount:0},
   soundEffect: 'ding',
   soundMuted: false,
+  soundTheme: 'custom',
+  textureOverlay: false,
+  bigHead: false,
   displayTheme: 'default',
   streaksOn: true,
   streakCount: 0,
@@ -1861,6 +1926,9 @@ function loadState() {
     // sound migration
     if (!merged.soundEffect) merged.soundEffect = 'ding';
     if (merged.soundMuted === undefined) merged.soundMuted = false;
+    if (!merged.soundTheme) merged.soundTheme = 'custom';
+    if (merged.textureOverlay === undefined) merged.textureOverlay = false;
+    if (merged.bigHead === undefined) merged.bigHead = false;
     // displayTheme migration
     if (!merged.displayTheme) merged.displayTheme = 'default';
     if (merged.streaksOn === undefined) merged.streaksOn = true;
@@ -2832,6 +2900,54 @@ function renderSettings() {
   if (muteToggle) {
     muteToggle.className = 'toggle' + (S.soundMuted ? ' on' : '');
     muteToggle.onclick = () => { S.soundMuted = !S.soundMuted; save(); renderSettings(); };
+  }
+
+  // Sound theme picker
+  const soundThemePicker = document.getElementById('sound-theme-picker');
+  if (soundThemePicker) {
+    soundThemePicker.innerHTML = SOUND_THEMES.map(t =>
+      '<button class="sens-opt' + (S.soundTheme === t.id ? ' active' : '') + '" data-stid="' + t.id + '" style="font-size:11px;padding:6px;flex-direction:column;gap:2px;height:auto">' +
+      '<span style="font-weight:600">' + esc(t.name) + '</span>' +
+      '<span style="font-size:9px;opacity:.7">' + esc(t.desc) + '</span>' +
+      '</button>'
+    ).join('');
+    soundThemePicker.querySelectorAll('.sens-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        S.soundTheme = btn.dataset.stid;
+        const theme = SOUND_THEMES.find(t => t.id === S.soundTheme);
+        if (theme && theme.taskSound) { S.soundEffect = theme.taskSound; }
+        save();
+        renderSettings();
+      });
+    });
+    // Show/hide individual sound picker based on theme
+    const isCustomTheme = S.soundTheme === 'custom';
+    const soundPickerWrap = document.getElementById('sound-picker');
+    if (soundPickerWrap) soundPickerWrap.parentElement.style.display = isCustomTheme ? '' : 'none';
+  }
+
+  // Texture toggle
+  const textureToggle = document.getElementById('texture-toggle');
+  if (textureToggle) {
+    textureToggle.className = 'toggle' + (S.textureOverlay ? ' on' : '');
+    textureToggle.onclick = () => {
+      S.textureOverlay = !S.textureOverlay;
+      document.body.dataset.texture = S.textureOverlay ? '1' : '0';
+      save();
+      renderSettings();
+    };
+  }
+
+  // Big head toggle
+  const bigheadToggle = document.getElementById('bighead-toggle');
+  if (bigheadToggle) {
+    bigheadToggle.className = 'toggle' + (S.bigHead ? ' on' : '');
+    bigheadToggle.onclick = () => {
+      S.bigHead = !S.bigHead;
+      document.body.dataset.bighead = S.bigHead ? '1' : '0';
+      save();
+      renderSettings();
+    };
   }
 }
 
@@ -4045,6 +4161,8 @@ function init() {
 
   applyDisplayTheme();
   applyHeroPos();
+  document.body.dataset.texture = S.textureOverlay ? '1' : '0';
+  document.body.dataset.bighead = S.bigHead ? '1' : '0';
   setupWsName();
   renderAll();
   applyBgMode();
@@ -4226,11 +4344,11 @@ function init() {
   if (S.firstRun) {
     showFirstRun();
   } else if (needsIntention()) {
-    // New day: play "game over" intro if streaks are on
+    // New day: play theme intro if streaks are on
     if (S.streaksOn) {
-      const a = new Audio('sounds/game_over.mp3');
-      a.volume = 0.4;
-      a.play().catch(() => {});
+      const theme = SOUND_THEMES.find(t => t.id === S.soundTheme) || SOUND_THEMES[0];
+      const introFile = theme.intro;
+      if (introFile) { const a = new Audio(introFile); a.volume = 0.4; a.play().catch(() => {}); }
     }
     showIntentionGate();
   }
