@@ -106,7 +106,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 @keyframes bigHeadPoint{0%{transform:translateX(-50%) translateY(0)}100%{transform:translateX(-50%) translateY(-8px)}}
 
 /* -- APP SHELL -- */
-#app{position:relative;z-index:10;display:flex;flex-direction:column;height:100vh;width:100vw}
+#app{position:relative;z-index:10;display:flex;flex-direction:column;height:100vh;width:100vw;transform-origin:top center}
 
 /* -- TOPBAR -- */
 #topbar{display:flex;align-items:center;padding:0 14px;gap:12px;height:42px;flex-shrink:0;background:rgba(255,255,255,.04);backdrop-filter:blur(28px) saturate(200%);-webkit-backdrop-filter:blur(28px) saturate(200%);border-bottom:1px solid var(--line);z-index:50}
@@ -553,6 +553,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-light="1"] #first-run{background:rgba(232,234,242,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 [data-light="1"] .fr-input{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.84)}
 [data-light="1"] .inline-add{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.84)}
+[data-light="1"] #photo-speed-select{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.84)}
 [data-light="1"] #intention-gate{background:rgba(232,234,242,.95)}
 [data-light="1"] .ig-task{background:rgba(0,0,0,.03)}
 [data-light="1"] .ig-custom{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.84)}
@@ -1209,6 +1210,16 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <button class="sens-opt" data-bgmode="unicode">Unicode Pattern</button>
       </div>
       <div class="settings-row">
+        <div class="settings-row-label">Photo cycle speed<small>How often the background photo changes</small></div>
+        <select id="photo-speed-select" style="background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:6px;color:var(--tx);font-size:12px;padding:4px 8px;font-family:var(--font);outline:none">
+          <option value="30">30 seconds</option>
+          <option value="45">45 seconds</option>
+          <option value="60">1 minute</option>
+          <option value="120">2 minutes</option>
+          <option value="300">5 minutes</option>
+        </select>
+      </div>
+      <div class="settings-row">
         <div class="settings-row-label">Texture overlay<small>Subtle dither for better text readability on photos</small></div>
         <button class="toggle" id="texture-toggle"></button>
       </div>
@@ -1247,6 +1258,24 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <div class="settings-group-label">Layout Position</div>
       <div style="font-size:11px;color:var(--dim);margin-bottom:8px">Where the clock, priorities, and timer sit on screen.</div>
       <div class="sens-row" id="layout-pos-picker"></div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">UI Scale</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:10px;color:var(--dim)">Small</span>
+        <input type="range" id="ui-scale-slider" min="80" max="120" step="5" style="flex:1;accent-color:var(--accent)" />
+        <span style="font-size:10px;color:var(--dim)">Large</span>
+        <span id="ui-scale-val" style="font-size:11px;color:var(--mu);min-width:30px;text-align:center"></span>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">Quotes</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Show quotes<small>Cycling jokes and quotes at the bottom</small></div>
+        <button class="toggle" id="quotes-toggle"></button>
+      </div>
     </div>
 
     <div class="settings-group">
@@ -1679,7 +1708,7 @@ function applyBgMode() {
     currentPhotoIdx = pickRandomPhotoIdx();
     photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
     photoBg.style.opacity = '1';
-    photoBgTimer = setInterval(() => cyclePhoto(), 45000); // 45 seconds
+    photoBgTimer = setInterval(() => cyclePhoto(), (S.photoCycleSpeed || 45) * 1000);
     // User controls position via the toggle (bottom-right arrows)
   } else if (mode === 'unicode') {
     blobs.forEach(b => b.style.display = 'none');
@@ -1894,6 +1923,9 @@ const DEFAULT_STATE = {
   departments: [],
   dockFilter: 'all',
   favourites: [],
+  uiScale: 100,
+  photoCycleSpeed: 45,
+  showQuotes: true,
 };
 
 /* -- STATE -- */
@@ -1943,6 +1975,9 @@ function loadState() {
     if (!merged.streakCount) merged.streakCount = 0;
     if (!merged.lastStreakTime) merged.lastStreakTime = 0;
     if (!merged.heroPos) merged.heroPos = 'center';
+    if (!merged.uiScale) merged.uiScale = 100;
+    if (!merged.photoCycleSpeed) merged.photoCycleSpeed = 45;
+    if (merged.showQuotes === undefined) merged.showQuotes = true;
     return merged;
   } catch { return clone(DEFAULT_STATE); }
 }
@@ -2246,6 +2281,36 @@ function renderPriorities() {
         save(); renderTasks(); renderPriorities();
       }
     });
+    row.addEventListener('dblclick', e => {
+      e.stopPropagation();
+      const tid = +row.dataset.tid;
+      const task = S.tasks.find(t => t.id === tid);
+      if (!task) return;
+      const textEl = row.querySelector('.hero-pri-text');
+      if (!textEl) return;
+      const origText = task.text;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = task.text;
+      input.style.cssText = 'width:100%;padding:4px 8px;background:rgba(255,255,255,.08);border:1px solid var(--accent);border-radius:6px;color:var(--tx);font-size:15px;font-family:var(--font);outline:none;font-weight:600;letter-spacing:-.02em';
+      textEl.replaceWith(input);
+      input.focus();
+      input.select();
+      const commit = () => {
+        const newText = input.value.trim();
+        if (newText && newText !== origText) {
+          task.text = newText;
+          save();
+        }
+        renderTasks();
+        renderPriorities();
+      };
+      input.addEventListener('blur', commit);
+      input.addEventListener('keydown', e2 => {
+        if (e2.key === 'Enter') { e2.preventDefault(); commit(); }
+        if (e2.key === 'Escape') { input.value = origText; commit(); }
+      });
+    });
   });
 
   const shareBtn = document.getElementById('share-priorities-btn');
@@ -2347,6 +2412,12 @@ function downloadBlob(blob) {
 function renderQuote() {
   const el = document.getElementById('hero-quote');
   if (!el) return;
+  if (S && S.showQuotes === false) {
+    el.style.display = 'none';
+    if (quoteTimer) { clearInterval(quoteTimer); quoteTimer = null; }
+    return;
+  }
+  el.style.display = '';
   // Pick initial quote based on day-of-year
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
@@ -2514,6 +2585,36 @@ function renderTasks() {
         if (task.done && wasUndone) playTaskSound();
         save(); renderTasks(); renderPriorities();
       }
+    });
+    row.addEventListener('dblclick', e => {
+      e.stopPropagation();
+      const tid = +row.dataset.tid;
+      const task = S.tasks.find(t => t.id === tid);
+      if (!task) return;
+      const textEl = row.querySelector('.task-text') || row.querySelector('.task-text-link');
+      if (!textEl) return;
+      const origText = task.text;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = task.text;
+      input.style.cssText = 'width:100%;padding:2px 6px;background:rgba(255,255,255,.08);border:1px solid var(--accent);border-radius:6px;color:var(--tx);font-size:12px;font-family:var(--font);outline:none';
+      textEl.replaceWith(input);
+      input.focus();
+      input.select();
+      const commit = () => {
+        const newText = input.value.trim();
+        if (newText && newText !== origText) {
+          task.text = newText;
+          save();
+        }
+        renderTasks();
+        renderPriorities();
+      };
+      input.addEventListener('blur', commit);
+      input.addEventListener('keydown', e2 => {
+        if (e2.key === 'Enter') { e2.preventDefault(); commit(); }
+        if (e2.key === 'Escape') { input.value = origText; commit(); }
+      });
     });
   });
   el.querySelectorAll('.task-pri-badge').forEach(btn => {
@@ -2931,6 +3032,43 @@ function renderSettings() {
     const isCustomTheme = S.soundTheme === 'custom';
     const soundPickerWrap = document.getElementById('sound-picker');
     if (soundPickerWrap) soundPickerWrap.parentElement.style.display = isCustomTheme ? '' : 'none';
+  }
+
+  // Photo cycle speed
+  const photoSpeed = document.getElementById('photo-speed-select');
+  if (photoSpeed) {
+    photoSpeed.value = S.photoCycleSpeed || 45;
+    photoSpeed.onchange = () => {
+      S.photoCycleSpeed = +photoSpeed.value;
+      save();
+      applyBgMode();
+    };
+  }
+
+  // UI Scale slider
+  const scaleSlider = document.getElementById('ui-scale-slider');
+  const scaleVal = document.getElementById('ui-scale-val');
+  if (scaleSlider) {
+    scaleSlider.value = S.uiScale || 100;
+    scaleVal.textContent = (S.uiScale || 100) + '%';
+    scaleSlider.oninput = () => {
+      S.uiScale = +scaleSlider.value;
+      scaleVal.textContent = S.uiScale + '%';
+      applyUiScale();
+      save();
+    };
+  }
+
+  // Quotes toggle
+  const quotesToggle = document.getElementById('quotes-toggle');
+  if (quotesToggle) {
+    quotesToggle.className = 'toggle' + (S.showQuotes !== false ? ' on' : '');
+    quotesToggle.onclick = () => {
+      S.showQuotes = S.showQuotes === false ? true : false;
+      save();
+      renderQuote();
+      renderSettings();
+    };
   }
 
   // Texture toggle
@@ -4008,6 +4146,14 @@ function applyHeroPos() {
 // Re-randomize position when photo cycles
 function onPhotoCycle() { if (S.heroPos === 'random') applyHeroPos(); }
 
+function applyUiScale() {
+  const scale = (S.uiScale || 100) / 100;
+  const app = document.getElementById('app');
+  app.style.transform = scale === 1 ? '' : 'scale('+scale+')';
+  app.style.height = scale === 1 ? '100vh' : (100/scale)+'vh';
+  app.style.width = scale === 1 ? '100vw' : (100/scale)+'vw';
+}
+
 /* -- KILL STREAKS -- */
 
 const STREAKS = [
@@ -4168,6 +4314,7 @@ function init() {
 
   applyDisplayTheme();
   applyHeroPos();
+  applyUiScale();
   document.body.dataset.texture = S.textureOverlay ? '1' : '0';
   document.body.dataset.bighead = S.bigHead ? '1' : '0';
   setupWsName();
