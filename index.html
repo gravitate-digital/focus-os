@@ -2001,9 +2001,31 @@ function getDomain(url) {
 
 /* -- FAVICON HELPER -- */
 
+// Product-specific icons where generic favicon doesn't match the product
+const ICON_OVERRIDES = {
+  'mail.google.com':        'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico',
+  'calendar.google.com':    'https://calendar.google.com/googlecalendar/images/favicons_2020q4/calendar_31.ico',
+  'drive.google.com':       'https://ssl.gstatic.com/images/branding/product/2x/drive_2020q4_48dp.png',
+  'docs.google.com':        'https://ssl.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png',
+  'sheets.google.com':      'https://ssl.gstatic.com/images/branding/product/2x/sheets_2020q4_48dp.png',
+  'meet.google.com':        'https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v1/web-96dp/logo_meet_2020q4_color_2x_web_96dp.png',
+  'chat.google.com':        'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/chat.ico',
+  'analytics.google.com':   'https://ssl.gstatic.com/analytics/20200225_00/app/images/favicon.ico',
+  'ads.google.com':         'https://ads.google.com/favicon.ico',
+  'search.google.com':      'https://ssl.gstatic.com/search-console/scfe/search_console-64.png',
+  'chat.openai.com':        'https://chat.openai.com/favicon.ico',
+  'claude.ai':              'https://claude.ai/favicon.ico',
+  'figma.com':              'https://static.figma.com/app/icon/1/favicon.png',
+  'canva.com':              'https://static.canva.com/static/images/favicon-1.ico',
+  'notion.so':              'https://www.notion.so/images/favicon.ico',
+  'linear.app':             'https://linear.app/favicon.ico',
+  'app.asana.com':          'https://d3ki9tyy5l5ruj.cloudfront.net/obj/favicon/asana-brand-favicon.ico',
+};
+
 function getFavicon(url, size) {
   try {
     const domain = new URL(url).hostname;
+    if (ICON_OVERRIDES[domain]) return ICON_OVERRIDES[domain];
     return 'https://www.google.com/s2/favicons?domain=' + domain + '&sz=' + (size || 32);
   } catch { return ''; }
 }
