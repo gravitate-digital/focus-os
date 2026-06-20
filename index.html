@@ -65,7 +65,17 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 @media(prefers-reduced-motion:no-preference){#photo-bg{animation:photoFloat 30s ease-in-out infinite}}
 @keyframes photoFloat{0%,100%{transform:translate(0,0) scale(1.02)}25%{transform:translate(4px,-3px) scale(1.03)}50%{transform:translate(-3px,4px) scale(1.02)}75%{transform:translate(3px,2px) scale(1.03)}}
 #photo-bg::after{content:'';position:absolute;inset:-20px;background:rgba(5,10,20,.45);pointer-events:none}
-[data-light="1"] #photo-bg::after{background:linear-gradient(180deg,rgba(15,9,7,.25) 0%,rgba(15,9,7,.15) 40%,rgba(15,9,7,.3) 100%)}
+[data-light="1"] #photo-bg::after{background:linear-gradient(180deg,rgba(5,10,20,.35) 0%,rgba(5,10,20,.25) 40%,rgba(5,10,20,.4) 100%)}
+/* When photos are visible, ALWAYS use white text regardless of light/dark mode */
+[data-bg="photos"] #hero-clock,[data-bg="photos"] #hero-date,[data-bg="photos"] #hero-quote,[data-bg="photos"] #hero-next-mtg{color:rgba(255,255,255,.92);text-shadow:0 1px 8px rgba(0,0,0,.4)}
+[data-bg="photos"] .hero-ot-label{color:var(--accent);text-shadow:0 1px 4px rgba(0,0,0,.3)}
+[data-bg="photos"] .hero-pri-text{color:rgba(255,255,255,.92)}
+[data-bg="photos"] .hero-fs-task,[data-bg="photos"] .hero-fs-sessions{color:rgba(255,255,255,.7)}
+[data-bg="photos"] .hero-fs-time{color:rgba(255,255,255,.92)}
+[data-bg="photos"] #hero-onething{background:linear-gradient(180deg,rgba(106,167,255,.15),rgba(106,167,255,.06));backdrop-filter:blur(24px) saturate(200%);-webkit-backdrop-filter:blur(24px) saturate(200%)}
+[data-bg="photos"] .dock-name{color:rgba(255,255,255,.7)}
+[data-bg="photos"] .dept-pill{color:rgba(255,255,255,.5)}
+[data-bg="photos"] .dept-pill:hover,[data-bg="photos"] .dept-pill.active{color:var(--accent)}
 #unicode-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:1;overflow:hidden;pointer-events:none}
 
 /* -- APP SHELL -- */
@@ -1591,13 +1601,15 @@ function applyBgMode() {
 
   if (photoBgTimer) { clearInterval(photoBgTimer); photoBgTimer = null; }
 
+  document.body.dataset.bg = mode;
+
   if (mode === 'photos') {
     blobs.forEach(b => b.style.display = 'none');
     unicodeBg.style.opacity = '0';
     currentPhotoIdx = pickRandomPhotoIdx();
     photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
     photoBg.style.opacity = '1';
-    photoBgTimer = setInterval(() => cyclePhoto(), 60000);
+    photoBgTimer = setInterval(() => cyclePhoto(), 45000); // 45 seconds
     // User controls position via the toggle (bottom-right arrows)
   } else if (mode === 'unicode') {
     blobs.forEach(b => b.style.display = 'none');
