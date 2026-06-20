@@ -187,7 +187,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #hero-date{font-size:16px;color:var(--mu);font-weight:300;letter-spacing:-.01em;text-align:center;margin-bottom:20px}
 
 /* Hero One Thing card */
-#hero-onething{position:relative;width:100%;max-width:480px;padding:20px 24px;border-radius:18px;background:linear-gradient(180deg,rgba(106,167,255,.12),rgba(106,167,255,.04));backdrop-filter:blur(40px) saturate(250%) brightness(1.08);-webkit-backdrop-filter:blur(40px) saturate(250%) brightness(1.08);border:1px solid rgba(106,167,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 6px 24px rgba(0,0,0,.18);margin-bottom:12px;text-align:left;transition:opacity .3s}
+#hero-onething{position:relative;width:100%;max-width:480px;padding:16px 20px;border-radius:16px;background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(40px) saturate(250%) brightness(1.06);-webkit-backdrop-filter:blur(40px) saturate(250%) brightness(1.06);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 16px rgba(0,0,0,.1);margin-bottom:8px;text-align:left;transition:opacity .3s}
 #hero-onething::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.12) 0%,transparent 50%);pointer-events:none}
 .hero-ot-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
 .hero-ot-task{display:flex;align-items:flex-start;gap:14px;cursor:pointer}
@@ -201,7 +201,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .hero-ot-hint{font-size:11px;color:var(--dim);margin-top:7px;line-height:1.5}
 
 /* Hero Focus Session */
-#hero-focus{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:0}
+#hero-focus{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:4px}
 .hero-fs-display{display:flex;align-items:center;gap:18px}
 .hero-fs-ring{position:relative;width:64px;height:64px;flex-shrink:0}
 .hero-fs-ring svg{width:64px;height:64px;transform:rotate(-90deg)}
@@ -235,7 +235,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* -- BOTTOM DOCK -- */
 #dock{flex-shrink:0;padding:6px 16px 12px;display:flex;justify-content:center;z-index:40}
 /* Dept pills: inline in topbar */
-#dock-dept-bar{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;max-width:40vw;flex-shrink:1}
+#dock-dept-bar{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1;min-width:0}
 #dock-dept-bar::-webkit-scrollbar{display:none}
 .dept-pill{padding:3px 8px;border-radius:6px;background:transparent;border:1px solid transparent;color:var(--dim);font-size:10px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s,border-color .14s;white-space:nowrap;flex-shrink:0}
 .dept-pill:hover,.dept-pill.active{background:rgba(106,167,255,.1);color:var(--accent);border-color:rgba(106,167,255,.15)}
