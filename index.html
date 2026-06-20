@@ -67,6 +67,9 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
 /* Photo + Unicode backgrounds */
 #photo-bg{position:absolute;inset:-20px;background-size:cover;background-position:center 30%;opacity:0;transition:opacity 1.5s ease;z-index:1}
+#photo-bg.trans-fade{transition:opacity 1.5s ease}
+#photo-bg.trans-slide{transition:opacity 0.8s ease,transform 0.8s ease}
+#photo-bg.trans-blur{transition:opacity 1.2s ease,filter 1.2s ease}
 @media(prefers-reduced-motion:no-preference){#photo-bg{animation:photoFloat 30s ease-in-out infinite}}
 @keyframes photoFloat{0%,100%{transform:translate(0,0) scale(1.02)}25%{transform:translate(4px,-3px) scale(1.03)}50%{transform:translate(-3px,4px) scale(1.02)}75%{transform:translate(3px,2px) scale(1.03)}}
 #photo-bg::after{content:'';position:absolute;inset:-20px;background:rgba(5,10,20,.45);pointer-events:none}
@@ -1233,11 +1236,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div class="settings-row-label">Texture overlay<small>Subtle dither for better text readability on photos</small></div>
         <button class="toggle" id="texture-toggle"></button>
       </div>
+      <div class="settings-row" style="margin-top:6px">
+        <div class="settings-row-label">Transition style</div>
+        <div class="sens-row" id="photo-trans-picker" style="flex:1;max-width:200px"></div>
+      </div>
     </div>
 
     <div class="settings-group">
       <div class="settings-group-label">Display</div>
-      <div class="settings-note">Hero view (default). More views coming soon.</div>
+      <div class="settings-note">Hero view (default). Grid view, Minimal view, and Dashboard view coming in the next update.</div>
     </div>
 
     <div class="settings-group">
@@ -1316,6 +1323,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <div class="settings-row">
         <div class="settings-row-label">Comical Mode<small>Comic Sans fonts. Your tasks grow until they take over the screen.</small></div>
         <button class="toggle" id="bighead-toggle"></button>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">Wellness</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Water reminders<small>Gentle nudge every 45 minutes to hydrate and move</small></div>
+        <button class="toggle" id="water-toggle"></button>
       </div>
     </div>
 
@@ -1733,20 +1748,50 @@ function applyBgMode() {
   }
 }
 
+function applyPhotoTransClass() {
+  const photoBg = document.getElementById('photo-bg');
+  if (!photoBg) return;
+  photoBg.classList.remove('trans-fade','trans-slide','trans-blur');
+  const t = S.photoTransition || 'fade';
+  photoBg.classList.add('trans-' + t);
+}
+
 function cyclePhoto() {
   const photoBg = document.getElementById('photo-bg');
   const nextIdx = (currentPhotoIdx + 1) % TEAM_PHOTOS.length;
   const nextUrl = 'photos/' + TEAM_PHOTOS[nextIdx];
+  const trans = S.photoTransition || 'fade';
   // Preload the next image before transitioning
   const img = new Image();
   img.onload = () => {
+    applyPhotoTransClass();
+    // Exit animation based on transition type
+    if (trans === 'slide') {
+      photoBg.style.transform = 'translateX(20px)';
+    } else if (trans === 'blur') {
+      photoBg.style.filter = 'blur(20px)';
+    }
     photoBg.style.opacity = '0';
+    const delay = trans === 'slide' ? 900 : trans === 'blur' ? 1300 : 1600;
     setTimeout(() => {
       currentPhotoIdx = nextIdx;
       photoBg.style.backgroundImage = 'url("' + nextUrl + '")';
+      // Reset entrance
+      if (trans === 'slide') {
+        photoBg.style.transform = 'translateX(-20px)';
+      } else if (trans === 'blur') {
+        photoBg.style.filter = 'blur(20px)';
+      }
+      // Trigger reflow then fade in
+      photoBg.offsetHeight; // eslint-disable-line no-unused-expressions
       photoBg.style.opacity = '1';
+      if (trans === 'slide') {
+        photoBg.style.transform = '';
+      } else if (trans === 'blur') {
+        photoBg.style.filter = '';
+      }
       onPhotoCycle();
-    }, 1600);
+    }, delay);
   };
   img.onerror = () => {
     // Skip broken images
@@ -1947,7 +1992,9 @@ const DEFAULT_STATE = {
   favourites: [],
   uiScale: 100,
   photoCycleSpeed: 45,
+  photoTransition: 'fade',
   showQuotes: true,
+  waterReminder: true,
 };
 
 /* -- STATE -- */
@@ -1999,7 +2046,9 @@ function loadState() {
     if (!merged.heroPos || merged.heroPos === 'left') merged.heroPos = 'center';
     if (!merged.uiScale) merged.uiScale = 100;
     if (!merged.photoCycleSpeed) merged.photoCycleSpeed = 45;
+    if (!merged.photoTransition) merged.photoTransition = 'fade';
     if (merged.showQuotes === undefined) merged.showQuotes = true;
+    if (merged.waterReminder === undefined) merged.waterReminder = true;
     return merged;
   } catch { return clone(DEFAULT_STATE); }
 }
@@ -3139,6 +3188,34 @@ function renderSettings() {
     bigheadToggle.onclick = () => {
       S.bigHead = !S.bigHead;
       document.body.dataset.bighead = S.bigHead ? '1' : '0';
+      save();
+      renderSettings();
+    };
+  }
+
+  // Photo transition picker
+  const photoTransPicker = document.getElementById('photo-trans-picker');
+  if (photoTransPicker) {
+    const transOpts = [{id:'fade',name:'Fade'},{id:'slide',name:'Slide'},{id:'blur',name:'Blur'}];
+    photoTransPicker.innerHTML = transOpts.map(o =>
+      '<div class="sens-opt'+((S.photoTransition||'fade')===o.id?' active':'')+'" data-trans="'+o.id+'">'+o.name+'</div>'
+    ).join('');
+    photoTransPicker.querySelectorAll('.sens-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        S.photoTransition = opt.dataset.trans;
+        save();
+        applyPhotoTransClass();
+        renderSettings();
+      });
+    });
+  }
+
+  // Water reminder toggle
+  const waterToggle = document.getElementById('water-toggle');
+  if (waterToggle) {
+    waterToggle.className = 'toggle' + (S.waterReminder !== false ? ' on' : '');
+    waterToggle.onclick = () => {
+      S.waterReminder = S.waterReminder === false ? true : false;
       save();
       renderSettings();
     };
@@ -4386,6 +4463,22 @@ function init() {
     if (S.autoMode) checkAutoMode();
     if (S.autoTheme) applyAutoTheme();
   }, 60000);
+
+  // Water reminder every 45 minutes
+  setInterval(() => {
+    if (!S.waterReminder) return;
+    const toast = document.getElementById('coach-toast');
+    const msgs = [
+      'Time for water. Stay hydrated.',
+      'Stand up, stretch, drink water.',
+      'Quick break: water and posture check.',
+      'Hydration check. Grab your water bottle.',
+    ];
+    set('coach-msg', msgs[Math.floor(Math.random()*msgs.length)]);
+    document.querySelector('.coach-lbl').textContent = 'WELLNESS';
+    toast.classList.add('show');
+    setTimeout(() => { toast.classList.remove('show'); document.querySelector('.coach-lbl').textContent = 'FOCUS COACH'; }, 5000);
+  }, 2700000);
 
   // Topbar buttons
   document.getElementById('btn-light').addEventListener('click', () => setLight(!S.light));
