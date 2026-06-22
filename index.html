@@ -70,6 +70,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #photo-bg.trans-fade{transition:opacity 1.5s ease}
 #photo-bg.trans-slide{transition:opacity 0.8s ease,transform 0.8s ease}
 #photo-bg.trans-blur{transition:opacity 1.2s ease,filter 1.2s ease}
+#photo-bg.trans-zoom{transition:opacity 1.2s ease,transform 3s ease}
 @media(prefers-reduced-motion:no-preference){#photo-bg{animation:photoFloat 30s ease-in-out infinite}}
 @keyframes photoFloat{0%,100%{transform:translate(0,0) scale(1.02)}25%{transform:translate(4px,-3px) scale(1.03)}50%{transform:translate(-3px,4px) scale(1.02)}75%{transform:translate(3px,2px) scale(1.03)}}
 #photo-bg::after{content:'';position:absolute;inset:-20px;background:rgba(5,10,20,.45);pointer-events:none}
@@ -89,6 +90,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-bg="photos"] .tb-btn:hover{color:#fff}
 [data-bg="photos"] .mode-dot+.lbl{color:rgba(255,255,255,.7)}
 #unicode-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:1;overflow:hidden;pointer-events:none}
+#dither-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:1;overflow:hidden;pointer-events:none}
+#photo-dither-overlay{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:2;pointer-events:none;mix-blend-mode:multiply}
 
 /* Texture overlay */
 #photo-texture{position:absolute;inset:-20px;z-index:2;pointer-events:none;opacity:0;transition:opacity .5s;
@@ -724,6 +727,96 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-display="retro"] #topbar{background:rgba(26,28,44,.9)}
 [data-display="retro"] #dock-strip{background:rgba(26,28,44,.8);border-color:rgba(65,166,246,.2)}
 
+/* Brown 1: warm dark brown */
+[data-display="brown1"]{--bg:#0F0907;--tx:rgba(237,233,222,.88);--mu:rgba(237,233,222,.6);--dim:rgba(237,233,222,.3);--line:rgba(237,233,222,.08);--accent:#C4956A;--glass-bg:rgba(15,9,7,.55);--glass-bo:rgba(196,149,106,.12);--glass-hi:rgba(196,149,106,.06)}
+[data-display="brown1"] .b1{background:rgba(196,149,106,.12)}
+[data-display="brown1"] .b2{background:rgba(139,90,43,.1)}
+[data-display="brown1"] .b3{background:rgba(196,149,106,.06)}
+[data-display="brown1"] #topbar{background:rgba(15,9,7,.88);border-bottom-color:rgba(196,149,106,.1)}
+[data-display="brown1"] #dock-strip{background:rgba(15,9,7,.8);border-color:rgba(196,149,106,.12)}
+[data-display="brown1"] .widget{background:rgba(15,9,7,.6);border-color:rgba(196,149,106,.1)}
+[data-display="brown1"] #side-panel{background:rgba(15,9,7,.94);border-left-color:rgba(196,149,106,.1)}
+[data-display="brown1"] .modal-box,[data-display="brown1"] #cmdk{background:rgba(25,15,10,.96)}
+[data-display="brown1"] #hero-onething{background:linear-gradient(180deg,rgba(196,149,106,.1),rgba(196,149,106,.04));border-color:rgba(196,149,106,.2)}
+[data-display="brown1"] #first-run,[data-display="brown1"] #intention-gate{background:rgba(15,9,7,.96)}
+
+/* Brown 2: light cocoa warmth */
+[data-display="brown2"]{--bg:#2B1B17;--tx:rgba(250,249,246,.86);--mu:rgba(250,249,246,.58);--dim:rgba(250,249,246,.3);--line:rgba(250,249,246,.08);--accent:#D4A574;--glass-bg:rgba(43,27,23,.55);--glass-bo:rgba(212,165,116,.12);--glass-hi:rgba(212,165,116,.06)}
+[data-display="brown2"] .b1{background:rgba(212,165,116,.1)}
+[data-display="brown2"] .b2{background:rgba(160,110,60,.08)}
+[data-display="brown2"] .b3{background:rgba(212,165,116,.06)}
+[data-display="brown2"] #topbar{background:rgba(43,27,23,.88);border-bottom-color:rgba(212,165,116,.1)}
+[data-display="brown2"] #dock-strip{background:rgba(43,27,23,.8);border-color:rgba(212,165,116,.12)}
+[data-display="brown2"] .widget{background:rgba(43,27,23,.6);border-color:rgba(212,165,116,.1)}
+[data-display="brown2"] #side-panel{background:rgba(43,27,23,.94);border-left-color:rgba(212,165,116,.1)}
+[data-display="brown2"] .modal-box,[data-display="brown2"] #cmdk{background:rgba(55,35,28,.96)}
+[data-display="brown2"] #hero-onething{background:linear-gradient(180deg,rgba(212,165,116,.1),rgba(212,165,116,.04));border-color:rgba(212,165,116,.2)}
+[data-display="brown2"] #first-run,[data-display="brown2"] #intention-gate{background:rgba(43,27,23,.96)}
+
+/* Blue 1: deep Gravitate navy */
+[data-display="blue1"]{--bg:#00193D;--tx:rgba(250,249,246,.88);--mu:rgba(250,249,246,.6);--dim:rgba(250,249,246,.32);--line:rgba(250,249,246,.08);--accent:#6DAAFF;--glass-bg:rgba(0,25,61,.55);--glass-bo:rgba(109,170,255,.12);--glass-hi:rgba(109,170,255,.06)}
+[data-display="blue1"] .b1{background:rgba(109,170,255,.1)}
+[data-display="blue1"] .b2{background:rgba(0,72,173,.12)}
+[data-display="blue1"] .b3{background:rgba(109,170,255,.06)}
+[data-display="blue1"] #topbar{background:rgba(0,25,61,.9);border-bottom-color:rgba(109,170,255,.1)}
+[data-display="blue1"] #dock-strip{background:rgba(0,25,61,.8);border-color:rgba(109,170,255,.12)}
+[data-display="blue1"] .widget{background:rgba(0,25,61,.6);border-color:rgba(109,170,255,.1)}
+[data-display="blue1"] #side-panel{background:rgba(0,25,61,.94);border-left-color:rgba(109,170,255,.1)}
+[data-display="blue1"] .modal-box,[data-display="blue1"] #cmdk{background:rgba(0,20,50,.96)}
+[data-display="blue1"] #hero-onething{background:linear-gradient(180deg,rgba(109,170,255,.1),rgba(109,170,255,.04));border-color:rgba(109,170,255,.2)}
+[data-display="blue1"] #first-run,[data-display="blue1"] #intention-gate{background:rgba(0,25,61,.96)}
+
+/* Blue 2: lighter sky navy */
+[data-display="blue2"]{--bg:#003784;--tx:rgba(250,249,246,.9);--mu:rgba(250,249,246,.62);--dim:rgba(250,249,246,.34);--line:rgba(250,249,246,.1);--accent:#8EC5FF;--glass-bg:rgba(0,55,132,.5);--glass-bo:rgba(142,197,255,.12);--glass-hi:rgba(142,197,255,.08)}
+[data-display="blue2"] .b1{background:rgba(142,197,255,.1)}
+[data-display="blue2"] .b2{background:rgba(0,72,173,.1)}
+[data-display="blue2"] .b3{background:rgba(142,197,255,.06)}
+[data-display="blue2"] #topbar{background:rgba(0,55,132,.9);border-bottom-color:rgba(142,197,255,.1)}
+[data-display="blue2"] #dock-strip{background:rgba(0,55,132,.8);border-color:rgba(142,197,255,.12)}
+[data-display="blue2"] .widget{background:rgba(0,55,132,.55);border-color:rgba(142,197,255,.1)}
+[data-display="blue2"] #side-panel{background:rgba(0,55,132,.94);border-left-color:rgba(142,197,255,.1)}
+[data-display="blue2"] .modal-box,[data-display="blue2"] #cmdk{background:rgba(0,45,110,.96)}
+[data-display="blue2"] #hero-onething{background:linear-gradient(180deg,rgba(142,197,255,.1),rgba(142,197,255,.04));border-color:rgba(142,197,255,.2)}
+[data-display="blue2"] #first-run,[data-display="blue2"] #intention-gate{background:rgba(0,55,132,.96)}
+
+/* Porcelain 1: clean white */
+[data-display="porcelain1"]{--bg:#FAF9F6;--tx:rgba(15,9,7,.84);--mu:rgba(15,9,7,.55);--dim:rgba(15,9,7,.3);--line:rgba(15,9,7,.08);--accent:#0048AD;--glass-bg:rgba(255,255,255,.7);--glass-bo:rgba(15,9,7,.06);--glass-hi:rgba(255,255,255,.95)}
+[data-display="porcelain1"] .b1{background:rgba(0,72,173,.06)}
+[data-display="porcelain1"] .b2{background:rgba(109,170,255,.06)}
+[data-display="porcelain1"] .b3{background:rgba(0,72,173,.04)}
+[data-display="porcelain1"] #topbar{background:rgba(250,249,246,.9);border-bottom-color:rgba(15,9,7,.06)}
+[data-display="porcelain1"] #dock-strip{background:rgba(255,255,255,.65);border-color:rgba(15,9,7,.06)}
+[data-display="porcelain1"] .dock-item{background:rgba(0,0,0,.02);border-color:rgba(0,0,0,.04)}
+[data-display="porcelain1"] .widget{background:rgba(255,255,255,.7);border-color:rgba(15,9,7,.06)}
+[data-display="porcelain1"] #side-panel{background:rgba(250,249,246,.96);border-left-color:rgba(15,9,7,.06)}
+[data-display="porcelain1"] .modal-box,[data-display="porcelain1"] #cmdk{background:rgba(250,249,246,.97)}
+[data-display="porcelain1"] #hero-onething{background:linear-gradient(180deg,rgba(0,72,173,.06),rgba(0,72,173,.02));border-color:rgba(0,72,173,.12)}
+[data-display="porcelain1"] #first-run,[data-display="porcelain1"] #intention-gate{background:rgba(250,249,246,.96)}
+[data-display="porcelain1"] .f-input{background:rgba(0,0,0,.03);border-color:rgba(15,9,7,.1);color:rgba(15,9,7,.84)}
+[data-display="porcelain1"] .theme-opt,[data-display="porcelain1"] .sens-opt{background:rgba(0,0,0,.03)}
+[data-display="porcelain1"] .toggle{background:rgba(0,0,0,.1)}
+[data-display="porcelain1"] .toggle::after{background:white}
+[data-display="porcelain1"] .ig-task{background:rgba(0,0,0,.03)}
+
+/* Porcelain 2: warm cream tint */
+[data-display="porcelain2"]{--bg:#EDE9DE;--tx:rgba(15,9,7,.82);--mu:rgba(15,9,7,.52);--dim:rgba(15,9,7,.28);--line:rgba(15,9,7,.07);--accent:#8B5A2B;--glass-bg:rgba(237,233,222,.7);--glass-bo:rgba(139,90,43,.1);--glass-hi:rgba(255,255,255,.8)}
+[data-display="porcelain2"] .b1{background:rgba(139,90,43,.06)}
+[data-display="porcelain2"] .b2{background:rgba(196,149,106,.06)}
+[data-display="porcelain2"] .b3{background:rgba(139,90,43,.04)}
+[data-display="porcelain2"] #topbar{background:rgba(237,233,222,.9);border-bottom-color:rgba(15,9,7,.06)}
+[data-display="porcelain2"] #dock-strip{background:rgba(237,233,222,.65);border-color:rgba(15,9,7,.06)}
+[data-display="porcelain2"] .dock-item{background:rgba(0,0,0,.02);border-color:rgba(0,0,0,.04)}
+[data-display="porcelain2"] .widget{background:rgba(237,233,222,.7);border-color:rgba(15,9,7,.06)}
+[data-display="porcelain2"] #side-panel{background:rgba(237,233,222,.96);border-left-color:rgba(15,9,7,.06)}
+[data-display="porcelain2"] .modal-box,[data-display="porcelain2"] #cmdk{background:rgba(237,233,222,.97)}
+[data-display="porcelain2"] #hero-onething{background:linear-gradient(180deg,rgba(139,90,43,.06),rgba(139,90,43,.02));border-color:rgba(139,90,43,.12)}
+[data-display="porcelain2"] #first-run,[data-display="porcelain2"] #intention-gate{background:rgba(237,233,222,.96)}
+[data-display="porcelain2"] .f-input{background:rgba(0,0,0,.03);border-color:rgba(15,9,7,.1);color:rgba(15,9,7,.82)}
+[data-display="porcelain2"] .theme-opt,[data-display="porcelain2"] .sens-opt{background:rgba(0,0,0,.03)}
+[data-display="porcelain2"] .toggle{background:rgba(0,0,0,.1)}
+[data-display="porcelain2"] .toggle::after{background:white}
+[data-display="porcelain2"] .ig-task{background:rgba(0,0,0,.03)}
+
 /* -- FLOW STEP DOTS -- */
 .flow-steps{display:flex;justify-content:center;gap:6px;margin-bottom:20px}
 .flow-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:background .2s}
@@ -963,7 +1056,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 </head>
 <body>
 
-<div id="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div id="photo-bg"></div><div id="photo-texture"></div><div id="unicode-bg"></div></div>
+<div id="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div id="photo-bg"></div><div id="photo-texture"></div><div id="unicode-bg"></div><div id="dither-bg"></div><div id="photo-dither-overlay"></div></div>
 
 <div id="app">
 
@@ -983,6 +1076,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         </button>
         <div id="mode-pop"></div>
       </div>
+      <span id="tb-dept-label" style="font-size:10px;color:var(--dim);letter-spacing:.04em;margin-left:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px"></span>
       <div class="tb-sep"></div>
       <div id="dock-dept-bar"></div>
     </div>
@@ -1241,7 +1335,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <div class="sens-row" id="bg-mode-row">
         <button class="sens-opt" data-bgmode="gradient">Gradient</button>
         <button class="sens-opt" data-bgmode="photos">Team Photos</button>
-        <button class="sens-opt" data-bgmode="unicode">Unicode Pattern</button>
+        <button class="sens-opt" data-bgmode="unicode">Unicode</button>
+        <button class="sens-opt" data-bgmode="unicode-heavy">Unicode Heavy</button>
+        <button class="sens-opt" data-bgmode="unicode-large">Unicode Large</button>
+        <button class="sens-opt" data-bgmode="dither">Dither Gradient</button>
+        <button class="sens-opt" data-bgmode="photo-dither">Photos + Blue Dither</button>
       </div>
       <div class="settings-row">
         <div class="settings-row-label">Photo cycle speed</div>
@@ -1511,61 +1609,62 @@ const EMOJIS = [
 
 const PRESETS = [
   // Core (everyone gets these)
-  {id:'google',    name:'Google',           url:'https://google.com',                        emoji:'\u{1F50D}', cat:'core'},
+  // Core — product-specific icons
+  {id:'google',    name:'Google',           url:'https://google.com',                        emoji:'\uD83C\uDF10', cat:'core'},
   {id:'gmail',     name:'Gmail',            url:'https://mail.google.com',                   emoji:'\u2709\uFE0F', cat:'core'},
-  {id:'gchat',     name:'Google Chat',      url:'https://chat.google.com',                   emoji:'\u{1F4AC}', cat:'core'},
-  {id:'calendar',  name:'Calendar',         url:'https://calendar.google.com',               emoji:'\u{1F4C5}', cat:'core'},
-  {id:'drive',     name:'Drive',            url:'https://drive.google.com',                  emoji:'\u{1F4BE}', cat:'core'},
-  {id:'docs',      name:'Docs',             url:'https://docs.google.com',                   emoji:'\u{1F4C4}', cat:'core'},
-  {id:'sheets',    name:'Sheets',           url:'https://sheets.google.com',                 emoji:'\u{1F4C8}', cat:'core'},
-  {id:'meet',      name:'Google Meet',      url:'https://meet.google.com',                   emoji:'\u{1F3A5}', cat:'core'},
-  {id:'asana',     name:'Asana',            url:'https://app.asana.com',                     emoji:'\u{1F4CB}', cat:'core'},
-  {id:'loom',      name:'Loom',             url:'https://loom.com',                          emoji:'\u{1F3AC}', cat:'core'},
+  {id:'gchat',     name:'Google Chat',      url:'https://chat.google.com',                   emoji:'\uD83D\uDDE8\uFE0F', cat:'core'},
+  {id:'calendar',  name:'Calendar',         url:'https://calendar.google.com',               emoji:'\uD83D\uDCC6', cat:'core'},
+  {id:'drive',     name:'Drive',            url:'https://drive.google.com',                  emoji:'\uD83D\uDCC2', cat:'core'},
+  {id:'docs',      name:'Docs',             url:'https://docs.google.com',                   emoji:'\uD83D\uDCC4', cat:'core'},
+  {id:'sheets',    name:'Sheets',           url:'https://sheets.google.com',                 emoji:'\uD83D\uDCCA', cat:'core'},
+  {id:'meet',      name:'Google Meet',      url:'https://meet.google.com',                   emoji:'\uD83C\uDFA5', cat:'core'},
+  {id:'asana',     name:'Asana',            url:'https://app.asana.com',                     emoji:'\uD83D\uDCCB', cat:'core'},
+  {id:'loom',      name:'Loom',             url:'https://loom.com',                          emoji:'\uD83C\uDFA5', cat:'core'},
   // AI
-  {id:'chatgpt',   name:'ChatGPT',          url:'https://chat.openai.com',                   emoji:'\u26A1', cat:'ai'},
-  {id:'claude',    name:'Claude',            url:'https://claude.ai',                         emoji:'\u25CE', cat:'ai'},
-  {id:'claude-d',  name:'Claude Design',     url:'https://claude.ai/new',                     emoji:'\u{1F3A8}', cat:'ai'},
-  {id:'claude-c',  name:'Claude Code',       url:'https://claude.ai/code',                    emoji:'\u{1F4BB}', cat:'ai'},
-  {id:'copilot',   name:'Copilot',           url:'https://copilot.microsoft.com',             emoji:'\u{1F916}', cat:'ai'},
+  {id:'chatgpt',   name:'ChatGPT',          url:'https://chat.openai.com',                   emoji:'\uD83E\uDDE0', cat:'ai'},
+  {id:'claude',    name:'Claude',            url:'https://claude.ai',                         emoji:'\u2728', cat:'ai'},
+  {id:'claude-d',  name:'Claude Design',     url:'https://claude.ai/new',                     emoji:'\uD83C\uDFA8', cat:'ai'},
+  {id:'claude-c',  name:'Claude Code',       url:'https://claude.ai/code',                    emoji:'\u2328\uFE0F', cat:'ai'},
+  {id:'copilot',   name:'Copilot',           url:'https://copilot.microsoft.com',             emoji:'\uD83E\uDD16', cat:'ai'},
   // Design
-  {id:'figma',     name:'Figma',             url:'https://figma.com',                         emoji:'\u{1F3A8}', cat:'design'},
-  {id:'canva',     name:'Canva',             url:'https://canva.com',                         emoji:'\u{1F58C}\uFE0F', cat:'design'},
-  {id:'adobe',     name:'Adobe CC',          url:'https://creativecloud.adobe.com',           emoji:'\u{1F4F7}', cat:'design'},
-  {id:'webflow',   name:'Webflow',           url:'https://webflow.com',                       emoji:'\u{1F310}', cat:'design'},
+  {id:'figma',     name:'Figma',             url:'https://figma.com',                         emoji:'\u270F\uFE0F', cat:'design'},
+  {id:'canva',     name:'Canva',             url:'https://canva.com',                         emoji:'\uD83D\uDD8C\uFE0F', cat:'design'},
+  {id:'adobe',     name:'Adobe CC',          url:'https://creativecloud.adobe.com',           emoji:'\uD83C\uDFA8', cat:'design'},
+  {id:'webflow',   name:'Webflow',           url:'https://webflow.com',                       emoji:'\uD83C\uDF10', cat:'design'},
   // Reporting / Analytics
-  {id:'ga4',       name:'Analytics',         url:'https://analytics.google.com',              emoji:'\u{1F4CA}', cat:'analytics'},
-  {id:'whatagraph',name:'Whatagraph',        url:'https://app.whatagraph.com',                emoji:'\u{1F4CA}', cat:'analytics'},
-  {id:'gsc',       name:'Search Console',    url:'https://search.google.com/search-console', emoji:'\u{1F50D}', cat:'analytics'},
+  {id:'ga4',       name:'Analytics',         url:'https://analytics.google.com',              emoji:'\uD83D\uDCC8', cat:'analytics'},
+  {id:'whatagraph',name:'Whatagraph',        url:'https://app.whatagraph.com',                emoji:'\uD83D\uDCCA', cat:'analytics'},
+  {id:'gsc',       name:'Search Console',    url:'https://search.google.com/search-console', emoji:'\uD83D\uDD0D', cat:'analytics'},
   // Paid Ads
-  {id:'gads',      name:'Google Ads',        url:'https://ads.google.com',                    emoji:'\u{1F4B0}', cat:'ads'},
-  {id:'meta',      name:'Meta Ads',          url:'https://business.facebook.com',             emoji:'\u{1F536}', cat:'ads'},
-  {id:'tiktok',    name:'TikTok Ads',        url:'https://ads.tiktok.com',                    emoji:'\u{1F3B5}', cat:'ads'},
-  {id:'bing',      name:'Bing Ads',          url:'https://ads.microsoft.com',                 emoji:'\u{1F310}', cat:'ads'},
-  {id:'amazon',    name:'Amazon Ads',        url:'https://advertising.amazon.com',            emoji:'\u{1F4E6}', cat:'ads'},
+  {id:'gads',      name:'Google Ads',        url:'https://ads.google.com',                    emoji:'\uD83D\uDCB5', cat:'ads'},
+  {id:'meta',      name:'Meta Ads',          url:'https://business.facebook.com',             emoji:'\uD83D\uDCE3', cat:'ads'},
+  {id:'tiktok',    name:'TikTok Ads',        url:'https://ads.tiktok.com',                    emoji:'\uD83C\uDFB5', cat:'ads'},
+  {id:'bing',      name:'Bing Ads',          url:'https://ads.microsoft.com',                 emoji:'\uD83D\uDD0D', cat:'ads'},
+  {id:'amazon',    name:'Amazon Ads',        url:'https://advertising.amazon.com',            emoji:'\uD83D\uDCE6', cat:'ads'},
   // SEO
-  {id:'semrush',   name:'SEMrush',           url:'https://www.semrush.com',                   emoji:'\u{1F50E}', cat:'seo'},
-  {id:'sfrog',     name:'Screaming Frog',    url:'https://www.screamingfrog.co.uk',           emoji:'\u{1F438}', cat:'seo'},
+  {id:'semrush',   name:'SEMrush',           url:'https://www.semrush.com',                   emoji:'\uD83D\uDD0E', cat:'seo'},
+  {id:'sfrog',     name:'Screaming Frog',    url:'https://www.screamingfrog.co.uk',           emoji:'\uD83D\uDC38', cat:'seo'},
   // Email Marketing
-  {id:'klaviyo',   name:'Klaviyo',            url:'https://www.klaviyo.com/login',             emoji:'\u{1F4E7}', cat:'email'},
-  {id:'mailchimp', name:'Mailchimp',          url:'https://login.mailchimp.com',               emoji:'\u{1F412}', cat:'email'},
-  {id:'zoho',      name:'Zoho',              url:'https://mail.zoho.com',                     emoji:'\u{1F4E7}', cat:'email'},
+  {id:'klaviyo',   name:'Klaviyo',            url:'https://www.klaviyo.com/login',             emoji:'\uD83D\uDCE8', cat:'email'},
+  {id:'mailchimp', name:'Mailchimp',          url:'https://login.mailchimp.com',               emoji:'\uD83D\uDC35', cat:'email'},
+  {id:'zoho',      name:'Zoho',              url:'https://mail.zoho.com',                     emoji:'\u2709\uFE0F', cat:'email'},
   // Call Tracking
-  {id:'callrail',  name:'CallRail',           url:'https://app.callrail.com',                  emoji:'\u{1F4DE}', cat:'crm'},
+  {id:'callrail',  name:'CallRail',           url:'https://app.callrail.com',                  emoji:'\uD83D\uDCDE', cat:'crm'},
   // Social
-  {id:'instagram', name:'Instagram',          url:'https://instagram.com',                     emoji:'\u{1F4F7}', cat:'social'},
-  {id:'facebook',  name:'Facebook',           url:'https://facebook.com',                      emoji:'\u{1F44D}', cat:'social'},
-  {id:'linkedin',  name:'LinkedIn',           url:'https://linkedin.com',                      emoji:'\u{1F4BC}', cat:'social'},
+  {id:'instagram', name:'Instagram',          url:'https://instagram.com',                     emoji:'\uD83D\uDCF7', cat:'social'},
+  {id:'facebook',  name:'Facebook',           url:'https://facebook.com',                      emoji:'\uD83D\uDC4D', cat:'social'},
+  {id:'linkedin',  name:'LinkedIn',           url:'https://linkedin.com',                      emoji:'\uD83D\uDCBC', cat:'social'},
   // Scheduling
-  {id:'acuity',    name:'Acuity Scheduling', url:'https://acuityscheduling.com',              emoji:'\u{1F4C5}', cat:'scheduling'},
+  {id:'acuity',    name:'Acuity Scheduling', url:'https://acuityscheduling.com',              emoji:'\uD83D\uDCC5', cat:'scheduling'},
   // Gravitate Internal
   {id:'gdigital',  name:'Gravitate Digital', url:'https://gravitatedigital.com.au',           emoji:'\u25B2', cat:'gravitate'},
   {id:'gstudio',   name:'Gravitate Studio',  url:'https://gravitatestudio.com.au',            emoji:'\u25C8', cat:'gravitate'},
-  {id:'proposals', name:'Proposals',          url:'https://proposals.gravitatedigital.com.au', emoji:'\u{1F4DD}', cat:'gravitate'},
+  {id:'proposals', name:'Proposals',          url:'https://proposals.gravitatedigital.com.au', emoji:'\uD83D\uDCDD', cat:'gravitate'},
   {id:'pace',      name:'Pace Timekeeping',  url:'https://pace-os.vercel.app',                emoji:'\u23F1\uFE0F', cat:'gravitate'},
-  {id:'space',     name:'Gravitate Space',   url:'https://gravitatespace.com.au',             emoji:'\u{1F3E2}', cat:'gravitate'},
+  {id:'space',     name:'Gravitate Space',   url:'https://gravitatespace.com.au',             emoji:'\uD83C\uDFE2', cat:'gravitate'},
   {id:'gfocus',    name:'Focus',             url:'https://focus-os-snowy-nu.vercel.app',     emoji:'\u25CE', cat:'gravitate'},
   // Dev
-  {id:'linear',    name:'Linear',             url:'https://linear.app',                        emoji:'\u25C8', cat:'dev'},
+  {id:'linear',    name:'Linear',             url:'https://linear.app',                        emoji:'\uD83D\uDD37', cat:'dev'},
 ];
 
 const CAT_LABELS = {
@@ -1642,6 +1741,12 @@ const DISPLAY_THEMES = [
   {id:'ocean', name:'Ocean Blue', desc:'Deep navy glass'},
   {id:'arcade', name:'Arcade', desc:'Neon, bold, gamified'},
   {id:'retro', name:'Retro Game', desc:'Pixel art vibes'},
+  {id:'brown1', name:'Brown 1', desc:'Warm dark brown'},
+  {id:'brown2', name:'Brown 2', desc:'Light cocoa warmth'},
+  {id:'blue1', name:'Blue 1', desc:'Deep Gravitate navy'},
+  {id:'blue2', name:'Blue 2', desc:'Light sky navy'},
+  {id:'porcelain1', name:'Porcelain 1', desc:'Clean porcelain white'},
+  {id:'porcelain2', name:'Porcelain 2', desc:'Warm porcelain cream'},
 ];
 
 const MORNING_VIBES = [
@@ -1666,57 +1771,141 @@ const COACH_MSGS = [
   "What would happen if you stayed with this one thing for 10 more minutes?",
 ];
 
-const QUOTES = [
-  // SEO & Digital Marketing
-  "A SEO expert walks into a bar, pub, tavern, inn, beer garden, saloon, gastropub...",
-  "Where's the best place to hide the evidence? Page 2 of Google.",
-  "Why did the marketer get off the trampoline? Worried about the bounce rate.",
-  "Why do SEOs love the farmer's market? Lots of organic content.",
-  "What do SEO professionals see when they see twins? Duplicate content.",
-  "Why did the SEO cross the road? To get hit with traffic.",
-  "I tried to check into room 404 at the hotel. Couldn't find it.",
-  "What kind of fruit do SEOs like best? Low hanging.",
-  "Why do mobile marketers make good parents? They're responsive.",
-  "Why did the digital marketer get dumped? A serious lack of engagement.",
-  // Agency life
-  "\"Can you make the logo bigger?\" : Every client, everywhere, forever.",
-  "\"Just a small change.\" : Famous last words.",
-  "\"We need it to go viral.\" Budget: $50.",
-  "\"Let's take this offline.\" Translation: let's never discuss this again.",
-  "\"Quick question.\" Narrator: it was not quick.",
-  "Scope creep isn't a bug, it's a feature nobody asked for.",
-  "The WiFi went down for five minutes so I had to talk to my coworkers. They seem nice.",
-  // Procrastination (real quotes)
-  "I love deadlines. I like the whooshing sound they make as they fly by. : Douglas Adams",
-  "Procrastinate now, don't put it off. : Ellen DeGeneres",
-  "Never put off till tomorrow what you can do the day after tomorrow. : Mark Twain",
-  "The sooner I fall behind, the more time I have to catch up.",
-  "Tomorrow is often the busiest day of the week.",
-  "Procrastination is the art of keeping up with yesterday. : Don Marquis",
-  // PPC & Ads
-  "Why does it take PPC managers so long to get to work? They can't help but create traffic.",
-  "Client: I want to rank #1 for everything. Budget: $200/month. Timeline: yesterday.",
-  "How do Jedi get leads? They use the Sales Force.",
-  // Design
-  "Helvetica and Times New Roman walk into a bar. Bartender says: we don't serve your type here.",
-  "How many designers does it take to change a light bulb? Does it have to be a light bulb?",
-  // Productivity
-  "The secret to getting ahead is getting started. : Mark Twain",
-  "Focus is not about saying yes. It's about saying no. : Steve Jobs",
-  "Done is better than perfect. : Sheryl Sandberg",
-  "In God we trust. All others must bring data. : W. Edwards Deming",
-  // Motivational
-  "Success is not final, failure is not fatal: it is the courage to continue that counts. : Winston Churchill",
-  "The only way to do great work is to love what you do. : Steve Jobs",
-  "It always seems impossible until it's done. : Nelson Mandela",
-  "The harder I work, the luckier I get. : Gary Player",
-  "What you do today can improve all your tomorrows. : Ralph Marston",
-  "Action is the foundational key to all success. : Pablo Picasso",
-  "Don't watch the clock; do what it does. Keep going. : Sam Levenson",
-  "You don't have to be great to start, but you have to start to be great. : Zig Ziglar",
-  "The way to get started is to quit talking and begin doing. : Walt Disney",
-  "Believe you can and you're halfway there. : Theodore Roosevelt",
-];
+const QUOTE_CATEGORIES = {
+  jokes: [
+    "A SEO expert walks into a bar, pub, tavern, inn, beer garden, saloon, gastropub...",
+    "Where's the best place to hide the evidence? Page 2 of Google.",
+    "Why did the marketer get off the trampoline? Worried about the bounce rate.",
+    "Why do SEOs love the farmer's market? Lots of organic content.",
+    "What do SEO professionals see when they see twins? Duplicate content.",
+    "I tried to check into room 404 at the hotel. Couldn't find it.",
+    "\"Can you make the logo bigger?\" : Every client, everywhere, forever.",
+    "\"Just a small change.\" : Famous last words.",
+    "\"We need it to go viral.\" Budget: $50.",
+    "\"Quick question.\" Narrator: it was not quick.",
+    "Scope creep isn't a bug, it's a feature nobody asked for.",
+    "The WiFi went down for five minutes so I had to talk to my coworkers. They seem nice.",
+    "Helvetica and Times New Roman walk into a bar. Bartender says: we don't serve your type here.",
+    "How many designers does it take to change a light bulb? Does it have to be a light bulb?",
+    "How do Jedi get leads? They use the Sales Force.",
+  ],
+  quotes: [
+    "Focus is not about saying yes. It's about saying no. : Steve Jobs",
+    "Done is better than perfect. : Sheryl Sandberg",
+    "In God we trust. All others must bring data. : W. Edwards Deming",
+    "The secret to getting ahead is getting started. : Mark Twain",
+    "Success is not final, failure is not fatal: it is the courage to continue that counts. : Winston Churchill",
+    "The only way to do great work is to love what you do. : Steve Jobs",
+    "It always seems impossible until it's done. : Nelson Mandela",
+    "The harder I work, the luckier I get. : Gary Player",
+    "Action is the foundational key to all success. : Pablo Picasso",
+    "Don't watch the clock; do what it does. Keep going. : Sam Levenson",
+    "You don't have to be great to start, but you have to start to be great. : Zig Ziglar",
+    "The way to get started is to quit talking and begin doing. : Walt Disney",
+    "I love deadlines. I like the whooshing sound they make as they fly by. : Douglas Adams",
+    "Never put off till tomorrow what you can do the day after tomorrow. : Mark Twain",
+    "Procrastination is the art of keeping up with yesterday. : Don Marquis",
+  ],
+  meta_ads: [
+    "Lookalike audiences work best when seeded from your top 1-3% of purchasers, not all customers.",
+    "Cost per result rises when ad frequency exceeds 3.5. Rotate creative before fatigue kills ROAS.",
+    "Advantage+ shopping campaigns often outperform manual CBO once you have 50+ conversions per week.",
+    "Video ads under 15 seconds get 72% higher completion rates on Meta placements.",
+    "Broad targeting on Meta often outperforms stacked interests once the pixel has 500+ events.",
+    "The first 3 seconds of a Meta video ad determine 80% of its performance. Hook early.",
+    "Dynamic creative testing lets Meta optimise 150+ combinations. Supply 5+ headlines and 3+ visuals.",
+    "Cost-per-lead campaigns can train Meta's algorithm on cheap leads. Optimise for quality, not volume.",
+    "Retargeting windows longer than 30 days see diminishing returns. 7-14 days is the sweet spot.",
+    "Placement asset customisation (Stories vs Feed) improves CTR by 20-40% over default crops.",
+  ],
+  email_marketing: [
+    "Personalised subject lines increase open rates by 26%. Use first name or recent purchase.",
+    "The best send time is when YOUR audience opens. Check your Klaviyo heatmaps, not blog posts.",
+    "Welcome series emails generate 3x more revenue per email than regular campaigns.",
+    "Segmented campaigns earn 760% more revenue than one-size-fits-all blasts.",
+    "Abandoned cart emails recover 5-11% of otherwise lost revenue. Three-email sequences work best.",
+    "Email list decay rate averages 22.5% per year. Clean your list quarterly.",
+    "Plain text emails often outperform designed ones for transactional and personal messages.",
+    "Preview text is the second subject line. Use all 90 characters or it pulls body copy.",
+    "Sunset policies (removing 6-month non-openers) improve deliverability for the engaged segment.",
+    "SMS + email flows together see 2x the conversion rate of email alone.",
+  ],
+  seo_tips: [
+    "Page speed: every additional second of load time reduces conversions by 7%.",
+    "Internal linking passes authority. Link from high-DA pages to pages you want to rank.",
+    "Title tags with the primary keyword in the first 60 characters see higher CTR in SERPs.",
+    "Featured snippets capture 8.6% of clicks. Structure content with clear H2s and concise answers.",
+    "Core Web Vitals are a ranking factor. LCP under 2.5s, FID under 100ms, CLS under 0.1.",
+    "Long-tail keywords account for 70% of all search traffic. Target them for faster wins.",
+    "EEAT signals (Experience, Expertise, Authority, Trust) matter most for YMYL topics.",
+    "Schema markup increases rich result eligibility. FAQ, How-to, and Product schemas are high-value.",
+    "Cannibalisation kills rankings. One best page per keyword intent, not five competing pages.",
+    "Google re-crawls pages at different rates. Force a crawl via Search Console after major updates.",
+  ],
+  branding: [
+    "Consistent brand presentation across all platforms increases revenue by up to 23%.",
+    "Colour increases brand recognition by 80%. Pick 2-3 colours and use them everywhere.",
+    "Your brand voice should read the same whether it's an email, social post, or error message.",
+    "The best brands own a feeling, not a feature. Nike owns determination, not shoes.",
+    "Brand guidelines nobody follows are just PDFs gathering dust. Make them usable.",
+    "A logo isn't a brand. A brand is every touchpoint: invoice, email signature, hold music.",
+    "Typography carries tone. Serif feels established. Sans-serif feels modern. Choose deliberately.",
+    "Naming conventions matter. If your product names confuse your team, they'll confuse customers.",
+    "The strongest brands are boring in the best way: predictable, reliable, and instantly recognisable.",
+    "Brand refreshes that alienate existing customers aren't refreshes. They're gambles.",
+  ],
+  statistics: [
+    "CTR (Click-Through Rate): clicks divided by impressions. Industry average for search ads: 3.17%.",
+    "ROAS (Return on Ad Spend): revenue divided by ad spend. A ROAS of 4 means $4 back per $1 spent.",
+    "CPA (Cost per Acquisition): total cost divided by conversions. Lower isn't always better if LTV is high.",
+    "Impression share: how often your ad appeared vs how often it could have. Below 80% means lost opportunities.",
+    "Bounce rate: single-page sessions divided by all sessions. Below 40% is excellent, above 70% needs attention.",
+    "Lifetime Value (LTV): average revenue per customer over their entire relationship. The real metric that matters.",
+    "Conversion rate: the percentage of visitors who complete a desired action. E-commerce average is 2.5-3%.",
+    "Frequency: how many times one person sees your ad. Above 4-5x and fatigue sets in.",
+    "Cost per mille (CPM): cost per 1,000 impressions. Useful for comparing reach efficiency across platforms.",
+    "Attribution window: the lookback period for crediting a conversion. Meta default is 7-day click, 1-day view.",
+  ],
+  ai_tips: [
+    "AI works best as a first draft generator, not a final output. Edit, don't publish raw.",
+    "Prompt structure: role + task + context + constraints + format. The more specific, the better the output.",
+    "Use Claude for strategy and analysis. Use ChatGPT for quick content. Use Copilot for code suggestions.",
+    "AI-generated content still needs human review for accuracy, brand voice, and legal compliance.",
+    "Chain-of-thought prompting (asking AI to reason step by step) improves accuracy by 30-50%.",
+    "Fine-tuned AI models on your own data outperform generic models for specialised tasks.",
+    "AI image generation works best with specific, descriptive prompts. Vague prompts produce vague results.",
+    "Retrieval-augmented generation (RAG) grounds AI in your actual data. Less hallucination, more accuracy.",
+    "The cost of AI tools should be measured against time saved, not raw subscription price.",
+    "AI coding assistants reduce boilerplate by 40-60% but introduce subtle bugs. Always review.",
+  ],
+  psychology: [
+    "Loss aversion: people feel losses 2x more than equivalent gains. Frame offers around what they'll miss.",
+    "Social proof: 92% of consumers trust recommendations from peers over advertising.",
+    "The decoy effect: adding a third inferior option makes the premium choice look better value.",
+    "Anchoring: the first number someone sees sets their expectation. Show the full price before the discount.",
+    "Paradox of choice: too many options leads to decision paralysis. Limit choices to 3-5.",
+    "Peak-end rule: people judge experiences by the peak moment and the end. Make your offboarding as good as onboarding.",
+    "Reciprocity: giving something first (free audit, sample, guide) increases the likelihood of a sale.",
+    "Scarcity drives urgency, but fake scarcity destroys trust permanently. Only use it when real.",
+    "The endowment effect: people value what they already have more than what they could get. Free trials work because of this.",
+    "Cognitive load: every additional form field reduces conversion by 7%. Ask for less, get more.",
+  ],
+  digital_services: [
+    "The best websites load in under 3 seconds. Every second after that costs 7% in conversions.",
+    "Responsive design isn't optional. 60%+ of traffic is mobile. Test on real devices, not just Chrome DevTools.",
+    "Google Business Profile is the most underrated SEO tool. Complete profiles get 7x more clicks.",
+    "A/B testing needs statistical significance. Run tests until you have 95%+ confidence, not just a few days.",
+    "Landing pages should have one CTA, not five. Every additional link dilutes conversion.",
+    "Website accessibility (WCAG 2.1) isn't just ethical, it's a legal requirement in many jurisdictions.",
+    "Analytics without action is just data hoarding. Set up dashboards that answer specific business questions.",
+    "Content calendars that aren't tied to business objectives produce content nobody needs.",
+    "Client reporting should lead with insights, not metrics. 'Traffic increased 20%' means nothing without context.",
+    "The best digital strategy is the one that gets executed. A mediocre plan done well beats a perfect plan ignored.",
+  ],
+};
+
+// Flatten all categories into QUOTES for backward compat
+const QUOTES = Object.values(QUOTE_CATEGORIES).flat();
 
 let quoteIdx = 0;
 let quoteTimer = null;
@@ -1752,6 +1941,8 @@ function applyBgMode() {
   const mode = (S && S.bgMode) || 'gradient';
   const photoBg = document.getElementById('photo-bg');
   const unicodeBg = document.getElementById('unicode-bg');
+  const ditherBg = document.getElementById('dither-bg');
+  const photoDither = document.getElementById('photo-dither-overlay');
   const blobs = document.querySelectorAll('.blob');
 
   if (photoBgTimer) { clearInterval(photoBgTimer); photoBgTimer = null; }
@@ -1766,23 +1957,44 @@ function applyBgMode() {
     photoBg.style.opacity = '1';
     photoBgTimer = setInterval(() => cyclePhoto(), (S.photoCycleSpeed || 45) * 1000);
     // User controls position via the toggle (bottom-right arrows)
-  } else if (mode === 'unicode') {
+  } else if (mode === 'unicode' || mode === 'unicode-heavy' || mode === 'unicode-large') {
     blobs.forEach(b => b.style.display = 'none');
     photoBg.style.opacity = '0';
-    renderUnicodeBg();
+    ditherBg.style.opacity = '0';
+    photoDither.style.opacity = '0';
+    renderUnicodeBg(mode);
     unicodeBg.style.opacity = '1';
+  } else if (mode === 'dither') {
+    blobs.forEach(b => b.style.display = 'none');
+    photoBg.style.opacity = '0';
+    unicodeBg.style.opacity = '0';
+    photoDither.style.opacity = '0';
+    renderDitherBg();
+    ditherBg.style.opacity = '1';
+  } else if (mode === 'photo-dither') {
+    blobs.forEach(b => b.style.display = 'none');
+    unicodeBg.style.opacity = '0';
+    ditherBg.style.opacity = '0';
+    currentPhotoIdx = pickRandomPhotoIdx();
+    photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
+    photoBg.style.opacity = '1';
+    renderPhotoDitherOverlay();
+    photoDither.style.opacity = '1';
+    photoBgTimer = setInterval(() => cyclePhoto(), (S.photoCycleSpeed || 45) * 1000);
   } else {
     // gradient (default)
     blobs.forEach(b => b.style.display = '');
     photoBg.style.opacity = '0';
     unicodeBg.style.opacity = '0';
+    ditherBg.style.opacity = '0';
+    photoDither.style.opacity = '0';
   }
 }
 
 function applyPhotoTransClass() {
   const photoBg = document.getElementById('photo-bg');
   if (!photoBg) return;
-  photoBg.classList.remove('trans-fade','trans-slide','trans-blur');
+  photoBg.classList.remove('trans-fade','trans-slide','trans-blur','trans-zoom');
   const t = S.photoTransition || 'fade';
   photoBg.classList.add('trans-' + t);
 }
@@ -1801,9 +2013,11 @@ function cyclePhoto() {
       photoBg.style.transform = 'translateX(20px)';
     } else if (trans === 'blur') {
       photoBg.style.filter = 'blur(20px)';
+    } else if (trans === 'zoom') {
+      photoBg.style.transform = 'scale(1.15)';
     }
     photoBg.style.opacity = '0';
-    const delay = trans === 'slide' ? 900 : trans === 'blur' ? 1300 : 1600;
+    const delay = trans === 'slide' ? 900 : trans === 'blur' ? 1300 : trans === 'zoom' ? 1300 : 1600;
     setTimeout(() => {
       currentPhotoIdx = nextIdx;
       photoBg.style.backgroundImage = 'url("' + nextUrl + '")';
@@ -1812,6 +2026,8 @@ function cyclePhoto() {
         photoBg.style.transform = 'translateX(-20px)';
       } else if (trans === 'blur') {
         photoBg.style.filter = 'blur(20px)';
+      } else if (trans === 'zoom') {
+        photoBg.style.transform = 'scale(0.95)';
       }
       // Trigger reflow then fade in
       photoBg.offsetHeight; // eslint-disable-line no-unused-expressions
@@ -1820,6 +2036,8 @@ function cyclePhoto() {
         photoBg.style.transform = '';
       } else if (trans === 'blur') {
         photoBg.style.filter = '';
+      } else if (trans === 'zoom') {
+        photoBg.style.transform = '';
       }
       onPhotoCycle();
     }, delay);
@@ -1832,13 +2050,19 @@ function cyclePhoto() {
   img.src = nextUrl;
 }
 
-function renderUnicodeBg() {
+function renderUnicodeBg(mode) {
+  mode = mode || 'unicode';
   const el = document.getElementById('unicode-bg');
   const isLight = document.body.dataset.light === '1';
   const color = isLight ? 'rgba(0,25,61,' : 'rgba(106,167,255,';
   const symbols = ['\u25CE', '\u25B2', '\u25C8'];
-  const cols = 60;
-  const rows = 28;
+  const isHeavy = mode === 'unicode-heavy';
+  const isLarge = mode === 'unicode-large';
+  const cols = isLarge ? 30 : (isHeavy ? 80 : 60);
+  const rows = isLarge ? 14 : (isHeavy ? 40 : 28);
+  const fontSize = isLarge ? 36 : (isHeavy ? 14 : 16);
+  const opBase = isHeavy ? 0.06 : 0.04;
+  const opRange = isHeavy ? 0.08 : 0.04;
   let html = '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="position:absolute;inset:0">';
   const seed = 42;
   let si = seed;
@@ -1846,14 +2070,54 @@ function renderUnicodeBg() {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
       const sym = symbols[Math.floor(rng() * symbols.length)];
-      const op = (0.04 + rng() * 0.04).toFixed(3);
+      const op = (opBase + rng() * opRange).toFixed(3);
       const x = (c / cols * 100).toFixed(1);
       const y = (r / rows * 100).toFixed(1);
-      html += '<text x="' + x + '%" y="' + y + '%" fill="' + color + op + ')" font-size="16" font-family="-apple-system,sans-serif">' + sym + '</text>';
+      html += '<text x="' + x + '%" y="' + y + '%" fill="' + color + op + ')" font-size="' + fontSize + '" font-family="-apple-system,sans-serif">' + sym + '</text>';
     }
   }
   html += '</svg>';
   el.innerHTML = html;
+}
+
+function renderDitherBg() {
+  const el = document.getElementById('dither-bg');
+  const isLight = document.body.dataset.light === '1';
+  const c1 = isLight ? '#EDE9DE' : '#0a1830';
+  const c2 = isLight ? '#FAF9F6' : '#00193D';
+  const c3 = isLight ? '#D4CFC2' : '#0F0907';
+  // SVG dither pattern
+  let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="position:absolute;inset:0">';
+  svg += '<defs><pattern id="dither-dots" width="4" height="4" patternUnits="userSpaceOnUse">';
+  svg += '<rect width="4" height="4" fill="' + c1 + '"/>';
+  svg += '<rect width="1" height="1" x="0" y="0" fill="' + c2 + '" opacity=".5"/>';
+  svg += '<rect width="1" height="1" x="2" y="2" fill="' + c3 + '" opacity=".4"/>';
+  svg += '</pattern></defs>';
+  svg += '<rect width="100%" height="100%" fill="url(#dither-dots)"/>';
+  // Gradient overlay for depth
+  svg += '<rect width="100%" height="100%" fill="url(#dither-grad)" opacity=".6"/>';
+  svg += '<defs><linearGradient id="dither-grad" x1="0" y1="0" x2="1" y2="1">';
+  svg += '<stop offset="0%" stop-color="' + c1 + '" stop-opacity=".3"/>';
+  svg += '<stop offset="50%" stop-color="' + c2 + '" stop-opacity=".1"/>';
+  svg += '<stop offset="100%" stop-color="' + c3 + '" stop-opacity=".3"/>';
+  svg += '</linearGradient></defs>';
+  svg += '</svg>';
+  el.innerHTML = svg;
+}
+
+function renderPhotoDitherOverlay() {
+  const el = document.getElementById('photo-dither-overlay');
+  // Blue-tinted dither overlay on top of photos
+  let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="position:absolute;inset:0">';
+  svg += '<defs><pattern id="blue-dither" width="3" height="3" patternUnits="userSpaceOnUse">';
+  svg += '<rect width="3" height="3" fill="rgba(0,25,61,.35)"/>';
+  svg += '<rect width="1" height="1" x="0" y="0" fill="rgba(109,170,255,.15)"/>';
+  svg += '<rect width="1" height="1" x="1" y="1" fill="rgba(0,72,173,.2)"/>';
+  svg += '<rect width="1" height="1" x="2" y="0" fill="rgba(109,170,255,.1)"/>';
+  svg += '</pattern></defs>';
+  svg += '<rect width="100%" height="100%" fill="url(#blue-dither)"/>';
+  svg += '</svg>';
+  el.innerHTML = svg;
 }
 
 /* -- ROLE PRESETS -- */
@@ -2026,7 +2290,7 @@ const DEFAULT_STATE = {
   dockStyle: 'default',
   photoTransition: 'fade',
   showQuotes: true,
-  waterReminder: true,
+  waterReminder: false,
   // Usage stats
   usage: {
     firstOpen: null,
@@ -3013,6 +3277,12 @@ function renderSettings() {
       'ocean':'linear-gradient(135deg,#00193D,#003784)',
       'arcade':'linear-gradient(135deg,#0a0014,#ff00ff)',
       'retro':'linear-gradient(135deg,#1a1c2c,#41a6f6)',
+      'brown1':'linear-gradient(135deg,#0F0907,#1A0E0A)',
+      'brown2':'linear-gradient(135deg,#2B1B17,#3D2A24)',
+      'blue1':'linear-gradient(135deg,#00193D,#002855)',
+      'blue2':'linear-gradient(135deg,#003784,#004FAD)',
+      'porcelain1':'linear-gradient(135deg,#FAF9F6,#F0EEE8)',
+      'porcelain2':'linear-gradient(135deg,#EDE9DE,#DED8CA)',
     };
     dtGrid.innerHTML = DISPLAY_THEMES.map(t =>
       '<div class="theme-opt'+(S.displayTheme===t.id?' active':'')+'" data-dtid="'+t.id+'">' +
@@ -3259,7 +3529,7 @@ function renderSettings() {
   // Photo transition picker
   const photoTransPicker = document.getElementById('photo-trans-picker');
   if (photoTransPicker) {
-    const transOpts = [{id:'fade',name:'Fade'},{id:'slide',name:'Slide'},{id:'blur',name:'Blur'}];
+    const transOpts = [{id:'fade',name:'Fade'},{id:'slide',name:'Slide'},{id:'blur',name:'Blur'},{id:'zoom',name:'Zoom'}];
     photoTransPicker.innerHTML = transOpts.map(o =>
       '<div class="sens-opt'+((S.photoTransition||'fade')===o.id?' active':'')+'" data-trans="'+o.id+'">'+o.name+'</div>'
     ).join('');
@@ -3448,7 +3718,9 @@ function setLight(on) {
   document.getElementById('btn-light').classList.toggle('active', on);
   save();
   // Re-render unicode bg color if active
-  if ((S.bgMode || 'gradient') === 'unicode') renderUnicodeBg();
+  const bgm = S.bgMode || 'gradient';
+  if (bgm === 'unicode' || bgm === 'unicode-heavy' || bgm === 'unicode-large') renderUnicodeBg(bgm);
+  if (bgm === 'dither') renderDitherBg();
 }
 
 
@@ -3917,6 +4189,17 @@ function renderModeSwitcher() {
   const dot = document.getElementById('mode-dot');
   if (dot) dot.style.background = mode.color || 'var(--accent)';
 
+  // Show current department(s) in topbar
+  const deptLabel = document.getElementById('tb-dept-label');
+  if (deptLabel) {
+    const deptNames = (S.departments || []).map(id => {
+      const dp = ROLE_META.find(d => d.id === id);
+      return dp ? dp.name : id;
+    });
+    deptLabel.textContent = deptNames.length ? deptNames.join(', ') : '';
+    deptLabel.title = deptNames.length ? 'Departments: ' + deptNames.join(', ') : 'No department selected';
+  }
+
   const pop = document.getElementById('mode-pop');
   let html = S.modes.map(m => {
     const panelCount = (m.panels||[]).length;
@@ -4305,12 +4588,14 @@ function applyDisplayTheme() {
   const theme = S.displayTheme || 'default';
   document.body.dataset.display = theme;
   // Ivory is always light; all other display themes are dark (or honour the manual toggle)
-  if (theme === 'ivory') {
+  const lightThemes = ['ivory','porcelain1','porcelain2'];
+  const darkThemes = ['leather','ocean','arcade','retro','brown1','brown2','blue1','blue2'];
+  if (lightThemes.includes(theme)) {
     document.body.dataset.light = '1';
     S.light = true;
     const btn = document.getElementById('btn-light');
     if (btn) btn.classList.add('active');
-  } else if (theme === 'leather' || theme === 'ocean' || theme === 'arcade' || theme === 'retro') {
+  } else if (darkThemes.includes(theme)) {
     document.body.dataset.light = '0';
     S.light = false;
     const btn = document.getElementById('btn-light');
