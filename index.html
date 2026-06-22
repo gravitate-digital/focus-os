@@ -1406,11 +1406,13 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
 
     <div class="settings-group">
-      <div class="settings-group-label">Quotes</div>
+      <div class="settings-group-label">Quotes and Tips</div>
       <div class="settings-row">
-        <div class="settings-row-label">Show quotes<small>Cycling jokes and quotes at the bottom</small></div>
+        <div class="settings-row-label">Show quotes<small>Cycling tips and quotes at the bottom</small></div>
         <button class="toggle" id="quotes-toggle"></button>
       </div>
+      <div class="settings-note">Choose which categories rotate. All are on by default.</div>
+      <div id="quote-cat-grid"></div>
     </div>
 
     <div class="settings-group">
@@ -1952,6 +1954,8 @@ function applyBgMode() {
   if (mode === 'photos') {
     blobs.forEach(b => b.style.display = 'none');
     unicodeBg.style.opacity = '0';
+    ditherBg.style.opacity = '0';
+    photoDither.style.opacity = '0';
     currentPhotoIdx = pickRandomPhotoIdx();
     photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
     photoBg.style.opacity = '1';
@@ -2291,6 +2295,7 @@ const DEFAULT_STATE = {
   photoTransition: 'fade',
   showQuotes: true,
   waterReminder: false,
+  quoteCats: null, // null = all on; or array of enabled category IDs
   // Usage stats
   usage: {
     firstOpen: null,
@@ -2817,6 +2822,16 @@ function downloadBlob(blob) {
 
 /* -- RENDER: DAILY QUOTE (rotating with fade) -- */
 
+function getActiveQuotes() {
+  const cats = S.quoteCats; // null = all, or array of category keys
+  if (!cats) return QUOTES; // all on
+  const filtered = [];
+  cats.forEach(catId => {
+    if (QUOTE_CATEGORIES[catId]) filtered.push(...QUOTE_CATEGORIES[catId]);
+  });
+  return filtered.length ? filtered : QUOTES;
+}
+
 function renderQuote() {
   const el = document.getElementById('hero-quote');
   if (!el) return;
@@ -2826,27 +2841,30 @@ function renderQuote() {
     return;
   }
   el.style.display = '';
+  const activeQ = getActiveQuotes();
   // Pick initial quote based on day-of-year
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
   const dayOfYear = Math.floor((now - start) / 86400000);
-  quoteIdx = dayOfYear % QUOTES.length;
-  showQuote(el);
+  quoteIdx = dayOfYear % activeQ.length;
+  showQuote(el, activeQ);
   // Cycle every 25 seconds with fade
   if (quoteTimer) clearInterval(quoteTimer);
   quoteTimer = setInterval(() => cycleQuote(el), 25000);
 }
 
-function showQuote(el) {
+function showQuote(el, pool) {
+  pool = pool || getActiveQuotes();
   el.style.opacity = '1';
-  el.textContent = '\u201C' + QUOTES[quoteIdx] + '\u201D';
+  el.textContent = '\u201C' + pool[quoteIdx % pool.length] + '\u201D';
 }
 
 function cycleQuote(el) {
+  const pool = getActiveQuotes();
   el.style.opacity = '0';
   setTimeout(() => {
-    quoteIdx = (quoteIdx + 1) % QUOTES.length;
-    el.textContent = '\u201C' + QUOTES[quoteIdx] + '\u201D';
+    quoteIdx = (quoteIdx + 1) % pool.length;
+    el.textContent = '\u201C' + pool[quoteIdx] + '\u201D';
     el.style.opacity = '1';
   }, 800);
 }
@@ -3500,6 +3518,41 @@ function renderSettings() {
       renderQuote();
       renderSettings();
     };
+  }
+
+  // Quote category toggles
+  const quoteCatGrid = document.getElementById('quote-cat-grid');
+  if (quoteCatGrid) {
+    const catLabels = {
+      jokes: '\uD83D\uDE02 Jokes', quotes: '\uD83D\uDCAC Quotes', meta_ads: '\uD83D\uDCE3 Meta Ads Tips',
+      email_marketing: '\uD83D\uDCE8 Email Marketing', seo_tips: '\uD83D\uDD0D SEO Tips',
+      branding: '\uD83C\uDFA8 Branding', statistics: '\uD83D\uDCCA Statistics',
+      ai_tips: '\uD83E\uDD16 AI Tips', psychology: '\uD83E\uDDE0 Psychology of Buying',
+      digital_services: '\uD83C\uDF10 Digital Services',
+    };
+    const allCats = Object.keys(QUOTE_CATEGORIES);
+    const enabledCats = S.quoteCats || allCats; // null = all on
+    quoteCatGrid.innerHTML = allCats.map(catId => {
+      const on = enabledCats.includes(catId);
+      return '<div class="settings-row" style="padding:4px 0">' +
+        '<div class="settings-row-label" style="font-size:12px">' + (catLabels[catId] || catId) + '</div>' +
+        '<button class="toggle' + (on ? ' on' : '') + '" data-qcat="' + catId + '"></button></div>';
+    }).join('');
+    quoteCatGrid.querySelectorAll('.toggle').forEach(btn => {
+      btn.onclick = () => {
+        const catId = btn.dataset.qcat;
+        let cats = S.quoteCats ? [...S.quoteCats] : [...allCats];
+        if (cats.includes(catId)) {
+          cats = cats.filter(c => c !== catId);
+        } else {
+          cats.push(catId);
+        }
+        S.quoteCats = cats.length === allCats.length ? null : cats;
+        save();
+        renderQuote();
+        renderSettings();
+      };
+    });
   }
 
   // Texture toggle
