@@ -187,10 +187,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
 /* Hero clock */
 #hero-clock{font-size:82px;font-weight:100;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1;color:var(--tx);text-align:center;margin-bottom:4px;font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif}
-#hero-date{font-size:16px;color:var(--mu);font-weight:300;letter-spacing:-.01em;text-align:center;margin-bottom:20px}
+#hero-date{font-size:16px;color:var(--mu);font-weight:300;letter-spacing:-.01em;text-align:center;margin-bottom:14px}
 
 /* Hero One Thing card */
-#hero-onething{position:relative;width:100%;max-width:480px;padding:16px 20px;border-radius:16px;background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(40px) saturate(250%) brightness(1.06);-webkit-backdrop-filter:blur(40px) saturate(250%) brightness(1.06);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 16px rgba(0,0,0,.1);margin-bottom:8px;text-align:left;transition:opacity .3s}
+#hero-onething{position:relative;width:100%;max-width:480px;padding:16px 20px;border-radius:16px;background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(40px) saturate(250%) brightness(1.06);-webkit-backdrop-filter:blur(40px) saturate(250%) brightness(1.06);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 16px rgba(0,0,0,.1);margin-bottom:14px;text-align:left;transition:opacity .3s}
 #hero-onething::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.12) 0%,transparent 50%);pointer-events:none}
 .hero-ot-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
 .hero-ot-task{display:flex;align-items:flex-start;gap:14px;cursor:pointer}
@@ -578,6 +578,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-light="1"] .fr-role{background:rgba(237,233,222,.3)}
 [data-light="1"] .ig-task{background:rgba(237,233,222,.3)}
 [data-light="1"] .ig-custom{background:rgba(237,233,222,.3);border-color:rgba(0,25,61,.1);color:#00193D}
+[data-light="1"] .mic-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:rgba(0,0,0,.5)}
+[data-light="1"] .mic-btn:hover{background:rgba(0,0,0,.08);color:rgba(0,0,0,.7)}
 [data-light="1"] .inline-add{background:rgba(237,233,222,.3);border-color:rgba(0,25,61,.08);color:#00193D}
 [data-light="1"] .fr-input{background:rgba(237,233,222,.35);border-color:rgba(0,25,61,.1);color:#00193D}
 [data-light="1"] #side-panel{background:rgba(250,249,246,.94);border-left-color:rgba(0,25,61,.06)}
@@ -628,6 +630,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .ig-add-row .ig-custom{flex:1;margin-bottom:0}
 .ig-add-btn{padding:0 16px;border-radius:12px;background:rgba(106,167,255,.15);border:1px solid rgba(106,167,255,.25);color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s;white-space:nowrap}
 .ig-add-btn:hover{background:rgba(106,167,255,.25)}
+.mic-btn{width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s,border-color .15s;flex-shrink:0}
+.mic-btn:hover{background:rgba(255,255,255,.1);color:var(--tx)}
+.mic-btn.listening{background:rgba(255,80,80,.15);border-color:rgba(255,80,80,.3);color:#ff5050;animation:mic-pulse 1.2s ease-in-out infinite}
+@keyframes mic-pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
 /* Task priority badge in sidebar */
 .task-pri-badge{width:20px;height:20px;border-radius:5px;background:rgba(106,167,255,.15);border:1px solid rgba(106,167,255,.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--accent);font-family:var(--mono);cursor:pointer;flex-shrink:0}
@@ -831,7 +837,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .ig-section-label:first-child{margin-top:0}
 
 /* Hero next meeting preview */
-#hero-next-mtg{font-size:12px;color:var(--dim);text-align:center;margin-bottom:10px}
+#hero-next-mtg{font-size:12px;color:var(--dim);text-align:center;margin-bottom:14px}
 #hero-next-mtg .mtg-accent{color:var(--accent)}
 
 /* Dock tooltip */
@@ -865,10 +871,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* Tablet and below */
 @media (max-width: 1024px) {
   #hero-clock{font-size:60px}
-  #hero-date{font-size:14px;margin-bottom:16px}
-  #hero-onething{max-width:420px;padding:16px 20px}
+  #hero-date{font-size:14px;margin-bottom:12px}
+  #hero-onething{max-width:420px;padding:16px 20px;margin-bottom:12px}
   .hero-pri-text{font-size:15px}
-  #hero-focus{max-width:420px}
+  #hero-focus{max-width:420px;margin-bottom:12px}
   #dock-dept-bar{max-width:80vw}
   .dept-pill{font-size:9px;padding:3px 7px}
 }
@@ -887,12 +893,13 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
   #hero{padding:12px 12px 70px}
   #hero-clock{font-size:48px;margin-bottom:2px}
-  #hero-date{font-size:12px;margin-bottom:12px}
-  #hero-onething{max-width:100%;padding:14px 16px;border-radius:14px;margin-bottom:8px}
+  #hero-date{font-size:12px;margin-bottom:10px}
+  #hero-onething{max-width:100%;padding:14px 16px;border-radius:14px;margin-bottom:10px}
   .hero-ot-label{font-size:8px;margin-bottom:6px}
   .hero-pri-text{font-size:14px}
   .hero-pri-num{width:20px;height:20px;font-size:10px}
-  #hero-next-mtg{font-size:11px;margin-bottom:8px}
+  #hero-next-mtg{font-size:11px;margin-bottom:10px}
+  #hero-focus{margin-bottom:10px}
   #hero-focus{max-width:100%}
   .hero-fs-ring{width:48px;height:48px}
   .hero-fs-ring svg{width:48px;height:48px}
@@ -965,8 +972,9 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
   #hero{padding:8px 10px 60px}
   #hero-clock{font-size:40px}
-  #hero-date{font-size:11px;margin-bottom:10px}
-  #hero-onething{padding:12px 14px;border-radius:12px}
+  #hero-date{font-size:11px;margin-bottom:8px}
+  #hero-onething{padding:12px 14px;border-radius:12px;margin-bottom:8px}
+  #hero-focus{margin-bottom:8px}
   .hero-ot-label{font-size:7.5px}
   .hero-pri-text{font-size:13px}
   .hero-pri-num{width:18px;height:18px;font-size:9px;border-radius:6px}
@@ -1043,9 +1051,9 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
   #hero{padding:8px 16px 50px}
   #hero-clock{font-size:36px;margin-bottom:2px}
   #hero-date{font-size:11px;margin-bottom:8px}
-  #hero-onething{padding:10px 14px;margin-bottom:6px}
+  #hero-onething{padding:10px 14px;margin-bottom:8px}
   .hero-pri-text{font-size:13px}
-  #hero-focus{margin-bottom:0}
+  #hero-focus{margin-bottom:8px}
   .hero-fs-ring{width:36px;height:36px}
   .hero-fs-ring svg{width:36px;height:36px}
   #hero-quote{display:none}
@@ -1216,7 +1224,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
     <div id="tasks-list"></div>
     <div id="task-add-wrap" style="display:none">
-      <input id="task-add-input" placeholder="New task, then Enter..." spellcheck="false" style="width:100%;margin-top:8px;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--tx);font-size:12px;font-family:var(--font);outline:none" />
+      <div style="display:flex;gap:5px;align-items:center;margin-top:8px">
+        <input id="task-add-input" placeholder="New task, then Enter..." spellcheck="false" style="flex:1;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--tx);font-size:12px;font-family:var(--font);outline:none" />
+        <button class="mic-btn" id="sidebar-mic" title="Voice input" type="button" style="width:30px;height:30px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
+      </div>
       <button class="task-adhoc-toggle" id="sidebar-adhoc-toggle" style="margin-top:4px" title="Mark as unplanned">Ad hoc</button>
     </div>
   </div>
@@ -1543,7 +1554,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     <div class="ig-tasks" id="ig-tasks"></div>
     <div class="ig-or">or add something new</div>
     <div class="ig-add-row">
-      <input class="ig-custom" id="ig-custom" placeholder="Type a new priority..." spellcheck="false" />
+      <input class="ig-custom" id="ig-custom" placeholder="Type or speak a priority..." spellcheck="false" />
+      <button class="mic-btn" id="ig-mic" title="Voice input" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
       <button class="ig-add-btn" id="ig-add-btn">Add</button>
     </div>
     <button class="ig-go" id="ig-go" disabled>Lock It In</button>
@@ -2375,6 +2387,27 @@ function loadState() {
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} }
 
+/* -- VOICE INPUT (Web Speech API) -- */
+function startVoiceInput(inputEl, micBtn) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { inputEl.placeholder = 'Voice not supported in this browser'; return; }
+  const recognition = new SR();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-AU';
+  micBtn.classList.add('listening');
+  inputEl.placeholder = 'Listening...';
+  const prevVal = inputEl.value;
+  recognition.onresult = (e) => {
+    let transcript = '';
+    for (let i = 0; i < e.results.length; i++) transcript += e.results[i][0].transcript;
+    inputEl.value = prevVal ? prevVal + ' ' + transcript : transcript;
+  };
+  recognition.onerror = () => { micBtn.classList.remove('listening'); inputEl.placeholder = 'Type or speak a priority...'; };
+  recognition.onend = () => { micBtn.classList.remove('listening'); inputEl.placeholder = 'Type or speak a priority...'; inputEl.focus(); };
+  recognition.start();
+}
+
 function curLayout() { return LAYOUTS.find(l => l.id === S.layoutId) || LAYOUTS[8]; }
 
 function getPanel(idx) {
@@ -2409,7 +2442,16 @@ const ICON_OVERRIDES = {
   'canva.com':              'https://static.canva.com/static/images/favicon-1.ico',
   'notion.so':              'https://www.notion.so/images/favicon.ico',
   'linear.app':             'https://linear.app/favicon.ico',
-  'app.asana.com':          'https://d3ki9tyy5l5ruj.cloudfront.net/obj/favicon/asana-brand-favicon.ico',
+  'app.asana.com':          'https://asana.com/favicon.ico',
+  'business.facebook.com':  'https://www.facebook.com/images/fb_icon_325x325.png',
+  'ads.tiktok.com':         'https://www.tiktok.com/favicon.ico',
+  'ads.microsoft.com':      'https://ads.microsoft.com/favicon.ico',
+  'copilot.microsoft.com':  'https://copilot.microsoft.com/favicon.ico',
+  'creativecloud.adobe.com':'https://creativecloud.adobe.com/favicon.ico',
+  'advertising.amazon.com': 'https://advertising.amazon.com/favicon.ico',
+  'login.mailchimp.com':    'https://mailchimp.com/favicon.ico',
+  'app.callrail.com':       'https://app.callrail.com/favicon.ico',
+  'app.whatagraph.com':     'https://app.whatagraph.com/favicon.ico',
 };
 
 function getFavicon(url, size) {
@@ -2669,7 +2711,8 @@ function renderPriorities() {
 
   // Always show add input (especially when all done)
   html += '<div class="hero-pri-add" style="margin-top:10px;display:flex;gap:6px;align-items:center">' +
-    '<input class="hero-pri-input" id="hero-pri-input" placeholder="Add another priority..." spellcheck="false" style="flex:1;padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:var(--tx);font-size:13px;font-family:var(--font);outline:none">' +
+    '<input class="hero-pri-input" id="hero-pri-input" placeholder="Type or speak a priority..." spellcheck="false" style="flex:1;padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:var(--tx);font-size:13px;font-family:var(--font);outline:none">' +
+    '<button class="mic-btn" id="hero-mic" title="Voice input" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>' +
     '<button class="task-adhoc-toggle" id="hero-adhoc-toggle" title="Mark as unplanned">Ad hoc</button>' +
     '<button class="fs-btn pri" id="hero-pri-add-btn" style="flex-shrink:0;padding:8px 14px;font-size:12px">Add</button></div>';
 
@@ -2753,6 +2796,8 @@ function renderPriorities() {
     addInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doAdd(); } });
     addInput.addEventListener('focus', e => { addInput.style.borderColor = 'var(--accent)'; });
     addInput.addEventListener('blur', e => { addInput.style.borderColor = ''; });
+    const heroMic = document.getElementById('hero-mic');
+    if (heroMic) heroMic.addEventListener('click', () => startVoiceInput(addInput, heroMic));
   }
 }
 
@@ -4463,6 +4508,10 @@ function showIntentionGate() {
     }
   });
 
+  // Voice input for intention gate
+  const igMic = document.getElementById('ig-mic');
+  if (igMic) igMic.addEventListener('click', () => startVoiceInput(customInput, igMic));
+
   document.getElementById('ig-go').onclick = () => {
     S.topPriorities = [...selectedIds];
     S.oneThingId = S.topPriorities[0] || null;
@@ -5170,6 +5219,8 @@ function init() {
     if (e.key === 'Enter'){ e.preventDefault(); commitTask(); }
     else if (e.key === 'Escape'){ taskInput.value=''; const w=document.getElementById('task-add-wrap'); if(w) w.style.display='none'; }
   });
+  const sidebarMic = document.getElementById('sidebar-mic');
+  if (sidebarMic) sidebarMic.addEventListener('click', () => startVoiceInput(taskInput, sidebarMic));
   taskInput.addEventListener('blur', () => { if (taskInput.value.trim()) commitTask(); else { const w=document.getElementById('task-add-wrap'); if(w) w.style.display='none'; } });
   const sidebarAdhocToggle = document.getElementById('sidebar-adhoc-toggle');
   if (sidebarAdhocToggle) sidebarAdhocToggle.addEventListener('click', () => sidebarAdhocToggle.classList.toggle('on'));
