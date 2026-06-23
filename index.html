@@ -615,6 +615,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .hero-pri-text{font-size:16px;font-weight:600;letter-spacing:-.02em;line-height:1.35;color:var(--tx);text-wrap:pretty}
 .hero-pri-item.pri-done .hero-pri-text{text-decoration:line-through;opacity:.5}
 .hero-pri-done-msg{font-size:14px;color:var(--ok);font-weight:500;margin-top:10px;text-align:center}
+.hero-pri-slot{display:flex;align-items:center;gap:12px;padding:6px 0;cursor:pointer;transition:opacity .2s}
+.hero-pri-slot+.hero-pri-slot{border-top:1px solid rgba(255,255,255,.06)}
+.hero-pri-slot .hero-pri-num{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);color:rgba(255,255,255,.2)}
+.hero-pri-slot .hero-pri-placeholder{font-size:14px;color:rgba(255,255,255,.2);font-style:italic;font-weight:400}
+.hero-pri-item{transition:background .3s ease}
+.hero-pri-item .hero-pri-num{transition:background .3s ease,border-color .3s ease,color .3s ease}
+[data-light="1"] .hero-pri-slot .hero-pri-num{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.15)}
+[data-light="1"] .hero-pri-slot .hero-pri-placeholder{color:rgba(0,0,0,.2)}
+[data-light="1"] .hero-pri-slot+.hero-pri-slot{border-top-color:rgba(0,0,0,.05)}
 .hero-share-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--dim);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s}
 .hero-share-btn:hover{background:rgba(255,255,255,.1);color:var(--tx)}
 [data-light="1"] .hero-share-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.06)}
@@ -1144,7 +1153,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     </div>
 
     <div id="hero-onething" class="hero-enter">
-      <div class="hero-ot-label">Today's Priorities</div>
+      <div class="hero-ot-label">Todays Priorities</div>
       <div id="hero-onething-body"></div>
     </div>
 
@@ -1674,9 +1683,11 @@ const PRESETS = [
   {id:'gdigital',  name:'Gravitate Digital', url:'https://gravitatedigital.com.au',           emoji:'\u25B2', cat:'gravitate'},
   {id:'gstudio',   name:'Gravitate Studio',  url:'https://gravitatestudio.com.au',            emoji:'\u25C8', cat:'gravitate'},
   {id:'proposals', name:'Proposals',          url:'https://proposals.gravitatedigital.com.au', emoji:'\uD83D\uDCDD', cat:'gravitate'},
-  {id:'pace',      name:'Pace Timekeeping',  url:'https://pace-os.vercel.app',                emoji:'\u23F1\uFE0F', cat:'gravitate'},
+  {id:'pace',      name:'Pace Timekeeping',  url:'https://pace-beige.vercel.app',             emoji:'\u23F1\uFE0F', cat:'gravitate'},
   {id:'space',     name:'Gravitate Space',   url:'https://gravitatespace.com.au',             emoji:'\uD83C\uDFE2', cat:'gravitate'},
   {id:'gfocus',    name:'Focus',             url:'https://focus-os-snowy-nu.vercel.app',     emoji:'\u25CE', cat:'gravitate'},
+  {id:'wellness',  name:'Wellness',          url:'https://gravitate-wellness.netlify.app',    emoji:'\uD83C\uDF3F', cat:'gravitate'},
+  {id:'workflow',  name:'Workflow',           url:'https://workflow.gravitatedigital.com.au',  emoji:'\u{1F4CA}', cat:'gravitate'},
   // Dev
   {id:'linear',    name:'Linear',             url:'https://linear.app',                        emoji:'\uD83D\uDD37', cat:'dev'},
 ];
@@ -2442,7 +2453,7 @@ const ICON_OVERRIDES = {
   'canva.com':              'https://static.canva.com/static/images/favicon-1.ico',
   'notion.so':              'https://www.notion.so/images/favicon.ico',
   'linear.app':             'https://linear.app/favicon.ico',
-  'app.asana.com':          'https://asana.com/favicon.ico',
+  'app.asana.com':          'https://brand.asana.biz/image/upload/f_auto:image,fl_preserve_transparency/v1696462484/asana_symbol_96x96.png',
   'business.facebook.com':  'https://www.facebook.com/images/fb_icon_325x325.png',
   'ads.tiktok.com':         'https://www.tiktok.com/favicon.ico',
   'ads.microsoft.com':      'https://ads.microsoft.com/favicon.ico',
@@ -2685,20 +2696,36 @@ function renderPriorities() {
   S.topPriorities = (S.topPriorities || []).filter(id => S.tasks.find(t => t.id === id));
   const priorities = S.topPriorities.map(id => S.tasks.find(t => t.id === id)).filter(Boolean);
 
-  if (!priorities.length) {
-    el.innerHTML = '<div class="hero-ot-empty">What will you focus on today?</div>' +
-      '<div class="hero-ot-hint">Open widgets (W) and tap + on a task to set your priorities.</div>';
-    return;
-  }
+  const MAX_PRIORITIES = 5;
+  const MIN_SLOTS = 3;
 
-  const allDone = priorities.every(t => t.done);
+  const allDone = priorities.length > 0 && priorities.every(t => t.done);
   if (!allDone) S._allDonePlayed = false;
 
-  let html = priorities.map((t, i) =>
-    '<div class="hero-pri-item'+(t.done?' pri-done':'')+'" data-tid="'+t.id+'">' +
+  let html = priorities.map((t, i) => {
+    // If task text contains a URL, extract it and make the text linkable
+    const urlMatch = t.text.match(/(https?:\/\/\S+)/);
+    let textHtml;
+    if (urlMatch) {
+      const url = urlMatch[1];
+      const label = t.text.replace(url, '').trim() || 'Open link';
+      textHtml = '<div class="hero-pri-text"><a href="'+esc(url)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:inherit;text-decoration:none">'+esc(label || t.text)+' <span style="font-size:11px;opacity:.5">\u2197</span></a></div>';
+    } else {
+      textHtml = '<div class="hero-pri-text">'+esc(t.text)+'</div>';
+    }
+    return '<div class="hero-pri-item'+(t.done?' pri-done':'')+'" data-tid="'+t.id+'">' +
     '<div class="hero-pri-num">'+(t.done?'\u2713':(i+1))+'</div>' +
-    '<div class="hero-pri-text">'+esc(t.text)+'</div></div>'
-  ).join('');
+    textHtml+'</div>';
+  }).join('');
+
+  // Show empty placeholder slots up to MIN_SLOTS
+  const emptySlots = Math.max(0, MIN_SLOTS - priorities.length);
+  for (let s = 0; s < emptySlots; s++) {
+    const num = priorities.length + s + 1;
+    html += '<div class="hero-pri-slot" data-slot="'+num+'">' +
+      '<div class="hero-pri-num">'+num+'</div>' +
+      '<div class="hero-pri-placeholder">Add priority '+num+'...</div></div>';
+  }
 
   if (allDone) {
     html += '<div class="hero-pri-done-msg">All priorities done. What a day.</div>';
@@ -2709,8 +2736,9 @@ function renderPriorities() {
     }
   }
 
-  // Always show add input (especially when all done)
-  html += '<div class="hero-pri-add" style="margin-top:10px;display:flex;gap:6px;align-items:center">' +
+  // Show add input unless at max (5)
+  const atMax = priorities.length >= MAX_PRIORITIES;
+  html += '<div class="hero-pri-add" style="margin-top:10px;'+(atMax?'display:none':'display:flex')+';gap:6px;align-items:center">' +
     '<input class="hero-pri-input" id="hero-pri-input" placeholder="Type or speak a priority..." spellcheck="false" style="flex:1;padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:var(--tx);font-size:13px;font-family:var(--font);outline:none">' +
     '<button class="mic-btn" id="hero-mic" title="Voice input" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>' +
     '<button class="task-adhoc-toggle" id="hero-adhoc-toggle" title="Mark as unplanned">Ad hoc</button>' +
@@ -2721,9 +2749,12 @@ function renderPriorities() {
     '<button class="hero-share-btn" id="share-priorities-btn">' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
     'Share</button>' +
-    '<a class="asana-open-link" href="https://app.asana.com/0/my-tasks" target="_blank" rel="noopener" title="Opens Asana in a new tab. Asana sync requires a login and is coming in a future update.">' +
+    '<a class="asana-open-link" href="https://app.asana.com/0/search" target="_blank" rel="noopener" title="Search your Asana tasks">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2" stroke-linecap="round"/></svg>' +
+    'Search Asana</a>' +
+    '<a class="asana-open-link" href="https://app.asana.com/0/my-tasks" target="_blank" rel="noopener" title="View your Asana tasks">' +
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
-    'Open in Asana</a></div>';
+    'My Tasks</a></div>';
 
   el.innerHTML = html;
 
@@ -2779,10 +2810,19 @@ function renderPriorities() {
   if (adhocToggle) {
     adhocToggle.addEventListener('click', () => { adhocToggle.classList.toggle('on'); });
   }
+  // Clicking an empty slot focuses the input
+  el.querySelectorAll('.hero-pri-slot').forEach(slot => {
+    slot.addEventListener('click', () => {
+      const inp = document.getElementById('hero-pri-input');
+      if (inp) inp.focus();
+    });
+  });
+
   if (addBtn && addInput) {
     const doAdd = () => {
       const txt = addInput.value.trim();
       if (!txt) return;
+      if ((S.topPriorities || []).length >= 5) return; // Max 5
       const id = Math.max(0, ...S.tasks.map(t=>t.id)) + 1;
       const isAdhoc = adhocToggle ? adhocToggle.classList.contains('on') : false;
       S.tasks.push({id, text: txt, done: false, adhoc: isAdhoc});
@@ -2823,7 +2863,7 @@ function sharePriorities() {
   // Title
   ctx.fillStyle = '#00193D';
   ctx.font = '600 20px -apple-system, sans-serif';
-  ctx.fillText("Today's Priorities", 40, 130);
+  ctx.fillText("Todays Priorities", 40, 130);
   // Priorities
   const priorities = S.topPriorities.map(id => S.tasks.find(t => t.id === id)).filter(Boolean);
   priorities.forEach((t, i) => {
@@ -2843,7 +2883,7 @@ function sharePriorities() {
   canvas.toBlob(function(blob) {
     if (navigator.share && navigator.canShare) {
       const file = new File([blob], 'priorities.png', {type: 'image/png'});
-      const shareData = {files: [file], title: "Today's Priorities"};
+      const shareData = {files: [file], title: "Todays Priorities"};
       if (navigator.canShare(shareData)) {
         navigator.share(shareData).catch(function() { downloadBlob(blob); });
       } else {
@@ -3101,7 +3141,7 @@ function renderTasks() {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const id = +btn.dataset.tid;
-      if (!S.topPriorities.includes(id)) {
+      if (!S.topPriorities.includes(id) && S.topPriorities.length < 5) {
         S.topPriorities.push(id);
         S.oneThingId = S.topPriorities[0] || null;
         save(); renderTasks(); renderPriorities();
