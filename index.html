@@ -1542,7 +1542,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div style="margin-bottom:6px">Focus stores everything in your browser's localStorage. Nothing is sent to any server, database, or third party. No cookies. No tracking. No analytics.</div>
         <div style="margin-bottom:6px"><strong style="color:var(--tx)">App links</strong> open external sites (Asana, Google, etc.) in new tabs. Those sites have their own login and security. Focus does not access, read, or store your credentials for any external service.</div>
         <div style="margin-bottom:6px"><strong style="color:var(--tx)">Asana task sync</strong> is not available in this version. Pulling tasks from Asana requires OAuth authentication with a backend server to handle tokens securely. This will be available when Focus moves to a proper app build (Next.js + Supabase). For now, tasks are managed manually within Focus.</div>
-        <div><strong style="color:var(--tx)">To clear all data:</strong> use the Reset button below, or run <code style="font-size:11px;background:rgba(255,255,255,.08);padding:1px 5px;border-radius:3px">localStorage.removeItem('focos_v11')</code> in the browser console.</div>
+        <div><strong style="color:var(--tx)">To clear all data:</strong> use the Reset button below, or run <code style="font-size:11px;background:rgba(255,255,255,.08);padding:1px 5px;border-radius:3px">localStorage.removeItem('focos_v12')</code> in the browser console.</div>
       </div>
     </div>
 
@@ -1672,7 +1672,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
    Gravitate AI Arm . v13 (Momentum)
 ====================================== */
 
-const KEY = 'focos_v11';
+const KEY = 'focos_v12';
 
 const EMOJIS = [
   '\u25CE','\u25B2','\u25C8','\u273A','\u25C9','\u2302','\u2605','\u2606','\u25CF','\u25CB',
@@ -2212,7 +2212,7 @@ function renderPhotoDitherOverlay() {
 /* -- ROLE PRESETS -- */
 const ROLE_PRESETS = {
   account_manager: {
-    defaultApps: ['google','gmail','gchat','calendar','asana','loom','ga4','whatagraph','callrail','gads','meta','sheets'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','ga4','whatagraph','callrail','gads','meta','sheets','meet','claude','proposals'],
     modes: [
       {id:'morning',name:'Morning',desc:'Email, calendar, tasks',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'},{preset:'gchat'}],layout:'quad'},
       {id:'client',name:'Client Work',desc:'Reporting, calls, tasks',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'callrail'},{preset:'asana'},{preset:'whatagraph'}],layout:'quad'},
@@ -2221,7 +2221,7 @@ const ROLE_PRESETS = {
     rocks:[], tasks:[],
   },
   sales: {
-    defaultApps: ['google','gmail','gchat','calendar','asana','loom','callrail','meet','sheets','linkedin'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','callrail','meet','sheets','linkedin','claude','proposals'],
     modes: [
       {id:'morning',name:'Morning',desc:'Email, calendar, CRM',color:'#6DAAFF',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'},{preset:'gchat'}],layout:'quad'},
       {id:'calls',name:'Calls',desc:'CallRail, Meet',color:'#6DAAFF',panels:[{preset:'callrail'},{preset:'meet'},{preset:'gmail'}],layout:'feat3'},
@@ -2230,7 +2230,7 @@ const ROLE_PRESETS = {
     rocks:[], tasks:[],
   },
   creative: {
-    defaultApps: ['google','gmail','gchat','calendar','asana','loom','figma','canva','adobe','drive','webflow'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','figma','canva','adobe','drive','webflow','claude-d'],
     modes: [
       {id:'design',name:'Design',desc:'Figma, Canva, Drive',color:'#6DAAFF',panels:[{preset:'figma'},{preset:'canva'},{preset:'drive'}],layout:'feat3'},
       {id:'review',name:'Review',desc:'Loom, Asana',color:'#6DAAFF',panels:[{preset:'loom'},{preset:'asana'},{preset:'gchat'},{preset:'figma'}],layout:'quad'},
@@ -2275,7 +2275,7 @@ const ROLE_PRESETS = {
     rocks:[], tasks:[],
   },
   leadership: {
-    defaultApps: ['google','gmail','gchat','calendar','asana','loom','ga4','whatagraph','sheets','meet'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','ga4','whatagraph','sheets','meet','claude','proposals','pace','workflow'],
     modes: [
       {id:'strategy',name:'Strategy',desc:'Metrics, Sheets',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'whatagraph'},{preset:'sheets'}],layout:'feat3'},
       {id:'ops',name:'Operations',desc:'Tasks, team',color:'#6DAAFF',panels:[{preset:'asana'},{preset:'gchat'},{preset:'sheets'},{preset:'meet'}],layout:'quad'},
