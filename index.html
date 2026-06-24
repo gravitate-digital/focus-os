@@ -621,9 +621,16 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .hero-pri-slot .hero-pri-placeholder{font-size:14px;color:rgba(255,255,255,.2);font-style:italic;font-weight:400}
 .hero-pri-item{transition:background .3s ease}
 .hero-pri-item .hero-pri-num{transition:background .3s ease,border-color .3s ease,color .3s ease}
+.hero-pri-item.pri-lockin{animation:priLockin .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes priLockin{0%{opacity:0;transform:translateY(8px) scale(.95)}30%{opacity:1;transform:translateY(-2px) scale(1.02)}50%{transform:translateY(0) scale(1)}70%{box-shadow:0 0 0 3px rgba(106,167,255,.25)}100%{box-shadow:0 0 0 0 transparent;transform:none}}
+.hero-pri-item.pri-lockin .hero-pri-num{animation:priNumPop .4s .1s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes priNumPop{0%{transform:scale(.5);opacity:.3}50%{transform:scale(1.3)}100%{transform:scale(1);opacity:1}}
+.hero-pri-coach{font-size:11px;color:rgba(255,180,80,.7);font-style:italic;margin-top:8px;line-height:1.4;text-align:center;animation:coachFade .6s ease}
+@keyframes coachFade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 [data-light="1"] .hero-pri-slot .hero-pri-num{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08);color:rgba(0,0,0,.15)}
 [data-light="1"] .hero-pri-slot .hero-pri-placeholder{color:rgba(0,0,0,.2)}
 [data-light="1"] .hero-pri-slot+.hero-pri-slot{border-top-color:rgba(0,0,0,.05)}
+[data-light="1"] .hero-pri-coach{color:rgba(180,120,40,.7)}
 .hero-share-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--dim);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s}
 .hero-share-btn:hover{background:rgba(255,255,255,.1);color:var(--tx)}
 [data-light="1"] .hero-share-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.06)}
@@ -1649,6 +1656,10 @@ const PRESETS = [
   {id:'claude-d',  name:'Claude Design',     url:'https://claude.ai/new',                     emoji:'\uD83C\uDFA8', cat:'ai'},
   {id:'claude-c',  name:'Claude Code',       url:'https://claude.ai/code',                    emoji:'\u2328\uFE0F', cat:'ai'},
   {id:'copilot',   name:'Copilot',           url:'https://copilot.microsoft.com',             emoji:'\uD83E\uDD16', cat:'ai'},
+  {id:'higgsfield',name:'Higgsfield',        url:'https://higgsfield.ai',                     emoji:'\uD83C\uDFAC', cat:'ai'},
+  {id:'vercel',    name:'Vercel',            url:'https://vercel.com',                        emoji:'\u25B2', cat:'ai'},
+  {id:'netlify',   name:'Netlify',           url:'https://app.netlify.com',                   emoji:'\uD83D\uDE80', cat:'ai'},
+  {id:'supabase',  name:'Supabase',          url:'https://supabase.com/dashboard',            emoji:'\u26A1', cat:'ai'},
   // Design
   {id:'figma',     name:'Figma',             url:'https://figma.com',                         emoji:'\u270F\uFE0F', cat:'design'},
   {id:'canva',     name:'Canva',             url:'https://canva.com',                         emoji:'\uD83D\uDD8C\uFE0F', cat:'design'},
@@ -1664,13 +1675,21 @@ const PRESETS = [
   {id:'tiktok',    name:'TikTok Ads',        url:'https://ads.tiktok.com',                    emoji:'\uD83C\uDFB5', cat:'ads'},
   {id:'bing',      name:'Bing Ads',          url:'https://ads.microsoft.com',                 emoji:'\uD83D\uDD0D', cat:'ads'},
   {id:'amazon',    name:'Amazon Ads',        url:'https://advertising.amazon.com',            emoji:'\uD83D\uDCE6', cat:'ads'},
+  {id:'liads',     name:'LinkedIn Ads',      url:'https://www.linkedin.com/campaignmanager',  emoji:'\uD83D\uDCBC', cat:'ads'},
   // SEO
   {id:'semrush',   name:'SEMrush',           url:'https://www.semrush.com',                   emoji:'\uD83D\uDD0E', cat:'seo'},
   {id:'sfrog',     name:'Screaming Frog',    url:'https://www.screamingfrog.co.uk',           emoji:'\uD83D\uDC38', cat:'seo'},
+  {id:'moz',       name:'Moz',              url:'https://moz.com/login',                     emoji:'\uD83D\uDCCA', cat:'seo'},
+  {id:'ahrefs',    name:'Ahrefs',            url:'https://app.ahrefs.com',                    emoji:'\uD83D\uDD17', cat:'seo'},
   // Email Marketing
   {id:'klaviyo',   name:'Klaviyo',            url:'https://www.klaviyo.com/login',             emoji:'\uD83D\uDCE8', cat:'email'},
   {id:'mailchimp', name:'Mailchimp',          url:'https://login.mailchimp.com',               emoji:'\uD83D\uDC35', cat:'email'},
   {id:'zoho',      name:'Zoho',              url:'https://mail.zoho.com',                     emoji:'\u2709\uFE0F', cat:'email'},
+  // Website
+  {id:'wordpress', name:'WordPress',          url:'https://wordpress.com',                     emoji:'\uD83D\uDCDD', cat:'website'},
+  {id:'cloudflare',name:'Cloudflare',         url:'https://dash.cloudflare.com',               emoji:'\u2601\uFE0F', cat:'website'},
+  {id:'godaddy',   name:'GoDaddy',            url:'https://dcc.godaddy.com',                   emoji:'\uD83C\uDF10', cat:'website'},
+  {id:'gtm',       name:'Tag Manager',        url:'https://tagmanager.google.com',              emoji:'\uD83C\uDFF7\uFE0F', cat:'website'},
   // Call Tracking
   {id:'callrail',  name:'CallRail',           url:'https://app.callrail.com',                  emoji:'\uD83D\uDCDE', cat:'crm'},
   // Social
@@ -1688,16 +1707,14 @@ const PRESETS = [
   {id:'gfocus',    name:'Focus',             url:'https://focus-os-snowy-nu.vercel.app',     emoji:'\u25CE', cat:'gravitate'},
   {id:'wellness',  name:'Wellness',          url:'https://gravitate-wellness.netlify.app',    emoji:'\uD83C\uDF3F', cat:'gravitate'},
   {id:'workflow',  name:'Workflow',           url:'https://workflow.gravitatedigital.com.au',  emoji:'\u{1F4CA}', cat:'gravitate'},
-  // Dev
-  {id:'linear',    name:'Linear',             url:'https://linear.app',                        emoji:'\uD83D\uDD37', cat:'dev'},
 ];
 
 const CAT_LABELS = {
   gravitate:'Gravitate Apps', core:'Core', ai:'AI', design:'Design',
   analytics:'Reporting', ads:'Paid Ads', seo:'SEO', email:'Email Marketing',
-  crm:'Call Tracking', social:'Social', scheduling:'Scheduling', dev:'Development'
+  website:'Website', crm:'Call Tracking', social:'Social', scheduling:'Scheduling'
 };
-const CAT_ORDER = ['gravitate','core','ai','design','analytics','ads','seo','email','crm','social','scheduling','dev'];
+const CAT_ORDER = ['gravitate','core','ai','design','analytics','ads','seo','email','website','crm','social','scheduling'];
 
 /* -- LAYOUT CATALOG (kept for mode switching) -- */
 const LAYOUTS = [
@@ -2177,7 +2194,7 @@ const ROLE_PRESETS = {
     rocks:[], tasks:[],
   },
   seo: {
-    defaultApps: ['google','gmail','gchat','calendar','asana','loom','semrush','sfrog','ga4','gsc','sheets'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','semrush','sfrog','moz','ahrefs','ga4','gsc','sheets'],
     modes: [
       {id:'audit',name:'Audit',desc:'SEMrush, Screaming Frog',color:'#6DAAFF',panels:[{preset:'semrush'},{preset:'sfrog'},{preset:'ga4'}],layout:'feat3'},
       {id:'report',name:'Reporting',desc:'Analytics, Console',color:'#6DAAFF',panels:[{preset:'ga4'},{preset:'gsc'},{preset:'sheets'},{preset:'asana'}],layout:'quad'},
@@ -2186,7 +2203,7 @@ const ROLE_PRESETS = {
     rocks:[], tasks:[],
   },
   paid_media: {
-    defaultApps: ['google','gmail','gchat','calendar','asana','loom','gads','meta','tiktok','bing','amazon','ga4','whatagraph','sheets'],
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','gads','meta','tiktok','bing','amazon','liads','ga4','whatagraph','sheets'],
     modes: [
       {id:'campaigns',name:'Campaigns',desc:'Ad platforms',color:'#6DAAFF',panels:[{preset:'gads'},{preset:'meta'},{preset:'tiktok'},{preset:'ga4'}],layout:'quad'},
       {id:'report',name:'Reporting',desc:'Whatagraph, Analytics',color:'#6DAAFF',panels:[{preset:'whatagraph'},{preset:'ga4'},{preset:'sheets'}],layout:'feat3'},
@@ -2230,11 +2247,29 @@ const ROLE_PRESETS = {
     ],
     rocks:[], tasks:[],
   },
-  developer: {
-    defaultApps: ['google','gmail','gchat','calendar','asana','loom','linear','claude','claude-c','figma','drive','chatgpt'],
+  website: {
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','webflow','wordpress','figma','cloudflare','godaddy','gsc','gtm','ga4'],
     modes: [
-      {id:'deep',name:'Deep Work',desc:'Code, docs, Linear',color:'#6DAAFF',panels:[{preset:'linear'},{preset:'claude-c'}],layout:'duoV'},
-      {id:'collab',name:'Collab',desc:'Chat, Figma, Linear',color:'#6DAAFF',panels:[{preset:'gchat'},{preset:'figma'},{preset:'linear'},{preset:'asana'}],layout:'quad'},
+      {id:'build',name:'Build',desc:'Webflow, WordPress, Figma',color:'#6DAAFF',panels:[{preset:'webflow'},{preset:'figma'},{preset:'wordpress'}],layout:'feat3'},
+      {id:'launch',name:'Launch',desc:'DNS, Cloudflare, GTM',color:'#6DAAFF',panels:[{preset:'cloudflare'},{preset:'godaddy'},{preset:'gtm'},{preset:'gsc'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'asana'}],layout:'trio'},
+    ],
+    rocks:[], tasks:[],
+  },
+  ai: {
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','claude','claude-c','claude-d','chatgpt','copilot','higgsfield','vercel','netlify','supabase'],
+    modes: [
+      {id:'build',name:'Build',desc:'Claude, Vercel, Supabase',color:'#6DAAFF',panels:[{preset:'claude-c'},{preset:'vercel'},{preset:'supabase'}],layout:'feat3'},
+      {id:'create',name:'Create',desc:'Claude, ChatGPT, Higgsfield',color:'#6DAAFF',panels:[{preset:'claude-d'},{preset:'chatgpt'},{preset:'higgsfield'},{preset:'copilot'}],layout:'quad'},
+      {id:'admin',name:'Admin',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'gchat'}],layout:'trio'},
+    ],
+    rocks:[], tasks:[],
+  },
+  developer: {
+    defaultApps: ['google','gmail','gchat','calendar','asana','loom','claude','claude-c','figma','drive','chatgpt','vercel','netlify','supabase'],
+    modes: [
+      {id:'deep',name:'Deep Work',desc:'Code, Claude, Vercel',color:'#6DAAFF',panels:[{preset:'claude-c'},{preset:'vercel'}],layout:'duoV'},
+      {id:'collab',name:'Collab',desc:'Chat, Figma, Asana',color:'#6DAAFF',panels:[{preset:'gchat'},{preset:'figma'},{preset:'supabase'},{preset:'asana'}],layout:'quad'},
       {id:'admin',name:'Admin',desc:'Email, calendar',color:'#ffd86b',panels:[{preset:'gmail'},{preset:'calendar'},{preset:'gchat'}],layout:'trio'},
     ],
     rocks:[], tasks:[],
@@ -2254,13 +2289,15 @@ const ROLE_META = [
   {id:'account_manager', name:'Account Manager', icon:'\u{1F4CA}', desc:'Reporting, budgets, client management'},
   {id:'sales',           name:'Sales',           icon:'\u{1F4DE}', desc:'Pipeline, outreach, meetings'},
   {id:'creative',        name:'Creative / Design',icon:'\u{1F3A8}', desc:'Design, content, briefs'},
-  {id:'seo',             name:'SEO',             icon:'\u{1F50E}', desc:'Rankings, audits, keyword research'},
-  {id:'paid_media',      name:'Paid Media',      icon:'\u{1F4B0}', desc:'Google, Meta, TikTok, Bing, Amazon'},
+  {id:'seo',             name:'SEO',             icon:'\u{1F50E}', desc:'Rankings, audits, Moz, Ahrefs'},
+  {id:'paid_media',      name:'Paid Media',      icon:'\u{1F4B0}', desc:'Google, Meta, TikTok, LinkedIn Ads'},
   {id:'social_media',    name:'Social Media',    icon:'\u{1F4F1}', desc:'Content, engagement, scheduling'},
   {id:'email_marketing', name:'Email Marketing', icon:'\u{1F4E7}', desc:'Klaviyo, Mailchimp, campaigns'},
-  {id:'studio',          name:'Studio',          icon:'\u{1F3AC}', desc:'Photo, video, Acuity, Webflow'},
+  {id:'website',         name:'Website',         icon:'\u{1F310}', desc:'Webflow, WordPress, DNS, GTM'},
+  {id:'studio',          name:'Studio',          icon:'\u{1F3AC}', desc:'Photo, video, Acuity, Adobe'},
+  {id:'ai',              name:'AI',              icon:'\u{1F916}', desc:'Claude, ChatGPT, Higgsfield, Vercel'},
   {id:'leadership',      name:'Leadership',      icon:'\u{1F3AF}', desc:'Strategy, metrics, team health'},
-  {id:'developer',       name:'Developer',       icon:'\u{1F4BB}', desc:'Code, sprints, PRs, documentation'},
+  {id:'developer',       name:'Developer',       icon:'\u{1F4BB}', desc:'Code, Claude Code, Vercel, Supabase'},
   {id:'custom',          name:'Custom',          icon:'\u2699\uFE0F', desc:'Set it up yourself'},
 ];
 
@@ -2452,7 +2489,6 @@ const ICON_OVERRIDES = {
   'figma.com':              'https://static.figma.com/app/icon/1/favicon.png',
   'canva.com':              'https://static.canva.com/static/images/favicon-1.ico',
   'notion.so':              'https://www.notion.so/images/favicon.ico',
-  'linear.app':             'https://linear.app/favicon.ico',
   'app.asana.com':          'https://brand.asana.biz/image/upload/f_auto:image,fl_preserve_transparency/v1696462484/asana_symbol_96x96.png',
   'business.facebook.com':  'https://www.facebook.com/images/fb_icon_325x325.png',
   'ads.tiktok.com':         'https://www.tiktok.com/favicon.ico',
@@ -2463,6 +2499,16 @@ const ICON_OVERRIDES = {
   'login.mailchimp.com':    'https://mailchimp.com/favicon.ico',
   'app.callrail.com':       'https://app.callrail.com/favicon.ico',
   'app.whatagraph.com':     'https://app.whatagraph.com/favicon.ico',
+  'www.linkedin.com':       'https://static.licdn.com/aero-v1/sc/h/akt4ae504epesldzj74dzred8',
+  'vercel.com':             'https://vercel.com/favicon.ico',
+  'app.netlify.com':        'https://app.netlify.com/favicon.ico',
+  'supabase.com':           'https://supabase.com/favicon/favicon-96x96.png',
+  'higgsfield.ai':          'https://higgsfield.ai/favicon.ico',
+  'moz.com':                'https://moz.com/favicon.ico',
+  'app.ahrefs.com':         'https://app.ahrefs.com/favicon.ico',
+  'dash.cloudflare.com':    'https://dash.cloudflare.com/favicon.ico',
+  'tagmanager.google.com':  'https://tagmanager.google.com/favicon.ico',
+  'www.klaviyo.com':        'https://www.klaviyo.com/favicon.ico',
 };
 
 function getFavicon(url, size) {
@@ -2696,8 +2742,8 @@ function renderPriorities() {
   S.topPriorities = (S.topPriorities || []).filter(id => S.tasks.find(t => t.id === id));
   const priorities = S.topPriorities.map(id => S.tasks.find(t => t.id === id)).filter(Boolean);
 
-  const MAX_PRIORITIES = 5;
   const MIN_SLOTS = 3;
+  const COACH_THRESHOLD = 5;
 
   const allDone = priorities.length > 0 && priorities.every(t => t.done);
   if (!allDone) S._allDonePlayed = false;
@@ -2727,6 +2773,18 @@ function renderPriorities() {
       '<div class="hero-pri-placeholder">Add priority '+num+'...</div></div>';
   }
 
+  // Coaching nudges when too many priorities
+  if (priorities.length > COACH_THRESHOLD) {
+    const nudges = [
+      'Having too many priorities is having no priorities.',
+      'Can you consolidate any of these? Fewer = sharper.',
+      'Real talk: which 3 of these would move the needle most?',
+      'You\'ve got '+priorities.length+' priorities. That\'s a to-do list, not a focus list.',
+    ];
+    const nudge = nudges[Math.min(priorities.length - COACH_THRESHOLD - 1, nudges.length - 1)];
+    html += '<div class="hero-pri-coach">'+nudge+'</div>';
+  }
+
   if (allDone) {
     html += '<div class="hero-pri-done-msg">All priorities done. What a day.</div>';
     // Play Halo victory chord when all done (only once per completion)
@@ -2736,9 +2794,8 @@ function renderPriorities() {
     }
   }
 
-  // Show add input unless at max (5)
-  const atMax = priorities.length >= MAX_PRIORITIES;
-  html += '<div class="hero-pri-add" style="margin-top:10px;'+(atMax?'display:none':'display:flex')+';gap:6px;align-items:center">' +
+  // Always show add input
+  html += '<div class="hero-pri-add" style="margin-top:10px;display:flex;gap:6px;align-items:center">' +
     '<input class="hero-pri-input" id="hero-pri-input" placeholder="Type or speak a priority..." spellcheck="false" style="flex:1;padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:var(--tx);font-size:13px;font-family:var(--font);outline:none">' +
     '<button class="mic-btn" id="hero-mic" title="Voice input" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>' +
     '<button class="task-adhoc-toggle" id="hero-adhoc-toggle" title="Mark as unplanned">Ad hoc</button>' +
@@ -2822,7 +2879,6 @@ function renderPriorities() {
     const doAdd = () => {
       const txt = addInput.value.trim();
       if (!txt) return;
-      if ((S.topPriorities || []).length >= 5) return; // Max 5
       const id = Math.max(0, ...S.tasks.map(t=>t.id)) + 1;
       const isAdhoc = adhocToggle ? adhocToggle.classList.contains('on') : false;
       S.tasks.push({id, text: txt, done: false, adhoc: isAdhoc});
@@ -2831,6 +2887,11 @@ function renderPriorities() {
       addInput.value = '';
       if (adhocToggle) adhocToggle.classList.remove('on');
       save(); renderTasks(); renderPriorities();
+      // Lock-in animation on the new item
+      const newItem = el.querySelector('.hero-pri-item[data-tid="'+id+'"]');
+      if (newItem) { newItem.classList.add('pri-lockin'); newItem.addEventListener('animationend', () => newItem.classList.remove('pri-lockin'), {once:true}); }
+      // Lock-in sound
+      if (!S.soundMuted) { const a = new Audio('sounds/teamate_gained.mp3'); a.volume = 0.25; a.play().catch(() => {}); }
     };
     addBtn.addEventListener('click', doAdd);
     addInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doAdd(); } });
@@ -3141,10 +3202,14 @@ function renderTasks() {
     btn.addEventListener('click', e => {
       e.stopPropagation();
       const id = +btn.dataset.tid;
-      if (!S.topPriorities.includes(id) && S.topPriorities.length < 5) {
+      if (!S.topPriorities.includes(id)) {
         S.topPriorities.push(id);
         S.oneThingId = S.topPriorities[0] || null;
         save(); renderTasks(); renderPriorities();
+        // Lock-in animation
+        const heroBody = document.getElementById('hero-onething-body');
+        if (heroBody) { const ni = heroBody.querySelector('.hero-pri-item[data-tid="'+id+'"]'); if (ni) { ni.classList.add('pri-lockin'); ni.addEventListener('animationend', () => ni.classList.remove('pri-lockin'), {once:true}); } }
+        if (!S.soundMuted) { const a = new Audio('sounds/teamate_gained.mp3'); a.volume = 0.25; a.play().catch(() => {}); }
       }
     });
   });
