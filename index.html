@@ -185,6 +185,25 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .pos-btn:hover{background:rgba(255,255,255,.12);color:var(--tx)}
 .pos-btn.active{background:rgba(106,167,255,.15);border-color:rgba(106,167,255,.25);color:var(--accent)}
 
+/* Hero view modes */
+[data-hero-view="minimal"] #hero-focus,[data-hero-view="minimal"] #hero-onething,[data-hero-view="minimal"] #hero-next-mtg{display:none!important}
+[data-hero-view="minimal"] #hero-clock{font-size:96px}
+[data-hero-view="compact"] #hero-clock{font-size:52px;margin-bottom:2px}
+[data-hero-view="compact"] #hero-date{font-size:13px;margin-bottom:8px}
+[data-hero-view="compact"] #hero-onething{max-width:400px;padding:12px 16px;max-height:260px}
+[data-hero-view="compact"] .hero-ot-label{font-size:8px;margin-bottom:6px}
+[data-hero-view="compact"] .hero-pri-text{font-size:14px}
+[data-hero-view="compact"] #hero-focus{gap:4px}
+[data-hero-view="compact"] #hero{gap:0;padding-bottom:60px}
+[data-hero-view="grid"] #hero{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto auto;gap:12px;align-items:start;justify-items:center;padding:20px 5vw 90px}
+[data-hero-view="grid"] #hero-clock{grid-column:1/-1;font-size:64px;margin-bottom:0}
+[data-hero-view="grid"] #hero-date{grid-column:1/-1;margin-bottom:4px}
+[data-hero-view="grid"] #hero-focus{width:100%;max-width:none;padding:16px;border-radius:16px;background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(40px) saturate(250%);-webkit-backdrop-filter:blur(40px) saturate(250%);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 16px rgba(0,0,0,.1)}
+[data-hero-view="grid"] #hero-onething{max-width:none;width:100%}
+[data-hero-view="grid"] #hero-next-mtg{grid-column:1/-1;width:100%;max-width:none;padding:12px 16px;border-radius:16px;background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(40px) saturate(250%);-webkit-backdrop-filter:blur(40px) saturate(250%);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 16px rgba(0,0,0,.1)}
+[data-hero-view="grid"] #hero-quote{grid-column:1/-1;position:relative;bottom:auto;left:auto;transform:none}
+[data-hero-view="grid"] #hero-pos-toggle{grid-column:1/-1;position:relative;bottom:auto;right:auto;justify-self:end}
+
 /* Hero clock */
 #hero-clock{font-size:82px;font-weight:100;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1;color:var(--tx);text-align:center;margin-bottom:4px;font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif}
 #hero-date{font-size:16px;color:var(--mu);font-weight:300;letter-spacing:-.01em;text-align:center;margin-bottom:14px}
@@ -1407,7 +1426,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
     <div class="settings-group">
       <div class="settings-group-label">Display</div>
-      <div class="settings-note">Hero view (default). Grid view, Minimal view, and Dashboard view coming in the next update.</div>
+      <div class="theme-grid" id="hero-view-picker"></div>
     </div>
 
     <div class="settings-group">
@@ -2368,6 +2387,7 @@ const DEFAULT_STATE = {
   lastStreakTime: 0,
   heroPos: 'center',
   heroOrder: ['clock','timer','priorities','meeting','quote'],
+  heroView: 'classic',
   bgMode: 'photos',
   oneThingId: 2,
   topPriorities: [],
@@ -2446,6 +2466,7 @@ function loadState() {
     if (!merged.photoCycleSpeed) merged.photoCycleSpeed = 45;
     if (!merged.dockStyle) merged.dockStyle = 'default';
     if (!merged.photoTransition) merged.photoTransition = 'fade';
+    if (!merged.heroView) merged.heroView = 'classic';
     if (merged.showQuotes === undefined) merged.showQuotes = true;
     if (merged.waterReminder === undefined) merged.waterReminder = true;
     // Usage stats migration
@@ -3599,6 +3620,9 @@ function renderSettings() {
       });
     });
   }
+
+  // Hero view picker
+  renderHeroViewPicker();
 
   // Layout position picker
   const layoutPosPicker = document.getElementById('layout-pos-picker');
@@ -4966,6 +4990,36 @@ function applyHeroPos() {
 // Re-randomize position when photo cycles
 function onPhotoCycle() { if (S.heroPos === 'random') applyHeroPos(); }
 
+function applyHeroView() {
+  const hero = document.getElementById('hero');
+  if (hero) hero.dataset.heroView = S.heroView || 'classic';
+}
+
+function renderHeroViewPicker() {
+  const picker = document.getElementById('hero-view-picker');
+  if (!picker) return;
+  const views = [
+    {id:'classic', name:'Classic', desc:'Centered stack'},
+    {id:'minimal', name:'Minimal', desc:'Clock only'},
+    {id:'compact', name:'Compact', desc:'Dense info'},
+    {id:'grid',    name:'Grid',    desc:'Widget cards'}
+  ];
+  picker.innerHTML = views.map(v =>
+    '<div class="theme-opt'+(S.heroView===v.id?' active':'')+'" data-hview="'+v.id+'">' +
+    '<div class="theme-swatch" style="background:rgba(106,167,255,.12);display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--mu);line-height:1.2;text-align:center;padding:2px">'+v.desc+'</div>' +
+    '<div class="theme-name">'+v.name+'</div></div>'
+  ).join('');
+  picker.querySelectorAll('.theme-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      S.heroView = opt.dataset.hview;
+      save();
+      applyHeroView();
+      renderHeroOrder();
+      renderSettings();
+    });
+  });
+}
+
 function applyUiScale() {
   const scale = (S.uiScale || 100) / 100;
   const app = document.getElementById('app');
@@ -5042,6 +5096,7 @@ function renderAll() {
   renderTasks();
   renderUsageWidget();
   renderHeroOrder();
+  applyHeroView();
 }
 
 /* -- KEYBOARD -- */
