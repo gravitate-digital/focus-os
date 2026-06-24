@@ -190,7 +190,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #hero-date{font-size:16px;color:var(--mu);font-weight:300;letter-spacing:-.01em;text-align:center;margin-bottom:14px}
 
 /* Hero One Thing card */
-#hero-onething{position:relative;width:100%;max-width:480px;padding:16px 20px;border-radius:16px;background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(40px) saturate(250%) brightness(1.06);-webkit-backdrop-filter:blur(40px) saturate(250%) brightness(1.06);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 16px rgba(0,0,0,.1);margin-bottom:14px;text-align:left;transition:opacity .3s}
+#hero-onething{position:relative;width:100%;max-width:480px;padding:16px 20px;border-radius:16px;background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(40px) saturate(250%) brightness(1.06);-webkit-backdrop-filter:blur(40px) saturate(250%) brightness(1.06);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 16px rgba(0,0,0,.1);margin-bottom:14px;text-align:left;transition:opacity .3s;max-height:320px;overflow:hidden;display:flex;flex-direction:column}
+#hero-onething-body{overflow-y:auto;flex:1;min-height:0;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent;-webkit-overflow-scrolling:touch}
+#hero-onething-body::-webkit-scrollbar{width:3px}
+#hero-onething-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:2px}
+#hero-onething-body::-webkit-scrollbar-track{background:transparent}
 #hero-onething::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.12) 0%,transparent 50%);pointer-events:none}
 .hero-ot-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
 .hero-ot-task{display:flex;align-items:flex-start;gap:14px;cursor:pointer}
@@ -226,7 +230,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .fs-preset.active{background:rgba(106,167,255,.1);border-color:rgba(106,167,255,.2);color:var(--accent)}
 
 /* Hero quote */
-#hero-quote{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);max-width:520px;text-align:center;font-size:13px;font-weight:300;font-style:italic;color:var(--dim);line-height:1.6;letter-spacing:-.01em;transition:opacity .8s ease}
+#hero-quote{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);max-width:520px;text-align:center;font-size:13px;font-weight:300;font-style:italic;color:var(--dim);line-height:1.6;letter-spacing:-.01em;transition:opacity .8s ease;padding:0 20px;box-sizing:border-box}
 
 /* Topbar timer indicator */
 #tb-timer{display:none;align-items:center;gap:5px;padding:0 8px;height:28px;border-radius:8px;background:rgba(106,167,255,.12);border:1px solid rgba(106,167,255,.2);color:var(--accent);font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;cursor:pointer;font-family:var(--font);flex-shrink:0}
@@ -1250,7 +1254,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 
   <div class="widget" id="w-usage">
     <div class="widget-head">
-      <div class="widget-label">\uD83D\uDCC8 Usage Stats</div>
+      <div class="widget-label">📈 Usage Stats</div>
     </div>
     <div id="usage-stats-body"></div>
   </div>
@@ -1698,6 +1702,8 @@ const PRESETS = [
   {id:'linkedin',  name:'LinkedIn',           url:'https://linkedin.com',                      emoji:'\uD83D\uDCBC', cat:'social'},
   // Scheduling
   {id:'acuity',    name:'Acuity Scheduling', url:'https://acuityscheduling.com',              emoji:'\uD83D\uDCC5', cat:'scheduling'},
+  // Music
+  {id:'spotify',   name:'Spotify',           url:'https://open.spotify.com',                  emoji:'\uD83C\uDFB5', cat:'music'},
   // Gravitate Internal
   {id:'gdigital',  name:'Gravitate Digital', url:'https://gravitatedigital.com.au',           emoji:'\u25B2', cat:'gravitate'},
   {id:'gstudio',   name:'Gravitate Studio',  url:'https://gravitatestudio.com.au',            emoji:'\u25C8', cat:'gravitate'},
@@ -1712,9 +1718,9 @@ const PRESETS = [
 const CAT_LABELS = {
   gravitate:'Gravitate Apps', core:'Core', ai:'AI', design:'Design',
   analytics:'Reporting', ads:'Paid Ads', seo:'SEO', email:'Email Marketing',
-  website:'Website', crm:'Call Tracking', social:'Social', scheduling:'Scheduling'
+  website:'Website', crm:'Call Tracking', social:'Social', scheduling:'Scheduling', music:'Music'
 };
-const CAT_ORDER = ['gravitate','core','ai','design','analytics','ads','seo','email','website','crm','social','scheduling'];
+const CAT_ORDER = ['gravitate','core','ai','design','analytics','ads','seo','email','website','crm','social','scheduling','music'];
 
 /* -- LAYOUT CATALOG (kept for mode switching) -- */
 const LAYOUTS = [
@@ -2509,6 +2515,7 @@ const ICON_OVERRIDES = {
   'dash.cloudflare.com':    'https://dash.cloudflare.com/favicon.ico',
   'tagmanager.google.com':  'https://tagmanager.google.com/favicon.ico',
   'www.klaviyo.com':        'https://www.klaviyo.com/favicon.ico',
+  'open.spotify.com':       'https://open.spotify.com/favicon.ico',
 };
 
 function getFavicon(url, size) {
