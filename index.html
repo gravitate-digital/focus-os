@@ -86,7 +86,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-bg="photos"] .dept-pill{color:rgba(255,255,255,.75);text-shadow:0 1px 2px rgba(0,0,0,.2)}
 [data-bg="photos"] .dept-pill:hover,[data-bg="photos"] .dept-pill.active{color:var(--accent)}
 [data-bg="photos"] #topbar{background:rgba(5,10,20,.65);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%)}
-[data-bg="photos"] .brand-name,[data-bg="photos"] #ws-name,[data-bg="photos"] #tb-clock,[data-bg="photos"] .tb-btn{color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.3)}
+[data-bg="photos"] .brand-name,[data-bg="photos"] #ws-name,[data-bg="photos"] #tb-weather,[data-bg="photos"] .tb-btn{color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.3)}
 [data-bg="photos"] .tb-btn:hover{color:#fff}
 [data-bg="photos"] .mode-dot+.lbl{color:rgba(255,255,255,.85);text-shadow:0 1px 3px rgba(0,0,0,.3)}
 [data-bg="photos"] #tb-dept-label{color:rgba(255,255,255,.5)!important}
@@ -129,7 +129,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #ws-name:focus{border-bottom-color:var(--accent)}
 .tb-sep{width:1px;height:16px;background:var(--line);flex-shrink:0}
 .tb-right{display:flex;align-items:center;gap:6px;flex:1;justify-content:flex-end}
-#tb-clock{font-size:12px;font-variant-numeric:tabular-nums;font-weight:300;color:var(--mu);letter-spacing:.02em;min-width:38px;text-align:right}
+#tb-weather{font-size:12px;font-variant-numeric:tabular-nums;font-weight:300;color:var(--mu);letter-spacing:.02em;min-width:38px;text-align:right}
 
 /* generic topbar button */
 .tb-btn{height:28px;min-width:28px;padding:0 8px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--mu);font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:6px;justify-content:center;transition:background .15s,color .15s,border-color .15s;font-family:var(--font);flex-shrink:0}
@@ -587,6 +587,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-light="1"] .b2{background:rgba(160,120,240,.22)}
 [data-light="1"] .b3{background:rgba(80,140,240,.18)}
 [data-light="1"] #topbar{background:rgba(250,249,246,.82);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border-bottom-color:rgba(0,25,61,.06)}
+[data-light="1"] .brand-name,[data-light="1"] #ws-name{color:rgba(0,25,61,.8)!important;text-shadow:none!important}
+[data-light="1"] #tb-weather{color:rgba(0,25,61,.6)!important;text-shadow:none!important}
+[data-light="1"] .tb-btn{color:rgba(0,25,61,.5)!important;text-shadow:none!important}
+[data-light="1"] .tb-btn:hover{color:rgba(0,25,61,.8)!important}
+[data-light="1"] .dept-pill{color:rgba(0,25,61,.5)!important;text-shadow:none!important}
+[data-light="1"] .dept-pill:hover,[data-light="1"] .dept-pill.active{color:var(--accent)!important}
+[data-light="1"] .mode-dot+.lbl{color:rgba(0,25,61,.6)!important;text-shadow:none!important}
+[data-light="1"] #tb-dept-label{color:rgba(0,25,61,.4)!important}
+[data-light="1"] .tb-sep{border-color:rgba(0,25,61,.08)!important}
 [data-light="1"] .widget{background:rgba(250,249,246,.7);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border-color:rgba(0,25,61,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 4px 16px rgba(0,25,61,.06)}
 [data-light="1"] #side-panel{background:rgba(245,247,255,.92);border-left-color:rgba(0,0,0,.06)}
 [data-light="1"] #side-panel-overlay{background:rgba(0,0,0,.15)}
@@ -941,7 +950,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
   .brand-name{font-size:12px}
   #ws-name{font-size:13px;max-width:100px}
   .cmd-hint{display:none}
-  #tb-clock{font-size:11px}
+  #tb-weather{font-size:10px}
   #dock-dept-bar{max-width:95vw;gap:2px}
   .dept-pill{font-size:8px;padding:2px 6px}
 
@@ -1152,7 +1161,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.2-3.2" stroke-linecap="round"></path></svg>
         <span class="cmd-hint">&#8984;K</span>
       </button>
-      <span id="tb-clock">--:--</span>
+      <span id="tb-weather" title="Current temperature" style="font-size:11px;color:var(--mu);letter-spacing:.02em;min-width:38px;text-align:right;font-variant-numeric:tabular-nums"></span>
       <button class="tb-btn" id="btn-light" aria-label="Toggle light mode" title="Toggle light mode (Alt+L)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"></circle><path d="M12 1.5v2.5M12 20v2.5M4.2 4.2l1.8 1.8M18 18l1.8 1.8M1.5 12H4M20 12h2.5M4.2 19.8L6 18M18 6l1.8-1.8" stroke-linecap="round"></path></svg>
       </button>
@@ -2929,9 +2938,39 @@ function renderClock() {
 
   set('hero-clock', h + ':' + m);
   set('hero-date', greet + '  \u00B7  ' + date);
-  set('tb-clock', h + ':' + m);
+  // tb-clock removed — replaced by weather
   const titleGreet = period === 'morning' ? 'Good morning' : period === 'afternoon' ? 'Good afternoon' : period === 'evening' ? 'Good evening' : 'Working late';
   document.title = titleGreet + (name ? name : '') + ' : Focus';
+}
+
+/* -- WEATHER (topbar) -- */
+let weatherCache = { temp: null, time: 0 };
+const WEATHER_ICONS = { 0:'\u2600\uFE0F', 1:'\uD83C\uDF24', 2:'\u26C5', 3:'\u2601\uFE0F', 45:'\uD83C\uDF2B', 48:'\uD83C\uDF2B', 51:'\uD83C\uDF26', 53:'\uD83C\uDF26', 55:'\uD83C\uDF27', 61:'\uD83C\uDF27', 63:'\uD83C\uDF27', 65:'\uD83C\uDF27', 71:'\u2744\uFE0F', 73:'\u2744\uFE0F', 75:'\u2744\uFE0F', 80:'\uD83C\uDF26', 81:'\uD83C\uDF27', 82:'\u26C8', 95:'\u26C8', 96:'\u26C8', 99:'\u26C8' };
+function fetchWeather() {
+  const el = document.getElementById('tb-weather');
+  if (!el) return;
+  // Cache for 15 minutes
+  if (weatherCache.temp !== null && Date.now() - weatherCache.time < 900000) {
+    el.textContent = weatherCache.temp;
+    return;
+  }
+  if (!navigator.geolocation) { el.textContent = ''; return; }
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude.toFixed(2);
+    const lon = pos.coords.longitude.toFixed(2);
+    fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weather_code&timezone=auto')
+      .then(r => r.json())
+      .then(d => {
+        const temp = Math.round(d.current.temperature_2m);
+        const code = d.current.weather_code;
+        const icon = WEATHER_ICONS[code] || '';
+        const display = icon + ' ' + temp + '\u00B0';
+        weatherCache = { temp: display, time: Date.now() };
+        el.textContent = display;
+        el.title = temp + '\u00B0C \u00B7 Updated ' + new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+      })
+      .catch(() => { el.textContent = ''; });
+  }, () => { el.textContent = ''; }, { timeout: 5000 });
 }
 
 /* -- RENDER: HERO PRIORITIES (Top 3) -- */
@@ -5532,6 +5571,10 @@ function init() {
   renderModeSwitcher();
 
   setInterval(() => { renderClock(); renderMeetings(); renderHeroMeeting(); }, 1000);
+
+  // Weather (fetch on load, refresh every 15 min)
+  fetchWeather();
+  setInterval(fetchWeather, 900000);
 
   // Track usage minutes (every 60s)
   setInterval(trackMinute, 60000);
