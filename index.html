@@ -76,19 +76,20 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #photo-bg::after{content:'';position:absolute;inset:-20px;background:rgba(5,10,20,.45);pointer-events:none}
 [data-light="1"] #photo-bg::after{background:linear-gradient(180deg,rgba(5,10,20,.35) 0%,rgba(5,10,20,.25) 40%,rgba(5,10,20,.4) 100%)}
 /* When photos are visible, ALWAYS use white text regardless of light/dark mode */
-[data-bg="photos"] #hero-clock,[data-bg="photos"] #hero-date,[data-bg="photos"] #hero-quote,[data-bg="photos"] #hero-next-mtg{color:rgba(255,255,255,.92);text-shadow:0 1px 8px rgba(0,0,0,.4)}
+[data-bg="photos"] #hero-clock,[data-bg="photos"] #hero-date,[data-bg="photos"] #hero-quote,[data-bg="photos"] #hero-next-mtg{color:rgba(255,255,255,.95);text-shadow:0 1px 6px rgba(0,0,0,.5),0 2px 16px rgba(0,0,0,.3)}
 [data-bg="photos"] .hero-ot-label{color:var(--accent);text-shadow:0 1px 4px rgba(0,0,0,.3)}
 [data-bg="photos"] .hero-pri-text{color:rgba(255,255,255,.92)}
 [data-bg="photos"] .hero-fs-task,[data-bg="photos"] .hero-fs-sessions{color:rgba(255,255,255,.7)}
 [data-bg="photos"] .hero-fs-time{color:rgba(255,255,255,.92)}
 [data-bg="photos"] #hero-onething{background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);border-color:rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 20px rgba(0,0,0,.12)}
 [data-bg="photos"] .dock-name{color:rgba(255,255,255,.7)!important}
-[data-bg="photos"] .dept-pill{color:rgba(255,255,255,.6)}
+[data-bg="photos"] .dept-pill{color:rgba(255,255,255,.75);text-shadow:0 1px 2px rgba(0,0,0,.2)}
 [data-bg="photos"] .dept-pill:hover,[data-bg="photos"] .dept-pill.active{color:var(--accent)}
-[data-bg="photos"] #topbar{background:rgba(5,10,20,.5);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px)}
-[data-bg="photos"] .brand-name,[data-bg="photos"] #ws-name,[data-bg="photos"] #tb-clock,[data-bg="photos"] .tb-btn{color:rgba(255,255,255,.8)}
+[data-bg="photos"] #topbar{background:rgba(5,10,20,.65);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%)}
+[data-bg="photos"] .brand-name,[data-bg="photos"] #ws-name,[data-bg="photos"] #tb-clock,[data-bg="photos"] .tb-btn{color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.3)}
 [data-bg="photos"] .tb-btn:hover{color:#fff}
-[data-bg="photos"] .mode-dot+.lbl{color:rgba(255,255,255,.7)}
+[data-bg="photos"] .mode-dot+.lbl{color:rgba(255,255,255,.85);text-shadow:0 1px 3px rgba(0,0,0,.3)}
+[data-bg="photos"] #tb-dept-label{color:rgba(255,255,255,.5)!important}
 #unicode-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:1;overflow:hidden;pointer-events:none}
 #dither-bg{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:1;overflow:hidden;pointer-events:none}
 #photo-dither-overlay{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease;z-index:2;pointer-events:none;mix-blend-mode:multiply}
@@ -1113,6 +1114,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
   #dock{padding:2px 8px 4px}
   .dock-item{width:36px;height:36px}
 }
+.user-photo-thumb{width:60px;height:60px;border-radius:8px;object-fit:cover;border:1px solid rgba(255,255,255,.1);position:relative;cursor:pointer;overflow:hidden;display:inline-block}
+.user-photo-thumb img{width:100%;height:100%;object-fit:cover;border-radius:7px}
+.user-photo-thumb .photo-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;cursor:pointer;border:none;font-family:var(--font)}
+.user-photo-thumb:hover .photo-del{display:flex}
 </style>
 </head>
 <body>
@@ -1422,6 +1427,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div class="settings-row-label">Transition style</div>
         <div class="sens-row" id="photo-trans-picker" style="flex:1;max-width:200px"></div>
       </div>
+      <div class="settings-row" style="margin-top:10px">
+        <div class="settings-row-label">Your Photos<small>Add your own background photos (up to 20)</small></div>
+        <label class="btn btn-sec" style="font-size:11px;padding:6px 12px;cursor:pointer">
+          Add Photos
+          <input type="file" id="photo-upload-input" accept="image/*" multiple hidden />
+        </label>
+      </div>
+      <div id="user-photos-grid" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
     </div>
 
     <div class="settings-group">
@@ -2019,9 +2032,143 @@ const TEAM_PHOTOS = [
 
 let photoBgTimer = null;
 let currentPhotoIdx = 0;
+let userPhotosCache = [];
+
+/* -- IndexedDB for user photos -- */
+function initPhotoDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('focusPhotos', 1);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('photos')) {
+        db.createObjectStore('photos', { autoIncrement: true });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function saveUserPhoto(dataUrl) {
+  return initPhotoDB().then(db => new Promise((resolve, reject) => {
+    const tx = db.transaction('photos', 'readwrite');
+    const store = tx.objectStore('photos');
+    const req = store.add(dataUrl);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  }));
+}
+
+function deleteUserPhoto(key) {
+  return initPhotoDB().then(db => new Promise((resolve, reject) => {
+    const tx = db.transaction('photos', 'readwrite');
+    const store = tx.objectStore('photos');
+    const req = store.delete(key);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  }));
+}
+
+function getAllUserPhotos() {
+  return initPhotoDB().then(db => new Promise((resolve, reject) => {
+    const tx = db.transaction('photos', 'readonly');
+    const store = tx.objectStore('photos');
+    const results = [];
+    const req = store.openCursor();
+    req.onsuccess = (e) => {
+      const cursor = e.target.result;
+      if (cursor) {
+        results.push({ key: cursor.key, dataUrl: cursor.value });
+        cursor.continue();
+      } else {
+        resolve(results);
+      }
+    };
+    req.onerror = () => reject(req.error);
+  }));
+}
+
+function getAllPhotoUrls() {
+  const team = TEAM_PHOTOS.map(f => 'photos/' + f);
+  const user = userPhotosCache.map(p => p.dataUrl);
+  return team.concat(user);
+}
+
+function renderUserPhotosGrid() {
+  const grid = document.getElementById('user-photos-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  userPhotosCache.forEach(p => {
+    const thumb = document.createElement('div');
+    thumb.className = 'user-photo-thumb';
+    const img = document.createElement('img');
+    img.src = p.dataUrl;
+    const del = document.createElement('button');
+    del.className = 'photo-del';
+    del.textContent = '\u00d7';
+    del.onclick = (e) => {
+      e.stopPropagation();
+      deleteUserPhoto(p.key).then(() => getAllUserPhotos()).then(photos => {
+        userPhotosCache = photos;
+        renderUserPhotosGrid();
+      });
+    };
+    thumb.appendChild(img);
+    thumb.appendChild(del);
+    grid.appendChild(thumb);
+  });
+}
+
+function resizeImageToMaxWidth(dataUrl, maxWidth) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      if (img.width <= maxWidth) { resolve(dataUrl); return; }
+      const ratio = maxWidth / img.width;
+      const canvas = document.createElement('canvas');
+      canvas.width = maxWidth;
+      canvas.height = Math.round(img.height * ratio);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', 0.85));
+    };
+    img.src = dataUrl;
+  });
+}
+
+function setupPhotoUpload() {
+  const input = document.getElementById('photo-upload-input');
+  if (!input) return;
+  input.addEventListener('change', async () => {
+    const files = Array.from(input.files);
+    if (!files.length) return;
+    const remaining = 20 - userPhotosCache.length;
+    if (remaining <= 0) {
+      alert('You can store up to 20 photos. Please delete some first.');
+      input.value = '';
+      return;
+    }
+    const toProcess = files.slice(0, remaining);
+    if (files.length > remaining) {
+      alert('Only adding ' + remaining + ' photo(s) — you\u2019ve reached the 20 photo limit.');
+    }
+    for (const file of toProcess) {
+      const dataUrl = await new Promise((res) => {
+        const reader = new FileReader();
+        reader.onload = () => res(reader.result);
+        reader.readAsDataURL(file);
+      });
+      const resized = await resizeImageToMaxWidth(dataUrl, 1920);
+      await saveUserPhoto(resized);
+    }
+    userPhotosCache = await getAllUserPhotos();
+    renderUserPhotosGrid();
+    input.value = '';
+  });
+}
 
 function pickRandomPhotoIdx() {
-  return Math.floor(Math.random() * TEAM_PHOTOS.length);
+  return Math.floor(Math.random() * getAllPhotoUrls().length);
 }
 
 function applyBgMode() {
@@ -2042,7 +2189,7 @@ function applyBgMode() {
     ditherBg.style.opacity = '0';
     photoDither.style.opacity = '0';
     currentPhotoIdx = pickRandomPhotoIdx();
-    photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
+    photoBg.style.backgroundImage = 'url("' + getAllPhotoUrls()[currentPhotoIdx] + '")';
     photoBg.style.opacity = '1';
     photoBgTimer = setInterval(() => cyclePhoto(), (S.photoCycleSpeed || 45) * 1000);
     // User controls position via the toggle (bottom-right arrows)
@@ -2065,7 +2212,7 @@ function applyBgMode() {
     unicodeBg.style.opacity = '0';
     ditherBg.style.opacity = '0';
     currentPhotoIdx = pickRandomPhotoIdx();
-    photoBg.style.backgroundImage = 'url("photos/' + TEAM_PHOTOS[currentPhotoIdx] + '")';
+    photoBg.style.backgroundImage = 'url("' + getAllPhotoUrls()[currentPhotoIdx] + '")';
     photoBg.style.opacity = '1';
     renderPhotoDitherOverlay();
     photoDither.style.opacity = '1';
@@ -2090,8 +2237,9 @@ function applyPhotoTransClass() {
 
 function cyclePhoto() {
   const photoBg = document.getElementById('photo-bg');
-  const nextIdx = (currentPhotoIdx + 1) % TEAM_PHOTOS.length;
-  const nextUrl = 'photos/' + TEAM_PHOTOS[nextIdx];
+  const allUrls = getAllPhotoUrls();
+  const nextIdx = (currentPhotoIdx + 1) % allUrls.length;
+  const nextUrl = allUrls[nextIdx];
   const trans = S.photoTransition || 'fade';
   // Preload the next image before transitioning
   const img = new Image();
@@ -5369,7 +5517,17 @@ function init() {
   document.body.dataset.dock = S.dockStyle || 'default';
   setupWsName();
   renderAll();
-  applyBgMode();
+
+  // Load user photos from IndexedDB before applying background
+  initPhotoDB().then(() => getAllUserPhotos()).then(photos => {
+    userPhotosCache = photos;
+    applyBgMode();
+    renderUserPhotosGrid();
+    setupPhotoUpload();
+  }).catch(() => {
+    applyBgMode();
+    setupPhotoUpload();
+  });
   renderFocusSession();
   renderModeSwitcher();
 
