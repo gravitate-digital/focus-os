@@ -180,7 +180,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-hero-pos="right"] .hero-fs-presets{justify-content:flex-end}
 [data-hero-pos="right"] #dock{justify-content:flex-end;padding-right:4vw}
 /* Position toggle */
-#hero-pos-toggle{position:absolute;bottom:16px;right:16px;display:flex;gap:2px;z-index:5;opacity:.5;transition:opacity .2s}
+#hero-pos-toggle{position:absolute;bottom:16px;right:16px;display:none!important;gap:2px;z-index:5;opacity:.5;transition:opacity .2s}
 #hero-pos-toggle:hover{opacity:1}
 .pos-btn{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:var(--mu);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);transition:background .14s,color .14s}
 .pos-btn:hover{background:rgba(255,255,255,.12);color:var(--tx)}
@@ -262,9 +262,9 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* -- BOTTOM DOCK -- */
 #dock{flex-shrink:0;padding:6px 16px 12px;display:flex;justify-content:center;z-index:40}
 /* Dept pills: inline in topbar */
-#dock-dept-bar{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1;min-width:0}
+#dock-dept-bar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1.5;min-width:0}
 #dock-dept-bar::-webkit-scrollbar{display:none}
-.dept-pill{padding:3px 8px;border-radius:6px;background:transparent;border:1px solid transparent;color:var(--dim);font-size:10px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s,border-color .14s;white-space:nowrap;flex-shrink:0}
+.dept-pill{padding:4px 12px;border-radius:6px;background:transparent;border:1px solid transparent;color:var(--dim);font-size:10px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s,border-color .14s;white-space:nowrap;flex-shrink:0}
 .dept-pill:hover,.dept-pill.active{background:rgba(106,167,255,.1);color:var(--accent);border-color:rgba(106,167,255,.15)}
 /* Mega-nav: fixed overlay drops from topbar */
 #dock-expand{position:fixed;top:42px;left:50%;transform:translateX(-50%);width:auto;max-width:92vw;padding:14px 18px;border-radius:0 0 16px 16px;background:rgba(7,13,26,.92);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:1px solid rgba(255,255,255,.1);border-top:none;box-shadow:0 12px 40px rgba(0,0,0,.35);display:none;gap:6px;flex-wrap:wrap;justify-content:center;max-height:220px;overflow-y:auto;z-index:45}
@@ -307,7 +307,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* -- SIDE PANEL (slide-out) -- */
 #side-panel-overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.3);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s}
 #side-panel-overlay.open{opacity:1;pointer-events:all}
-#side-panel{position:fixed;top:42px;right:0;bottom:0;width:300px;z-index:100;background:rgba(7,13,26,.92);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border-left:1px solid rgba(255,255,255,.1);box-shadow:-8px 0 40px rgba(0,0,0,.3);transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;padding:14px}
+#side-panel{position:fixed;top:42px;right:0;bottom:0;width:300px;z-index:100;background:rgba(7,13,26,.92);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border-left:1px solid rgba(255,255,255,.1);box-shadow:-8px 0 40px rgba(0,0,0,.3);transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;padding:6px 14px 14px}
 #side-panel::-webkit-scrollbar{display:none}
 #side-panel.open{transform:translateX(0)}
 .widget{flex-shrink:0;background:rgba(255,255,255,.07);backdrop-filter:blur(40px) saturate(220%);-webkit-backdrop-filter:blur(40px) saturate(220%);border:1px solid rgba(255,255,255,.14);border-radius:var(--r);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 16px rgba(0,0,0,.14);padding:14px 15px;overflow:hidden;margin-bottom:8px}
@@ -426,11 +426,11 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* -- MODALS -- */
 .modal-bg{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-bg.open{opacity:1;pointer-events:all}
-.modal-box{width:390px;max-width:90vw;padding:26px;border-radius:20px;background:rgba(7,13,26,.95);backdrop-filter:blur(60px);-webkit-backdrop-filter:blur(60px);border:1px solid rgba(255,255,255,.14);box-shadow:0 24px 64px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.14);animation:modalIn .2s ease;max-height:90vh;overflow-y:auto}
+.modal-box{width:390px;max-width:90vw;padding:26px;border-radius:20px;background:rgba(7,13,26,.95);backdrop-filter:blur(60px);-webkit-backdrop-filter:blur(60px);border:1px solid rgba(255,255,255,.14);box-shadow:0 24px 64px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.14);animation:modalIn .2s ease;max-height:90vh;overflow-y:auto;position:relative}
 @keyframes modalIn{from{transform:scale(.96) translateY(8px);opacity:0}to{transform:none;opacity:1}}
 .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .modal-title{font-size:16px;font-weight:600;letter-spacing:-.015em}
-.modal-close{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--mu);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);transition:background .15s,color .15s}
+.modal-close{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--mu);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);transition:background .15s,color .15s;position:absolute;top:16px;right:16px}
 .modal-close:hover{background:rgba(255,255,255,.12);color:var(--tx)}
 .f-label{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:5px}
 .f-input{width:100%;padding:9px 11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:9px;color:var(--tx);font-size:13.5px;font-family:var(--font);outline:none;transition:border-color .2s,background .2s;margin-bottom:13px}
@@ -475,14 +475,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* Settings modal */
 .settings-group{margin-bottom:20px}
 .settings-group-label{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
-.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:6px}
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));gap:8px;margin-bottom:6px}
 .theme-opt{padding:10px 8px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid transparent;cursor:pointer;text-align:center;transition:background .14s,border-color .14s}
 .theme-opt:hover{background:rgba(255,255,255,.08)}
 .theme-opt.active{background:rgba(106,167,255,.12);border-color:rgba(106,167,255,.28)}
 .theme-swatch{width:28px;height:28px;border-radius:8px;margin:0 auto 6px;border:1px solid rgba(255,255,255,.1)}
 .theme-name{font-size:10.5px;color:var(--mu);font-weight:500}
 .theme-opt.active .theme-name{color:var(--accent)}
-.sens-row{display:flex;gap:6px}
+.sens-row{display:flex;gap:6px;flex-wrap:wrap}
 .sens-opt{flex:1;padding:8px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid transparent;cursor:pointer;text-align:center;font-size:12px;color:var(--mu);font-weight:500;font-family:var(--font);transition:background .14s,border-color .14s}
 .sens-opt:hover{background:rgba(255,255,255,.08)}
 .sens-opt.active{background:rgba(106,167,255,.12);border-color:rgba(106,167,255,.28);color:var(--accent)}
@@ -909,7 +909,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-light="1"] .dock-item::after{background:rgba(245,247,255,.92);border-color:rgba(0,0,0,.08)}
 
 /* Side panel close button */
-.sp-close{position:sticky;top:0;float:right;margin-bottom:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--mu);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);transition:background .15s,color .15s;z-index:2}
+.sp-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--mu);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font);transition:background .15s,color .15s;z-index:2}
 .sp-close:hover{background:rgba(255,255,255,.14);color:var(--tx)}
 
 /* Hero entrance animation */
@@ -990,7 +990,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
   .f-input{padding:8px 10px;font-size:13px}
 
   /* Settings */
-  .theme-grid{grid-template-columns:repeat(3,1fr);gap:5px}
+  .theme-grid{grid-template-columns:repeat(auto-fill, minmax(100px, 1fr));gap:5px}
   .theme-swatch{width:24px;height:24px}
   .theme-name{font-size:9px}
 
@@ -1162,9 +1162,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <span class="cmd-hint">&#8984;K</span>
       </button>
       <span id="tb-weather" title="Current temperature" style="font-size:11px;color:var(--mu);letter-spacing:.02em;min-width:38px;text-align:right;font-variant-numeric:tabular-nums"></span>
-      <button class="tb-btn" id="btn-light" aria-label="Toggle light mode" title="Toggle light mode (Alt+L)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"></circle><path d="M12 1.5v2.5M12 20v2.5M4.2 4.2l1.8 1.8M18 18l1.8 1.8M1.5 12H4M20 12h2.5M4.2 19.8L6 18M18 6l1.8-1.8" stroke-linecap="round"></path></svg>
-      </button>
+      <!-- Light mode toggle moved to Settings -->
       <button class="tb-btn" id="btn-settings" aria-label="Settings" title="Settings (S)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
       </button>
@@ -1444,6 +1442,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         </label>
       </div>
       <div id="user-photos-grid" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-label">Appearance</div>
+      <div class="settings-row">
+        <div class="settings-row-label">Light mode<small>Switch between dark and light appearance</small></div>
+        <button class="toggle" id="light-toggle"></button>
+      </div>
     </div>
 
     <div class="settings-group">
@@ -1768,12 +1774,15 @@ const PRESETS = [
   // Gravitate Internal
   {id:'gdigital',  name:'Gravitate Digital', url:'https://gravitatedigital.com.au',           emoji:'\u25B2', cat:'gravitate'},
   {id:'gstudio',   name:'Gravitate Studio',  url:'https://gravitatestudio.com.au',            emoji:'\u25C8', cat:'gravitate'},
-  {id:'proposals', name:'Proposals',          url:'https://gravitate-proposals.vercel.app',    emoji:'\uD83D\uDCDD', cat:'gravitate'},
-  {id:'pace',      name:'Pace',              url:'https://gravitate-pace.vercel.app',          emoji:'\u23F1\uFE0F', cat:'gravitate'},
+  {id:'proposals', name:'Proposal',           url:'https://gravitate-proposals.vercel.app',    emoji:'\u270D\uFE0E', cat:'gravitate'},
+  {id:'pace',      name:'Pace',              url:'https://gravitate-pace.vercel.app',          emoji:'\u23F2', cat:'gravitate'},
   {id:'space',     name:'Space',             url:'https://gravitatespace.com.au',              emoji:'\uD83C\uDFE2', cat:'gravitate'},
   {id:'gfocus',    name:'Focus',             url:'https://gravitate-focus.vercel.app',         emoji:'\u25CE', cat:'gravitate'},
-  {id:'wellness',  name:'Wellness',          url:'https://gravitate-wellness.netlify.app',     emoji:'\uD83C\uDF3F', cat:'gravitate'},
-  {id:'workflow',  name:'Workflow',           url:'https://gravitate-workflow.vercel.app',      emoji:'\u{1F4CA}', cat:'gravitate'},
+  {id:'wellness',  name:'Wellness',          url:'https://gravitate-wellness.netlify.app',     emoji:'\u263B', cat:'gravitate'},
+  {id:'workflow',  name:'Workflow',           url:'https://gravitate-workflow.vercel.app',      emoji:'\u2714\uFE0E', cat:'gravitate'},
+  {id:'quarterly', name:'Quarterly',         url:'https://gravitate-quarterly.vercel.app',     emoji:'\u2683', cat:'gravitate'},
+  {id:'forms',     name:'Forms',             url:'https://forms.gravitatedigital.com.au',      emoji:'\u2328', cat:'gravitate'},
+  {id:'whatwhen',  name:'What & When',       url:'https://whatandwhen.gravitatedigital.com.au', emoji:'\u2638', cat:'gravitate'},
 ];
 
 const CAT_LABELS = {
@@ -2686,7 +2695,7 @@ const ICON_OVERRIDES = {
   'docs.google.com':        'https://ssl.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png',
   'sheets.google.com':      'https://ssl.gstatic.com/images/branding/product/2x/sheets_2020q4_48dp.png',
   'meet.google.com':        'https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v1/web-96dp/logo_meet_2020q4_color_2x_web_96dp.png',
-  'chat.google.com':        'https://ssl.gstatic.com/ui/v1/icons/mail/rfr/chat.ico',
+  'chat.google.com':        'https://fonts.gstatic.com/s/i/productlogos/chat_2020q4/v1/web-96dp/logo_chat_2020q4_color_2x_web_96dp.png',
   'analytics.google.com':   'https://ssl.gstatic.com/analytics/20200225_00/app/images/favicon.ico',
   'ads.google.com':         'https://ads.google.com/favicon.ico',
   'search.google.com':      'https://ssl.gstatic.com/search-console/scfe/search_console-64.png',
@@ -3316,7 +3325,7 @@ function buildHeroOrderSettings() {
       item.className = 'hero-order-item';
       item.draggable = true;
       item.dataset.key = key;
-      item.innerHTML = '<span class="hero-order-grip">\u2800\u2801\u2802\u2803</span><span class="hero-order-icon">' + meta.icon + '</span><span class="hero-order-name">' + meta.label + '</span>';
+      item.innerHTML = '<span class="hero-order-grip">\u2261</span><span class="hero-order-icon">' + meta.icon + '</span><span class="hero-order-name">' + meta.label + '</span>';
 
       item.addEventListener('dragstart', e => {
         item.classList.add('dragging');
@@ -4101,6 +4110,13 @@ function renderSettings() {
     };
   }
 
+  // Light mode toggle
+  const lightToggle = document.getElementById('light-toggle');
+  if (lightToggle) {
+    lightToggle.className = 'toggle' + (S.light ? ' on' : '');
+    lightToggle.onclick = () => setLight(!S.light);
+  }
+
   // Content mix / category percentages
   renderCategorySettings();
 
@@ -4131,7 +4147,8 @@ function applyAutoTheme() {
       document.body.dataset.light = '0';
       S.light = false;
     }
-    document.getElementById('btn-light').classList.toggle('active', S.light);
+    const ltBtn = document.getElementById('light-toggle');
+    if (ltBtn) ltBtn.className = 'toggle' + (S.light ? ' on' : '');
   }
 }
 
@@ -4265,7 +4282,8 @@ function showCoachToast() {
 function setLight(on) {
   S.light = on;
   document.body.dataset.light = on ? '1' : '0';
-  document.getElementById('btn-light').classList.toggle('active', on);
+  const ltBtn = document.getElementById('light-toggle');
+  if (ltBtn) ltBtn.className = 'toggle' + (on ? ' on' : '');
   save();
   // Re-render unicode bg color if active
   const bgm = S.bgMode || 'gradient';
@@ -5147,18 +5165,18 @@ function applyDisplayTheme() {
   if (lightThemes.includes(theme)) {
     document.body.dataset.light = '1';
     S.light = true;
-    const btn = document.getElementById('btn-light');
-    if (btn) btn.classList.add('active');
+    const ltBtn = document.getElementById('light-toggle');
+    if (ltBtn) ltBtn.className = 'toggle on';
   } else if (darkThemes.includes(theme)) {
     document.body.dataset.light = '0';
     S.light = false;
-    const btn = document.getElementById('btn-light');
-    if (btn) btn.classList.remove('active');
+    const ltBtn = document.getElementById('light-toggle');
+    if (ltBtn) ltBtn.className = 'toggle';
   } else {
     // Default: respect auto-theme or manual light toggle
     document.body.dataset.light = S.light ? '1' : '0';
-    const btn = document.getElementById('btn-light');
-    if (btn) btn.classList.toggle('active', !!S.light);
+    const ltBtn = document.getElementById('light-toggle');
+    if (ltBtn) ltBtn.className = 'toggle' + (S.light ? ' on' : '');
   }
 }
 
@@ -5543,7 +5561,8 @@ function init() {
     applyAutoTheme();
   } else {
     document.body.dataset.light = S.light ? '1' : '0';
-    document.getElementById('btn-light').classList.toggle('active', !!S.light);
+    const ltBtn = document.getElementById('light-toggle');
+    if (ltBtn) ltBtn.className = 'toggle' + (S.light ? ' on' : '');
     applyTheme();
   }
 
@@ -5611,7 +5630,7 @@ function init() {
   }, 2700000);
 
   // Topbar buttons
-  document.getElementById('btn-light').addEventListener('click', () => setLight(!S.light));
+  // Light toggle wired up in renderSettings
   document.getElementById('btn-help').addEventListener('click', () => openModal('modal-help'));
   document.getElementById('btn-cmdk').addEventListener('click', openCmdk);
   document.getElementById('btn-settings').addEventListener('click', () => openModal('modal-settings'));
