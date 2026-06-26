@@ -1,128 +1,120 @@
-# Gravitate Focus: Team Handover
+# Gravitate Focus — Team Setup Guide
 
-## What is it?
+## What is Focus?
 
-Gravitate Focus is your new tab dashboard. Instead of opening Chrome to a blank Google search, you open to your priorities, your apps, and a focus timer that helps you work with intention.
+Your new tab page. Shows your clock, priorities, focus timer, and quick links to every app you use at Gravitate. Opens every time you open a new tab.
 
-It takes 60 seconds to set up. Your data stays on your device. Nothing is tracked centrally.
-
----
-
-## How to set it up (Chrome)
-
-### Option 1: New Tab Override extension (recommended)
-
-1. Open Chrome and install **"New Tab Redirect"** from the Chrome Web Store:
-   https://chromewebstore.google.com/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna
-2. After installing, it will ask for a URL. Enter:
-   **https://focus-os-snowy-nu.vercel.app**
-3. Done. Every new tab now opens Gravitate Focus.
-
-### Option 2: Set as homepage
-
-1. Open Chrome Settings (three dots, top right, Settings)
-2. Under "On startup", select "Open a specific page or set of pages"
-3. Click "Add a new page"
-4. Enter: **https://focus-os-snowy-nu.vercel.app**
-5. New windows will open to Gravitate Focus.
-
-### Option 3: Pin as a tab
-
-1. Go to **https://focus-os-snowy-nu.vercel.app**
-2. Right-click the tab
-3. Click "Pin tab"
-4. It stays as the first tab in every Chrome window.
+**URL:** https://gravitate-focus.vercel.app
 
 ---
 
-## First time setup (60 seconds)
+## First-Time Setup (5 minutes)
 
-When you first open Gravitate Focus:
+### 1. Sign In
 
-1. **Enter your name** (this personalises your greeting)
-2. **Pick your department/role**: Account Manager, Sales, Creative, SEO, Paid Media, Social Media, Email Marketing, Leadership, Developer, or Custom
-3. **Choose your apps**: Your role pre-selects the apps you probably use. Add or remove any. Max 8 in your dock.
-4. **Set your morning priorities**: Pick 1 to 3 tasks for the day. These become your hero card.
+1. Open https://gravitate-focus.vercel.app
+2. Click **Sign in with Google**
+3. Use your **@gravitatedigital.com.au** Google account
+4. You'll stay signed in for 90 days
 
-That's it. You're set up.
+### 2. Set as Your New Tab Page
+
+#### Chrome (recommended)
+
+**Option A — Chrome Extension (easiest):**
+1. Install "Custom New Tab URL" from Chrome Web Store:
+   https://chromewebstore.google.com/detail/custom-new-tab-url/mmjbdbjnoablegbkcklggeknkfcjkjia
+2. After installing, it will ask for a URL
+3. Enter: `https://gravitate-focus.vercel.app`
+4. Done — every new tab opens Focus
+
+**Option B — Set as Homepage:**
+1. Chrome → Settings → On startup → Open a specific page
+2. Add: `https://gravitate-focus.vercel.app`
+3. This opens Focus when Chrome launches (not every new tab)
+
+#### Safari (Mac)
+
+1. Safari → Settings (Cmd+,) → General
+2. Set **Homepage** to: `https://gravitate-focus.vercel.app`
+3. Set **New windows open with** → Homepage
+4. Set **New tabs open with** → Homepage
+5. Done — every new tab opens Focus
+
+### 3. Onboarding
+
+Focus will walk you through:
+1. **Your name** — this appears in the greeting
+2. **Your departments** — pick all that apply (Account Manager, Sales, SEO, etc.)
+3. **Your apps** — pre-selected based on departments, add/remove as needed
+4. **Your priorities** — set up to 5 things you're focused on today
 
 ---
 
-## What you see each morning
+## Daily Use
 
-**The greeting** adapts to time of day. Mornings are warm and sunny. Afternoons are clean and focused. Evenings wind down.
+### Priorities
+- Type a priority in the card and hit Add or Enter
+- Click a priority to mark it done (plays a sound)
+- Double-click to edit the text
+- First 3 slots are always visible; scroll for more
+- After 5, you'll get a gentle nudge to focus
 
-**"What are your top priorities today?"** appears every morning. Pick 1 to 3 tasks. These sit front and centre all day as your anchor.
+### Focus Timer
+- Click Start for a 25-minute Pomodoro
+- Click the time to cycle between 60/30/25/15/5 minute presets
+- Use the slider for custom durations
+- A 5-minute warning plays before time's up
 
-**The dock** at the bottom has your apps. Click any to open in a new tab. Press 1 to 8 on your keyboard to open them even faster.
+### Apps
+- Hover a department pill in the topbar to see that department's apps
+- Click any app to open it in a new tab
+- Use **Cmd+K** to quick-search any app by name
 
-**The focus timer** is a Pomodoro timer. Press F to start a 25-minute focus session. It beeps when done and counts your sessions for the day.
-
-**Widgets** (meetings, sprint, rocks, tasks) live in a slide-out panel. Press W to open it.
-
----
-
-## Keyboard shortcuts
-
-| Action | Shortcut |
+### Keyboard Shortcuts
+| Key | Action |
 |---|---|
-| Open app 1 to 8 | `1` to `8` |
-| Quick launch / search | `Cmd+K` or `/` |
-| Toggle widgets panel | `W` |
-| Start/pause focus timer | `F` |
-| Settings | `S` |
-| Toggle light/dark mode | `Alt+L` |
-| Help | `?` |
-| Close anything | `Esc` |
+| **Cmd+K** | Quick launch (search apps) |
+| **W** | Toggle widgets panel |
+| **S** | Open settings |
+| **F** | Start/pause focus timer |
+| **?** | Show all shortcuts |
+| **1-8** | Switch between modes |
+| **Esc** | Close any overlay |
+
+### Settings (press S)
+- **Appearance** — dark/light mode toggle
+- **Background** — team photos, gradients, unicode art, dither
+- **Hero layout** — drag to reorder clock, timer, priorities, quote
+- **View mode** — Classic, Minimal, Compact, Grid
+- **Sound theme** — different completion sounds
+- **Your photos** — upload personal background photos
 
 ---
 
-## Sharing your priorities
+## Your Data
 
-Click the **Share** button below your priorities card. It generates a clean image of your top 3 that you can:
-- Drag into Google Chat
-- Send to Slack
-- Save to your desktop
-
-This replaces the morning "what are you working on?" message: just screenshot and share.
+- **Synced to cloud** — your setup follows you across devices and browsers
+- **Sign in on any computer** with your Gravitate Google account and everything's there
+- **90-day session** — you only need to sign in again every 3 months
+- **Photos** — custom uploaded photos are stored in your browser only (not synced)
 
 ---
 
-## Customising
+## Troubleshooting
 
-### Change your apps
-Hover any dock app and click the edit button (pencil icon). You can change the name, URL, and icon.
-
-### Change your context mode
-Click the mode switcher in the top bar (shows "Morning", "Deep Work", etc). Each mode swaps your dock apps and layout. Modes auto-switch by time of day, or you can switch manually.
-
-### Change your theme
-Press `S` for settings. Pick a background theme or leave it on "Auto" to shift with the time of day.
-
-### Your data
-Everything is saved in your browser's localStorage. It stays on your machine. Nobody else can see it.
-
-You can export your config as a JSON file (Settings, Export) and import it on another device.
+| Issue | Fix |
+|---|---|
+| Blank screen | Hard refresh: Cmd+Shift+R |
+| Lost my setup | Sign in again — cloud backup restores it |
+| Weather not showing | Allow location access when prompted |
+| New tab doesn't open Focus | Check the Chrome extension is enabled |
+| Can't sign in | Make sure you're using your @gravitatedigital.com.au account |
 
 ---
 
-## FAQ
+## Questions?
 
-**Does it track me?**
-No. Zero tracking, zero analytics, zero data sent anywhere. It's a static HTML file.
-
-**Can I use it on multiple devices?**
-Yes. Set it up on each device separately. Use Export/Import in Settings to copy your config between devices.
-
-**What if I want different apps?**
-Edit any dock slot, or go to Settings and reset to pick a new role.
-
-**Does it work on Firefox/Safari/Edge?**
-Yes. It's a standard web page. The "New Tab Override" extension is Chrome-specific but the URL works in any browser.
-
-**The focus timer stopped when I closed the tab?**
-The timer pauses when the tab is closed and resumes where you left off when you reopen it.
-
----
+Ask Saxon or open a ticket in Asana.
 
 *◎ Gravitate. We Grow Brands.*
