@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Focus</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
 <style>
 @font-face{font-family:'Aspekta';src:url('fonts/Aspekta-400.ttf') format('truetype');font-weight:400;font-display:swap}
 @font-face{font-family:'Aspekta';src:url('fonts/Aspekta-500.ttf') format('truetype');font-weight:500;font-display:swap}
@@ -1131,6 +1132,16 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 </head>
 <body>
 
+<div id="login-gate" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--bg,#050a14);align-items:center;justify-content:center;flex-direction:column;gap:20px">
+  <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="rgba(106,167,255,.8)" stroke-width="1.6" style="width:48px;height:48px"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.4" fill="rgba(106,167,255,.8)" stroke="none"/><path d="M12 1.5v3.4M12 19.1v3.4M1.5 12h3.4M19.1 12h3.4" stroke-linecap="round"/></svg>
+  <div style="font-size:24px;font-weight:200;color:rgba(255,255,255,.9);letter-spacing:-.02em">Gravitate Focus</div>
+  <button id="google-login-btn" style="margin-top:20px;padding:12px 28px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);backdrop-filter:blur(20px);color:rgba(255,255,255,.9);font-size:14px;font-weight:500;cursor:pointer;font-family:-apple-system,sans-serif;display:flex;align-items:center;gap:10px;transition:background .15s">
+    <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+    Sign in with Google
+  </button>
+  <div style="font-size:11px;color:rgba(255,255,255,.3);margin-top:8px">Gravitate team members only</div>
+</div>
+
 <div id="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div id="photo-bg"></div><div id="photo-texture"></div><div id="unicode-bg"></div><div id="dither-bg"></div><div id="photo-dither-overlay"></div></div>
 
 <div id="app">
@@ -1240,6 +1251,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 <!-- SIDE PANEL -->
 <aside id="side-panel">
   <button class="sp-close" id="sp-close" title="Close panel">&#10005;</button>
+  <div id="announcements-widget"></div>
   <div class="widget" id="w-meetings">
     <div class="widget-head">
       <div class="widget-label">Up Next</div>
@@ -1585,6 +1597,13 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <button class="btn btn-danger" id="btn-reset-all" style="width:100%;text-align:center">Reset All Data</button>
       </div>
     </div>
+    <div class="settings-group">
+      <div class="settings-group-label">Account</div>
+      <div class="settings-row">
+        <div class="settings-row-label" id="settings-user-info">Signed in</div>
+        <button class="btn btn-sec" id="btn-sign-out" style="font-size:11px;padding:6px 12px;color:var(--danger)">Sign Out</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1699,6 +1718,118 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
    Focus . focus-os.js
    Gravitate AI Arm . v13 (Momentum)
 ====================================== */
+
+// Supabase Auth
+const SUPABASE_URL = 'https://gskvvvqnyzgrxyvdkcsg.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdza3Z2dnFueXpncnh5dmRrY3NnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0NzU3MTYsImV4cCI6MjA5ODA1MTcxNn0.X-y1fgKoZeLlyeypClo34MxjWsisjaneu-12k_G_NiI';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let currentUser = null;
+
+async function checkAuth() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    document.getElementById('login-gate').style.display = 'none';
+    return true;
+  }
+  // Show login gate
+  document.getElementById('login-gate').style.display = 'flex';
+  return false;
+}
+
+async function signInWithGoogle() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: window.location.origin + window.location.pathname,
+      queryParams: { hd: 'gravitatedigital.com.au' }
+    }
+  });
+  if (error) console.error('Login error:', error.message);
+}
+
+async function signOut() {
+  await supabase.auth.signOut();
+  currentUser = null;
+  document.getElementById('login-gate').style.display = 'flex';
+}
+
+// Listen for auth state changes (handles OAuth redirect callback)
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' && session) {
+    currentUser = session.user;
+    document.getElementById('login-gate').style.display = 'none';
+    // Load cloud preferences after sign in
+    loadCloudPreferences();
+  }
+  if (event === 'SIGNED_OUT') {
+    currentUser = null;
+    document.getElementById('login-gate').style.display = 'flex';
+  }
+});
+
+// Cloud Preference Sync
+async function saveCloudPreferences() {
+  if (!currentUser) return;
+  try {
+    const { error } = await supabase.from('user_preferences').upsert({
+      user_id: currentUser.id,
+      email: currentUser.email,
+      display_name: currentUser.user_metadata?.full_name || currentUser.email,
+      preferences: S,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id' });
+    if (error) console.error('Sync error:', error.message);
+  } catch (e) { console.error('Sync failed:', e); }
+}
+
+async function loadCloudPreferences() {
+  if (!currentUser) return;
+  try {
+    const { data, error } = await supabase.from('user_preferences')
+      .select('preferences')
+      .eq('user_id', currentUser.id)
+      .single();
+    if (data && data.preferences && Object.keys(data.preferences).length > 0) {
+      // Cloud preferences exist - merge them into local state
+      Object.assign(S, data.preferences);
+      save(); // Save to localStorage too
+      renderAll();
+    } else {
+      // No cloud data yet - push local state to cloud
+      saveCloudPreferences();
+    }
+  } catch (e) { console.error('Load failed:', e); }
+}
+
+// Debounced cloud sync - call after every save()
+let cloudSyncTimer = null;
+function scheduleCloudSync() {
+  if (cloudSyncTimer) clearTimeout(cloudSyncTimer);
+  cloudSyncTimer = setTimeout(saveCloudPreferences, 5000); // Sync 5s after last change
+}
+
+// Announcements
+async function loadAnnouncements() {
+  const el = document.getElementById('announcements-widget');
+  if (!el || !currentUser) return;
+  try {
+    const { data } = await supabase.from('announcements')
+      .select('*')
+      .eq('active', true)
+      .order('created_at', { ascending: false })
+      .limit(5);
+    if (!data || data.length === 0) { el.innerHTML = ''; return; }
+    el.innerHTML = data.map(a => {
+      const typeColors = { info: 'var(--accent)', update: 'var(--ok)', alert: 'var(--danger)', ad: '#ffd86b' };
+      const color = typeColors[a.type] || 'var(--accent)';
+      return '<div class="widget" style="margin-bottom:12px;border-left:3px solid '+color+'">' +
+        '<div class="widget-label" style="color:'+color+'">' + (a.type === 'ad' ? '\uD83D\uDCE2' : '\uD83D\uDCCC') + ' ' + esc(a.title) + '</div>' +
+        (a.body ? '<div style="font-size:12px;color:var(--mu);line-height:1.5;margin-top:6px">' + esc(a.body) + '</div>' : '') +
+        '</div>';
+    }).join('');
+  } catch (e) { el.innerHTML = ''; }
+}
 
 const KEY = 'focos_v12';
 
@@ -2648,7 +2779,7 @@ function loadState() {
 }
 
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch {} scheduleCloudSync(); }
 
 /* -- VOICE INPUT (Web Speech API) -- */
 function startVoiceInput(inputEl, micBtn) {
@@ -5368,7 +5499,7 @@ function setupWsName() {
 /* -- UTILITY -- */
 
 function set(id, val){ const el=document.getElementById(id); if(el) el.textContent=val; }
-function esc(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function esc(str){ return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 function toMin(t){ const [h,m]=t.split(':').map(Number); return h*60+m; }
 function fmt12(t){ let [h,m]=t.split(':').map(Number); const ap=h>=12?'pm':'am'; h=h%12||12; return h+':'+String(m).padStart(2,'0')+ap; }
 function timeAgo(ts){
@@ -5553,8 +5684,21 @@ function renderCategorySettings() {
   });
 }
 
-function init() {
+async function init() {
+  // Auth gate
+  const authed = await checkAuth();
+  if (!authed) {
+    document.getElementById('google-login-btn').addEventListener('click', signInWithGoogle);
+    return; // Don't init the app until logged in
+  }
+
   S = loadState();
+
+  // Set workspace name to user's first name if not set
+  if (currentUser && !S.wsName) {
+    S.wsName = (currentUser.user_metadata?.full_name || currentUser.email).split(' ')[0];
+    save();
+  }
 
   // Apply auto-theme if enabled, otherwise manual theme
   if (S.autoTheme) {
@@ -5729,6 +5873,13 @@ function init() {
   });
   document.getElementById('btn-reset-all').addEventListener('click', resetAllData);
 
+  // Account sign out
+  document.getElementById('btn-sign-out').addEventListener('click', signOut);
+  const userInfo = document.getElementById('settings-user-info');
+  if (currentUser && userInfo) {
+    userInfo.innerHTML = (currentUser.user_metadata?.full_name || currentUser.email) + '<br><small style="color:var(--mu);font-weight:400">' + currentUser.email + '</small>';
+  }
+
   // Quick add task
   document.getElementById('task-add-btn').addEventListener('click', showTaskAdd);
   const taskInput = document.getElementById('task-add-input');
@@ -5810,6 +5961,10 @@ function init() {
     }
     showIntentionGate();
   }
+
+  // Cloud sync and announcements
+  loadCloudPreferences();
+  loadAnnouncements();
 }
 
 document.addEventListener('DOMContentLoaded', init);
