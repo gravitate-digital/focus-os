@@ -421,6 +421,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .cmdk-meta{font-size:10px;color:var(--dim);display:flex;align-items:center;gap:5px;flex-shrink:0}
 .cmdk-kbd{font-family:var(--mono);font-size:10px;background:rgba(255,255,255,.08);border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--mu)}
 .cmdk-empty{padding:26px;text-align:center;color:var(--dim);font-size:13px}
+.cmdk-search-row{display:flex;align-items:center;gap:6px;padding:10px 14px;border-top:1px solid var(--line);flex-wrap:wrap}
+.cmdk-search-lbl{font-size:10px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;font-weight:600;margin-right:2px;white-space:nowrap}
+.cmdk-search-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--mu);font-size:11.5px;font-family:var(--font);cursor:pointer;transition:background .12s,border-color .12s,color .12s;white-space:nowrap}
+.cmdk-search-btn:hover{background:rgba(106,167,255,.14);border-color:rgba(106,167,255,.3);color:var(--tx)}
+.cmdk-search-btn img{width:14px;height:14px;border-radius:2px}
+.cmdk-search-hide{display:none}
 .cmdk-foot{display:flex;gap:16px;padding:10px 16px;border-top:1px solid var(--line);font-size:10.5px;color:var(--dim)}
 .cmdk-foot span{display:flex;align-items:center;gap:5px}
 
@@ -607,6 +613,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-light="1"] #hero-onething{background:linear-gradient(180deg,rgba(0,72,173,.08),rgba(0,72,173,.03));border-color:rgba(0,72,173,.15)}
 [data-light="1"] #coach-toast,[data-light="1"] #cmdk,[data-light="1"] .modal-box{background:rgba(250,249,246,.94);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%)}
 [data-light="1"] .mtg-title,[data-light="1"] .cmdk-name{color:rgba(0,0,0,.84)}
+[data-light="1"] .cmdk-search-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.12);color:rgba(0,0,0,.6)}
+[data-light="1"] .cmdk-search-btn:hover{background:rgba(0,80,200,.1);border-color:rgba(0,80,200,.25);color:rgba(0,0,0,.84)}
 [data-light="1"] .f-input{background:rgba(237,233,222,.4);border-color:rgba(0,25,61,.1);color:#00193D}
 [data-light="1"] .theme-opt{background:rgba(237,233,222,.35)}
 [data-light="1"] .sens-opt{background:rgba(237,233,222,.35)}
@@ -1325,6 +1333,14 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <input id="cmdk-input" placeholder="Jump to an app or task..." spellcheck="false" autocomplete="off" />
     </div>
     <div id="cmdk-list"></div>
+    <div id="cmdk-search-row" class="cmdk-search-row cmdk-search-hide">
+      <span class="cmdk-search-lbl">Search with</span>
+      <button class="cmdk-search-btn" data-engine="google"><img src="https://www.google.com/favicon.ico" alt="">Google</button>
+      <button class="cmdk-search-btn" data-engine="chatgpt"><img src="https://cdn.oaistatic.com/assets/favicon-mh-o2gm12s6.ico" alt="">ChatGPT</button>
+      <button class="cmdk-search-btn" data-engine="claude"><img src="https://claude.ai/favicon.ico" alt="">Claude</button>
+      <button class="cmdk-search-btn" data-engine="drive"><img src="https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png" alt="">Drive</button>
+      <button class="cmdk-search-btn" data-engine="gmail"><img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" alt="">Gmail</button>
+    </div>
     <div class="cmdk-foot">
       <span><span class="cmdk-kbd">&uarr;&darr;</span> navigate</span>
       <span><span class="cmdk-kbd">&crarr;</span> open</span>
@@ -1741,7 +1757,7 @@ async function signInWithGoogle() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: window.location.origin + window.location.pathname,
+      redirectTo: 'https://gravitate-focus.vercel.app',
       queryParams: { hd: 'gravitatedigital.com.au' }
     }
   });
@@ -4377,6 +4393,27 @@ function openCmdk() {
 }
 function closeCmdk() { document.getElementById('cmdk-bg').classList.remove('open'); }
 
+const SEARCH_ENGINES = {
+  google: q => 'https://www.google.com/search?q=' + encodeURIComponent(q),
+  chatgpt: q => 'https://chatgpt.com/?q=' + encodeURIComponent(q),
+  claude: q => 'https://claude.ai/new?q=' + encodeURIComponent(q),
+  drive: q => 'https://drive.google.com/drive/search?q=' + encodeURIComponent(q),
+  gmail: q => 'https://mail.google.com/mail/u/0/#search/' + encodeURIComponent(q)
+};
+
+function updateSearchRow() {
+  const q = document.getElementById('cmdk-input').value.trim();
+  const row = document.getElementById('cmdk-search-row');
+  row.classList.toggle('cmdk-search-hide', !q);
+}
+
+function runSearch(engine) {
+  const q = document.getElementById('cmdk-input').value.trim();
+  if (!q || !SEARCH_ENGINES[engine]) return;
+  window.open(SEARCH_ENGINES[engine](q), '_blank', 'noopener');
+  closeCmdk();
+}
+
 function runCmdk() {
   const it = cmdkItems[cmdkSel];
   if (!it) return;
@@ -5837,8 +5874,11 @@ async function init() {
 
   // Command palette input
   const cmdkInput = document.getElementById('cmdk-input');
-  cmdkInput.addEventListener('input', () => { cmdkItems = buildCmdkItems(cmdkInput.value); cmdkSel = 0; renderCmdk(); });
+  cmdkInput.addEventListener('input', () => { cmdkItems = buildCmdkItems(cmdkInput.value); cmdkSel = 0; renderCmdk(); updateSearchRow(); });
   document.getElementById('cmdk-bg').addEventListener('click', e => { if (e.target.id==='cmdk-bg') closeCmdk(); });
+  document.querySelectorAll('.cmdk-search-btn').forEach(btn => {
+    btn.addEventListener('click', () => runSearch(btn.dataset.engine));
+  });
 
   // Edit panel modal
   document.getElementById('edit-close').addEventListener('click', () => closeModal('modal-edit'));
