@@ -1771,15 +1771,19 @@ async function signOut() {
 }
 
 // Listen for auth state changes (handles OAuth redirect callback)
+let appInitialized = false;
 supabase.auth.onAuthStateChange((event, session) => {
   if (event === 'SIGNED_IN' && session) {
     currentUser = session.user;
     document.getElementById('login-gate').style.display = 'none';
-    // Load cloud preferences after sign in
-    loadCloudPreferences();
+    // Boot the app if it hasn't initialized yet (e.g. after OAuth redirect)
+    if (!appInitialized && document.readyState !== 'loading') {
+      init();
+    }
   }
   if (event === 'SIGNED_OUT') {
     currentUser = null;
+    appInitialized = false;
     document.getElementById('login-gate').style.display = 'flex';
   }
 });
@@ -6005,6 +6009,7 @@ async function init() {
   // Cloud sync and announcements
   loadCloudPreferences();
   loadAnnouncements();
+  appInitialized = true;
 }
 
 document.addEventListener('DOMContentLoaded', init);
