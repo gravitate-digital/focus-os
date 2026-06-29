@@ -139,7 +139,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .tb-btn svg{width:14px;height:14px;flex-shrink:0}
 .tb-btn .lbl{font-size:12px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
 .cmd-hint{font-family:var(--mono);font-size:9.5px;color:var(--dim);border:1px solid var(--line);border-radius:4px;padding:1px 4px;margin-left:2px}
-#btn-cmdk{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--dim);font-size:11px;cursor:pointer;font-family:var(--font);transition:background .14s,border-color .14s;min-width:120px}
+#btn-cmdk{display:flex;align-items:center;gap:6px;padding:4px 14px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--dim);font-size:11px;cursor:pointer;font-family:var(--font);transition:background .14s,border-color .14s;min-width:180px;flex-shrink:1}
 #btn-cmdk:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.12);color:var(--mu)}
 
 /* -- CONTEXT MODE SWITCHER -- */
@@ -265,7 +265,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* -- BOTTOM DOCK -- */
 #dock{flex-shrink:0;padding:6px 16px 12px;display:flex;justify-content:center;z-index:40}
 /* Dept pills: inline in topbar */
-#dock-dept-bar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1.5;min-width:0}
+#dock-dept-bar{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:3;min-width:0}
 #dock-dept-bar::-webkit-scrollbar{display:none}
 .dept-pill{padding:3px 8px;border-radius:6px;background:transparent;border:1px solid transparent;color:var(--dim);font-size:9px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s,border-color .14s;white-space:nowrap;flex-shrink:0}
 .dept-pill:hover,.dept-pill.active{background:rgba(106,167,255,.1);color:var(--accent);border-color:rgba(106,167,255,.15)}
@@ -1140,6 +1140,45 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .user-photo-thumb img{width:100%;height:100%;object-fit:cover;border-radius:7px}
 .user-photo-thumb .photo-del{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;cursor:pointer;border:none;font-family:var(--font)}
 .user-photo-thumb:hover .photo-del{display:flex}
+
+/* -- NOTES -- */
+.note-row{display:flex;align-items:flex-start;gap:7px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px;line-height:1.4}
+.note-row:last-child{border-bottom:none}
+.note-row.note-done{opacity:.35}
+.note-text{flex:1;color:var(--mu);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.note-client{font-size:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,220,80,.7);margin-bottom:2px}
+.note-meta{font-size:9px;color:var(--dim);margin-top:2px}
+.note-actions{display:flex;gap:2px;flex-shrink:0;margin-left:auto}
+.note-btn{width:22px;height:22px;border:none;background:none;color:var(--dim);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;border-radius:4px;transition:opacity .15s,color .15s,background .14s;opacity:0;font-family:var(--font)}
+.note-row:hover .note-btn{opacity:.6}
+.note-btn:hover{opacity:1!important;color:var(--tx);background:rgba(255,255,255,.08)}
+.note-btn.note-pin-active{opacity:.8;color:rgba(255,220,80,.8)}
+.note-btn.note-done-btn:hover{color:var(--ok)}
+.note-btn.note-del-btn:hover{color:var(--danger);background:rgba(255,120,120,.1)}
+#note-add-wrap{display:none;margin-top:8px}
+#note-add-wrap.open{display:block}
+#note-add-textarea{width:100%;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--tx);font-size:12px;font-family:var(--font);outline:none;resize:none;min-height:48px;line-height:1.4}
+#note-add-textarea:focus{border-color:var(--accent)}
+#note-client-input{width:100%;padding:5px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:var(--tx);font-size:11px;font-family:var(--font);outline:none;margin-top:4px}
+#note-client-input:focus{border-color:var(--accent)}
+.note-submit-row{display:flex;gap:5px;margin-top:5px}
+.note-submit-btn{padding:5px 12px;border-radius:7px;background:rgba(255,220,80,.15);border:1px solid rgba(255,220,80,.2);color:rgba(255,220,80,.9);font-size:11px;cursor:pointer;font-family:var(--font);font-weight:600;transition:background .14s}
+.note-submit-btn:hover{background:rgba(255,220,80,.25)}
+
+/* Pinned notes on hero */
+.pinned-note{position:absolute;width:220px;padding:12px 14px;border-radius:12px;background:rgba(255,220,80,.12);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1px solid rgba(255,220,80,.2);box-shadow:0 4px 16px rgba(0,0,0,.15);cursor:grab;z-index:30;font-size:12px;color:var(--tx);font-family:var(--font);line-height:1.5;user-select:none}
+.pinned-note:active{cursor:grabbing}
+.pinned-note .pn-client{font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,220,80,.7);margin-bottom:4px}
+.pinned-note .pn-text{font-size:12px;color:var(--tx);line-height:1.5}
+.pinned-note .pn-time{font-size:9px;color:var(--dim);margin-top:6px}
+.pinned-note .pn-actions{display:flex;gap:4px;margin-top:6px}
+.pinned-note .pn-btn{font-size:10px;padding:2px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.06);color:var(--mu);cursor:pointer;font-family:var(--font)}
+.pn-btn.pn-asana{color:rgba(255,220,80,.8);border-color:rgba(255,220,80,.2)}
+.pn-btn.pn-asana:hover{background:rgba(255,220,80,.15)}
+.pn-btn.pn-unpin{color:var(--dim)}
+.pn-btn.pn-unpin:hover{background:rgba(255,255,255,.1)}
+#pinned-notes{position:absolute;inset:0;pointer-events:none;z-index:30}
+#pinned-notes .pinned-note{pointer-events:auto}
 </style>
 </head>
 <body>
@@ -1187,6 +1226,9 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       </button>
       <span id="tb-weather" title="Current temperature" style="font-size:11px;color:var(--mu);letter-spacing:.02em;min-width:38px;text-align:right;font-variant-numeric:tabular-nums"></span>
       <!-- Light mode toggle moved to Settings -->
+      <button class="tb-btn" id="btn-note" aria-label="Quick note" title="Quick note (N)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
       <button class="tb-btn" id="btn-settings" aria-label="Settings" title="Settings (S)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
       </button>
@@ -1246,6 +1288,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <button class="pos-btn active" data-pos="center" title="Center">&#9679;</button>
       <button class="pos-btn" data-pos="right" title="Align right">&#9654;</button>
     </div>
+    <div id="pinned-notes"></div>
   </main>
 
   <!-- BOTTOM DOCK -->
@@ -1320,6 +1363,21 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       </div>
       <button class="task-adhoc-toggle" id="sidebar-adhoc-toggle" style="margin-top:4px" title="Mark as unplanned">Ad hoc</button>
     </div>
+  </div>
+
+  <div class="widget" id="w-notes">
+    <div class="widget-head">
+      <div class="widget-label">Notes</div>
+      <button class="widget-add" id="note-add-btn" title="Add note">+</button>
+    </div>
+    <div id="note-add-wrap">
+      <textarea id="note-add-textarea" placeholder="Quick note..." spellcheck="false" rows="2"></textarea>
+      <input id="note-client-input" placeholder="Client / project (optional)" spellcheck="false" />
+      <div class="note-submit-row">
+        <button class="note-submit-btn" id="note-submit">Add Note</button>
+      </div>
+    </div>
+    <div id="notes-list"></div>
   </div>
 
   <div class="widget" id="w-usage">
@@ -1603,7 +1661,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
         <div style="margin-bottom:6px">Focus stores everything in your browser's localStorage. Nothing is sent to any server, database, or third party. No cookies. No tracking. No analytics.</div>
         <div style="margin-bottom:6px"><strong style="color:var(--tx)">App links</strong> open external sites (Asana, Google, etc.) in new tabs. Those sites have their own login and security. Focus does not access, read, or store your credentials for any external service.</div>
         <div style="margin-bottom:6px"><strong style="color:var(--tx)">Asana task sync</strong> is not available in this version. Pulling tasks from Asana requires OAuth authentication with a backend server to handle tokens securely. This will be available when Focus moves to a proper app build (Next.js + Supabase). For now, tasks are managed manually within Focus.</div>
-        <div><strong style="color:var(--tx)">To clear all data:</strong> use the Reset button below, or run <code style="font-size:11px;background:rgba(255,255,255,.08);padding:1px 5px;border-radius:3px">localStorage.removeItem('focos_v12')</code> in the browser console.</div>
+        <div><strong style="color:var(--tx)">To clear all data:</strong> use the Reset button below, or run <code style="font-size:11px;background:rgba(255,255,255,.08);padding:1px 5px;border-radius:3px">localStorage.removeItem('focos_v13')</code> in the browser console.</div>
       </div>
     </div>
 
@@ -1856,7 +1914,7 @@ async function loadAnnouncements() {
   } catch (e) { el.innerHTML = ''; }
 }
 
-const KEY = 'focos_v12';
+const KEY = 'focos_v13';
 
 const EMOJIS = [
   '\u25CE','\u25B2','\u25C8','\u273A','\u25C9','\u2302','\u2605','\u2606','\u25CF','\u25CB',
@@ -2693,10 +2751,11 @@ const DEFAULT_STATE = {
   // Daily intention
   intentionDate: null,
   // Widgets
-  sprint:{name:'Sprint 12', daysLeft:8, progress:68},
+  sprint:{name:'', daysLeft:0, progress:0},
   meetings:[],
   rocks:[],
   tasks:[],
+  notes:[],
   coach:{on:true, sensitivity:'med', switchCount:0},
   soundEffect: 'ding',
   soundMuted: false,
@@ -2791,6 +2850,8 @@ function loadState() {
     if (!merged.heroView) merged.heroView = 'classic';
     if (merged.showQuotes === undefined) merged.showQuotes = true;
     if (merged.waterReminder === undefined) merged.waterReminder = true;
+    // Notes migration
+    if (!merged.notes) merged.notes = [];
     // Usage stats migration
     if (!merged.usage) merged.usage = clone(DEFAULT_STATE.usage);
     if (!merged.usage.firstOpen) merged.usage.firstOpen = new Date().toISOString();
@@ -3936,6 +3997,205 @@ function saveSprintEdit() {
   sprintEditing = false;
   document.getElementById('sprint-body').style.display = 'block';
   document.getElementById('sprint-edit-form').style.display = 'none';
+}
+
+/* -- NOTES -- */
+
+function relativeTime(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return m + 'm ago';
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + 'h ago';
+  const d = Math.floor(h / 24);
+  if (d === 1) return 'yesterday';
+  return d + 'd ago';
+}
+
+function renderNotes() {
+  const el = document.getElementById('notes-list');
+  if (!el) return;
+  if (!S.notes) S.notes = [];
+
+  // Sort: non-done newest first, done at bottom newest first
+  const sorted = S.notes.slice().sort((a, b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    return new Date(b.created) - new Date(a.created);
+  });
+
+  el.innerHTML = sorted.map(n => {
+    const doneClass = n.done ? ' note-done' : '';
+    const pinClass = n.pinned ? ' note-pin-active' : '';
+    return '<div class="note-row' + doneClass + '" data-nid="' + n.id + '">' +
+      '<div style="flex:1;min-width:0">' +
+      (n.client ? '<div class="note-client">' + esc(n.client) + '</div>' : '') +
+      '<div class="note-text">' + esc(n.text) + '</div>' +
+      '<div class="note-meta">' + relativeTime(n.created) + '</div>' +
+      '</div>' +
+      '<div class="note-actions">' +
+      '<button class="note-btn note-pin-btn' + pinClass + '" data-nid="' + n.id + '" title="' + (n.pinned ? 'Unpin' : 'Pin to screen') + '">\uD83D\uDCCC</button>' +
+      '<button class="note-btn note-done-btn" data-nid="' + n.id + '" title="' + (n.done ? 'Undo' : 'Moved to Asana') + '">\u2713</button>' +
+      '<button class="note-btn note-del-btn" data-nid="' + n.id + '" title="Delete">\u2715</button>' +
+      '</div></div>';
+  }).join('');
+
+  // Event: pin toggle
+  el.querySelectorAll('.note-pin-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const note = S.notes.find(n => n.id === +btn.dataset.nid);
+      if (!note) return;
+      note.pinned = !note.pinned;
+      if (note.pinned && !note.pinnedPos) note.pinnedPos = { x: 20, y: 100 };
+      save(); renderNotes(); renderPinnedNotes();
+    });
+  });
+
+  // Event: done toggle
+  el.querySelectorAll('.note-done-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const note = S.notes.find(n => n.id === +btn.dataset.nid);
+      if (!note) return;
+      note.done = !note.done;
+      if (note.done) note.pinned = false;
+      save(); renderNotes(); renderPinnedNotes();
+    });
+  });
+
+  // Event: delete
+  el.querySelectorAll('.note-del-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      S.notes = S.notes.filter(n => n.id !== +btn.dataset.nid);
+      save(); renderNotes(); renderPinnedNotes();
+    });
+  });
+
+  // Wire add button
+  const addBtn = document.getElementById('note-add-btn');
+  const addWrap = document.getElementById('note-add-wrap');
+  if (addBtn && addWrap && !addBtn._noteWired) {
+    addBtn._noteWired = true;
+    addBtn.addEventListener('click', () => {
+      addWrap.classList.toggle('open');
+      if (addWrap.classList.contains('open')) {
+        document.getElementById('note-add-textarea').focus();
+      }
+    });
+  }
+
+  const submitBtn = document.getElementById('note-submit');
+  if (submitBtn && !submitBtn._noteWired) {
+    submitBtn._noteWired = true;
+    submitBtn.addEventListener('click', addNote);
+  }
+
+  const textarea = document.getElementById('note-add-textarea');
+  if (textarea && !textarea._noteWired) {
+    textarea._noteWired = true;
+    textarea.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        addNote();
+      }
+    });
+  }
+}
+
+function addNote() {
+  const textarea = document.getElementById('note-add-textarea');
+  const clientInput = document.getElementById('note-client-input');
+  const text = (textarea ? textarea.value.trim() : '');
+  if (!text) return;
+  const client = clientInput ? clientInput.value.trim() : '';
+  S.notes.push({
+    id: Date.now(),
+    text: text,
+    client: client,
+    pinned: false,
+    pinnedPos: { x: 20, y: 100 },
+    created: new Date().toISOString(),
+    done: false
+  });
+  save();
+  if (textarea) textarea.value = '';
+  if (clientInput) clientInput.value = '';
+  renderNotes();
+}
+
+function renderPinnedNotes() {
+  const container = document.getElementById('pinned-notes');
+  if (!container) return;
+  if (!S.notes) S.notes = [];
+  const pinned = S.notes.filter(n => n.pinned && !n.done);
+  container.innerHTML = pinned.map(n => {
+    const pos = n.pinnedPos || { x: 20, y: 100 };
+    return '<div class="pinned-note" data-nid="' + n.id + '" style="left:' + pos.x + 'px;top:' + pos.y + 'px">' +
+      (n.client ? '<div class="pn-client">' + esc(n.client) + '</div>' : '') +
+      '<div class="pn-text">' + esc(n.text) + '</div>' +
+      '<div class="pn-time">' + relativeTime(n.created) + '</div>' +
+      '<div class="pn-actions">' +
+      '<button class="pn-btn pn-asana" data-nid="' + n.id + '">Move to Asana</button>' +
+      '<button class="pn-btn pn-unpin" data-nid="' + n.id + '">Unpin</button>' +
+      '</div></div>';
+  }).join('');
+
+  // Wire actions
+  container.querySelectorAll('.pn-asana').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const note = S.notes.find(n => n.id === +btn.dataset.nid);
+      if (!note) return;
+      note.done = true;
+      note.pinned = false;
+      save(); renderNotes(); renderPinnedNotes();
+    });
+  });
+
+  container.querySelectorAll('.pn-unpin').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const note = S.notes.find(n => n.id === +btn.dataset.nid);
+      if (!note) return;
+      note.pinned = false;
+      save(); renderNotes(); renderPinnedNotes();
+    });
+  });
+
+  // Wire drag
+  container.querySelectorAll('.pinned-note').forEach(card => {
+    card.addEventListener('mousedown', e => {
+      if (e.target.closest('.pn-btn')) return;
+      e.preventDefault();
+      const nid = +card.dataset.nid;
+      const note = S.notes.find(n => n.id === nid);
+      if (!note) return;
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const origX = note.pinnedPos ? note.pinnedPos.x : 20;
+      const origY = note.pinnedPos ? note.pinnedPos.y : 100;
+      card.style.cursor = 'grabbing';
+
+      function onMove(ev) {
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        card.style.left = (origX + dx) + 'px';
+        card.style.top = (origY + dy) + 'px';
+      }
+
+      function onUp(ev) {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        card.style.cursor = 'grab';
+        const dx = ev.clientX - startX;
+        const dy = ev.clientY - startY;
+        note.pinnedPos = { x: origX + dx, y: origY + dy };
+        save();
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
 }
 
 /* -- SETTINGS -- */
@@ -5477,6 +5737,8 @@ function renderAll() {
   renderSprint();
   renderRocks();
   renderTasks();
+  renderNotes();
+  renderPinnedNotes();
   renderUsageWidget();
   renderHeroOrder();
   applyHeroView();
@@ -5512,6 +5774,15 @@ function setupKeyboard() {
     if (/^[1-8]$/.test(e.key)) { const idx=+e.key-1; if (idx<S.panels.length) openPanel(idx); return; }
     if (e.key.toLowerCase()==='w' && !e.altKey && !e.metaKey && !e.ctrlKey){ e.preventDefault(); toggleSidePanel(); return; }
     if (e.key.toLowerCase()==='f' && !e.altKey && !e.metaKey && !e.ctrlKey){ e.preventDefault(); toggleFocusSession(); return; }
+    if (e.key.toLowerCase()==='n' && !e.altKey && !e.metaKey && !e.ctrlKey){
+      e.preventDefault();
+      const sp = document.getElementById('side-panel');
+      if (sp && !sp.classList.contains('open')) toggleSidePanel();
+      const wrap = document.getElementById('note-add-wrap');
+      if (wrap) wrap.classList.add('open');
+      setTimeout(() => { const ta = document.getElementById('note-add-textarea'); if (ta) ta.focus(); }, 120);
+      return;
+    }
     if (e.altKey && e.key.toLowerCase()==='l'){ e.preventDefault(); setLight(!S.light); return; }
     if (e.key.toLowerCase()==='s' && !e.altKey && !e.metaKey && !e.ctrlKey){
       e.preventDefault();
@@ -5826,6 +6097,15 @@ async function init() {
   document.getElementById('btn-cmdk').addEventListener('click', openCmdk);
   document.getElementById('btn-settings').addEventListener('click', () => openModal('modal-settings'));
   document.getElementById('btn-sidepanel').addEventListener('click', toggleSidePanel);
+  document.getElementById('btn-note').addEventListener('click', () => {
+    openSidePanel();
+    setTimeout(() => {
+      const ta = document.getElementById('note-add-textarea');
+      if (ta) { ta.style.display = 'block'; ta.focus(); }
+      const wrap = document.getElementById('note-add-wrap');
+      if (wrap) wrap.style.display = 'block';
+    }, 200);
+  });
 
   // Hero entrance animation
   setTimeout(() => {
