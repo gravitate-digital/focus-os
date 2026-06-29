@@ -5310,7 +5310,8 @@ function playTaskSound() {
   audio.play().catch(() => {});
   audio.addEventListener('ended', () => { if (currentPreviewAudio === audio) currentPreviewAudio = null; });
   if (S.soundEffect === 'finish-him') showFinishHim();
-  trackStreak();
+  // Delay streak so it plays AFTER the task sound, not on top of it
+  setTimeout(trackStreak, 1800);
 }
 
 function showFinishHim() {
