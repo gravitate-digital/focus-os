@@ -74,15 +74,15 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 #photo-bg.trans-zoom{transition:opacity 1.2s ease,transform 3s ease}
 @media(prefers-reduced-motion:no-preference){#photo-bg{animation:photoFloat 30s ease-in-out infinite}}
 @keyframes photoFloat{0%,100%{transform:translate(0,0) scale(1.02)}25%{transform:translate(4px,-3px) scale(1.03)}50%{transform:translate(-3px,4px) scale(1.02)}75%{transform:translate(3px,2px) scale(1.03)}}
-#photo-bg::after{content:'';position:absolute;inset:-20px;background:rgba(5,10,20,.45);pointer-events:none}
+#photo-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,.15) 40%,rgba(0,0,0,.1) 60%,rgba(0,0,0,.4) 100%);pointer-events:none;z-index:1}
 [data-light="1"] #photo-bg::after{background:linear-gradient(180deg,rgba(5,10,20,.35) 0%,rgba(5,10,20,.25) 40%,rgba(5,10,20,.4) 100%)}
 /* When photos are visible, ALWAYS use white text regardless of light/dark mode */
-[data-bg="photos"] #hero-clock,[data-bg="photos"] #hero-date,[data-bg="photos"] #hero-quote,[data-bg="photos"] #hero-next-mtg{color:rgba(255,255,255,.95);text-shadow:0 1px 6px rgba(0,0,0,.5),0 2px 16px rgba(0,0,0,.3)}
+[data-bg="photos"] #hero-clock,[data-bg="photos"] #hero-date,[data-bg="photos"] #hero-quote,[data-bg="photos"] #hero-next-mtg{color:rgba(255,255,255,.95);text-shadow:0 2px 8px rgba(0,0,0,.6),0 4px 24px rgba(0,0,0,.4)}
 [data-bg="photos"] .hero-ot-label{color:var(--accent);text-shadow:0 1px 4px rgba(0,0,0,.3)}
 [data-bg="photos"] .hero-pri-text{color:rgba(255,255,255,.92)}
 [data-bg="photos"] .hero-fs-task,[data-bg="photos"] .hero-fs-sessions{color:rgba(255,255,255,.7)}
 [data-bg="photos"] .hero-fs-time{color:rgba(255,255,255,.92)}
-[data-bg="photos"] #hero-onething{background:linear-gradient(180deg,rgba(106,167,255,.08),rgba(106,167,255,.03));backdrop-filter:blur(30px) saturate(200%);-webkit-backdrop-filter:blur(30px) saturate(200%);border-color:rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 20px rgba(0,0,0,.12)}
+[data-bg="photos"] #hero-onething{background:linear-gradient(180deg,rgba(10,20,40,.65),rgba(10,20,40,.5));backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border-color:rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 4px 20px rgba(0,0,0,.2)}
 [data-bg="photos"] .dock-name{color:rgba(255,255,255,.7)!important}
 [data-bg="photos"] .dept-pill{color:rgba(255,255,255,.75);text-shadow:0 1px 2px rgba(0,0,0,.2)}
 [data-bg="photos"] .dept-pill:hover,[data-bg="photos"] .dept-pill.active{color:var(--accent)}
@@ -139,6 +139,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 .tb-btn svg{width:14px;height:14px;flex-shrink:0}
 .tb-btn .lbl{font-size:12px;font-weight:500;letter-spacing:-.01em;white-space:nowrap}
 .cmd-hint{font-family:var(--mono);font-size:9.5px;color:var(--dim);border:1px solid var(--line);border-radius:4px;padding:1px 4px;margin-left:2px}
+#btn-cmdk{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--dim);font-size:11px;cursor:pointer;font-family:var(--font);transition:background .14s,border-color .14s;min-width:120px}
+#btn-cmdk:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.12);color:var(--mu)}
 
 /* -- CONTEXT MODE SWITCHER -- */
 #mode-wrap{position:relative}
@@ -265,7 +267,7 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 /* Dept pills: inline in topbar */
 #dock-dept-bar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;flex:1.5;min-width:0}
 #dock-dept-bar::-webkit-scrollbar{display:none}
-.dept-pill{padding:4px 12px;border-radius:6px;background:transparent;border:1px solid transparent;color:var(--dim);font-size:10px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s,border-color .14s;white-space:nowrap;flex-shrink:0}
+.dept-pill{padding:3px 8px;border-radius:6px;background:transparent;border:1px solid transparent;color:var(--dim);font-size:9px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .14s,color .14s,border-color .14s;white-space:nowrap;flex-shrink:0}
 .dept-pill:hover,.dept-pill.active{background:rgba(106,167,255,.1);color:var(--accent);border-color:rgba(106,167,255,.15)}
 /* Mega-nav: fixed overlay drops from topbar */
 #dock-expand{position:fixed;top:42px;left:50%;transform:translateX(-50%);width:auto;max-width:92vw;padding:14px 18px;border-radius:0 0 16px 16px;background:rgba(7,13,26,.92);backdrop-filter:blur(50px) saturate(200%);-webkit-backdrop-filter:blur(50px) saturate(200%);border:1px solid rgba(255,255,255,.1);border-top:none;box-shadow:0 12px 40px rgba(0,0,0,.35);display:none;gap:6px;flex-wrap:wrap;justify-content:center;max-height:220px;overflow-y:auto;z-index:45}
@@ -603,6 +605,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-light="1"] .mode-dot+.lbl{color:rgba(0,25,61,.6)!important;text-shadow:none!important}
 [data-light="1"] #tb-dept-label{color:rgba(0,25,61,.4)!important}
 [data-light="1"] .tb-sep{border-color:rgba(0,25,61,.08)!important}
+[data-light="1"] #btn-cmdk{background:rgba(0,25,61,.04);border-color:rgba(0,25,61,.08)}
+[data-light="1"] #btn-cmdk:hover{background:rgba(0,25,61,.08)}
 [data-light="1"] .widget{background:rgba(250,249,246,.7);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border-color:rgba(0,25,61,.06);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 4px 16px rgba(0,25,61,.06)}
 [data-light="1"] #side-panel{background:rgba(245,247,255,.92);border-left-color:rgba(0,0,0,.06)}
 [data-light="1"] #side-panel-overlay{background:rgba(0,0,0,.15)}
@@ -1177,7 +1181,8 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
     <div class="tb-right">
       <div id="tb-timer" title="Focus session in progress"><span class="pulse"></span><span id="tb-timer-time">25:00</span></div>
       <button class="tb-btn" id="btn-cmdk" title="Quick launch (Cmd+K)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.2-3.2" stroke-linecap="round"></path></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:14px;height:14px;flex-shrink:0"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.2-3.2" stroke-linecap="round"></path></svg>
+        <span style="flex:1;text-align:left;opacity:.5">Search apps...</span>
         <span class="cmd-hint">&#8984;K</span>
       </button>
       <span id="tb-weather" title="Current temperature" style="font-size:11px;color:var(--mu);letter-spacing:.02em;min-width:38px;text-align:right;font-variant-numeric:tabular-nums"></span>
