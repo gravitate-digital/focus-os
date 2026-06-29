@@ -1192,6 +1192,23 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
 [data-note-style="dark"] .pn-client{color:var(--accent)}
 [data-note-style="neon"] .pinned-note{background:rgba(0,255,180,.06);border-color:rgba(0,255,180,.2);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);box-shadow:0 4px 16px rgba(0,0,0,.15),0 0 20px rgba(0,255,180,.05)}
 [data-note-style="neon"] .pn-client{color:rgba(0,255,180,.7)}
+[data-note-style="postit"] .pinned-note{background:#fef08a;border:none;box-shadow:2px 3px 8px rgba(0,0,0,.15);border-radius:2px;backdrop-filter:none;-webkit-backdrop-filter:none;transform:rotate(-1deg)}
+[data-note-style="postit"] .pn-client{color:#8a7020}
+[data-note-style="postit"] .pn-text{color:#2a2510}
+[data-note-style="postit"] .pn-time{color:rgba(80,60,10,.4)}
+[data-note-style="postit"] .pn-btn{background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.1);color:#5a4a10}
+[data-note-style="lined"] .pinned-note{background:#fff;border:1px solid #ddd;border-radius:4px;backdrop-filter:none;-webkit-backdrop-filter:none;background-image:repeating-linear-gradient(transparent,transparent 27px,#e8e8e8 27px,#e8e8e8 28px);background-position:0 32px;box-shadow:2px 3px 8px rgba(0,0,0,.1)}
+[data-note-style="lined"] .pn-client{color:#c44;border-left:2px solid #c44;padding-left:6px}
+[data-note-style="lined"] .pn-text{color:#333;font-family:'Caveat',cursive,var(--font);font-size:14px}
+[data-note-style="lined"] .pn-time{color:#aaa}
+[data-note-style="lined"] .pn-btn{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08);color:#666}
+[data-note-style="chalk"] .pinned-note{background:#2a3a2a;border:2px solid #3a4a3a;border-radius:4px;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:inset 0 0 30px rgba(0,0,0,.3),2px 3px 8px rgba(0,0,0,.2)}
+[data-note-style="chalk"] .pn-text{color:rgba(255,255,255,.85);font-family:'Caveat',cursive,var(--font);font-size:14px}
+[data-note-style="chalk"] .pn-client{color:rgba(255,220,100,.6)}
+[data-note-style="chalk"] .pn-time{color:rgba(255,255,255,.25)}
+[data-note-style="chalk"] .pn-btn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.5)}
+.pinned-note .pn-resize{position:absolute;bottom:0;right:0;width:16px;height:16px;cursor:nwse-resize;opacity:.3;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--dim)}
+.pinned-note .pn-resize:hover{opacity:.7}
 </style>
 </head>
 <body>
@@ -1621,6 +1638,10 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:var(--bg);color:va
       <div class="settings-group-label">Note Style</div>
       <div style="font-size:11px;color:var(--dim);margin-bottom:8px">How pinned notes look on your dashboard.</div>
       <div class="theme-grid" id="note-style-picker"></div>
+      <div class="settings-row" style="margin-top:10px">
+        <div class="settings-row-label">Aging effects<small>Notes develop burn marks and wear over time</small></div>
+        <button class="toggle" id="note-aging-toggle"></button>
+      </div>
     </div>
 
     <div class="settings-group">
@@ -2798,6 +2819,7 @@ const DEFAULT_STATE = {
   tasks:[],
   notes:[],
   noteStyle: 'glass',
+  noteAging: true,
   coach:{on:true, sensitivity:'med', switchCount:0},
   soundEffect: 'ding',
   soundMuted: false,
@@ -2894,6 +2916,7 @@ function loadState() {
     if (merged.waterReminder === undefined) merged.waterReminder = true;
     // Notes migration
     if (!merged.notes) merged.notes = [];
+    if (merged.noteAging === undefined) merged.noteAging = true;
     // Usage stats migration
     if (!merged.usage) merged.usage = clone(DEFAULT_STATE.usage);
     if (!merged.usage.firstOpen) merged.usage.firstOpen = new Date().toISOString();
@@ -4166,6 +4189,7 @@ function addNote() {
     client: client,
     pinned: true,
     pinnedPos: { x: 20, y: 100 },
+    pinnedSize: { w: 260, h: 'auto' },
     created: new Date().toISOString(),
     done: false
   });
@@ -4183,20 +4207,28 @@ function renderPinnedNotes() {
   const pinned = S.notes.filter(n => n.pinned && !n.done);
   container.innerHTML = pinned.map(n => {
     const pos = n.pinnedPos || { x: 20, y: 100 };
+    const sz = n.pinnedSize || { w: 260, h: 'auto' };
     const ageDays = Math.floor((Date.now() - new Date(n.created).getTime()) / 86400000);
     let ageClass = '';
-    if (ageDays >= 14) ageClass = ' age-14';
-    else if (ageDays >= 7) ageClass = ' age-7';
-    else if (ageDays >= 3) ageClass = ' age-3';
-    else if (ageDays >= 1) ageClass = ' age-1';
-    return '<div class="pinned-note' + ageClass + '" data-nid="' + n.id + '" style="left:' + pos.x + 'px;top:' + pos.y + 'px">' +
+    if (S.noteAging) {
+      if (ageDays >= 14) ageClass = ' age-14';
+      else if (ageDays >= 7) ageClass = ' age-7';
+      else if (ageDays >= 3) ageClass = ' age-3';
+      else if (ageDays >= 1) ageClass = ' age-1';
+    }
+    const widthStyle = 'width:' + sz.w + 'px';
+    const heightStyle = sz.h === 'auto' ? '' : ';min-height:' + sz.h + 'px';
+    return '<div class="pinned-note' + ageClass + '" data-nid="' + n.id + '" style="left:' + pos.x + 'px;top:' + pos.y + 'px;' + widthStyle + heightStyle + '">' +
       (n.client ? '<div class="pn-client">' + esc(n.client) + '</div>' : '') +
       '<div class="pn-text">' + esc(n.text) + '</div>' +
       '<div class="pn-time">' + relativeTime(n.created) + '</div>' +
       '<div class="pn-actions">' +
       '<button class="pn-btn pn-asana" data-nid="' + n.id + '">Done</button>' +
+      '<button class="pn-btn pn-copy" data-nid="' + n.id + '">Copy</button>' +
       '<button class="pn-btn pn-unpin" data-nid="' + n.id + '">Unpin</button>' +
-      '</div></div>';
+      '</div>' +
+      '<div class="pn-resize">&#9698;</div>' +
+      '</div>';
   }).join('');
 
   // Wire actions
@@ -4211,6 +4243,18 @@ function renderPinnedNotes() {
     });
   });
 
+  container.querySelectorAll('.pn-copy').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const note = S.notes.find(n => n.id === +btn.dataset.nid);
+      if (note) {
+        navigator.clipboard.writeText((note.client ? note.client + ': ' : '') + note.text);
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 1200);
+      }
+    });
+  });
+
   container.querySelectorAll('.pn-unpin').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -4221,16 +4265,53 @@ function renderPinnedNotes() {
     });
   });
 
+  // Wire resize handles
+  container.querySelectorAll('.pn-resize').forEach(handle => {
+    handle.addEventListener('mousedown', e => {
+      e.stopPropagation();
+      e.preventDefault();
+      const card = handle.closest('.pinned-note');
+      const nid = +card.dataset.nid;
+      const note = S.notes.find(n => n.id === nid);
+      if (!note) return;
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const startW = card.offsetWidth;
+      const startH = card.offsetHeight;
+
+      function onMove(ev) {
+        const newW = Math.max(160, startW + (ev.clientX - startX));
+        const newH = Math.max(60, startH + (ev.clientY - startY));
+        card.style.width = newW + 'px';
+        card.style.minHeight = newH + 'px';
+      }
+
+      function onUp(ev) {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        const newW = Math.max(160, startW + (ev.clientX - startX));
+        const newH = Math.max(60, startH + (ev.clientY - startY));
+        if (!note.pinnedSize) note.pinnedSize = { w: 260, h: 'auto' };
+        note.pinnedSize.w = newW;
+        note.pinnedSize.h = newH;
+        save();
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+
   // Wire drag
   container.querySelectorAll('.pinned-note').forEach(card => {
     // Double-click to open detail modal
     card.addEventListener('dblclick', e => {
-      if (e.target.closest('.pn-btn')) return;
+      if (e.target.closest('.pn-btn') || e.target.closest('.pn-resize')) return;
       openNoteDetail(+card.dataset.nid);
     });
 
     card.addEventListener('mousedown', e => {
-      if (e.target.closest('.pn-btn')) return;
+      if (e.target.closest('.pn-btn') || e.target.closest('.pn-resize')) return;
       e.preventDefault();
       const nid = +card.dataset.nid;
       const note = S.notes.find(n => n.id === nid);
@@ -4327,6 +4408,18 @@ function renderSettings() {
 
   // Note style picker
   renderNoteStylePicker();
+
+  // Note aging toggle
+  const agingToggle = document.getElementById('note-aging-toggle');
+  if (agingToggle) {
+    agingToggle.className = 'toggle' + (S.noteAging ? ' on' : '');
+    agingToggle.addEventListener('click', () => {
+      S.noteAging = !S.noteAging;
+      save();
+      agingToggle.className = 'toggle' + (S.noteAging ? ' on' : '');
+      renderPinnedNotes();
+    });
+  }
 
   // Layout position picker
   const layoutPosPicker = document.getElementById('layout-pos-picker');
@@ -5759,10 +5852,13 @@ function renderNoteStylePicker() {
   const picker = document.getElementById('note-style-picker');
   if (!picker) return;
   const styles = [
-    {id:'glass', name:'Glass',  swatch:'linear-gradient(135deg,rgba(255,220,80,.15),rgba(255,220,80,.05))'},
-    {id:'paper', name:'Paper',  swatch:'linear-gradient(135deg,rgba(255,248,220,.9),rgba(245,235,200,.9))'},
-    {id:'dark',  name:'Dark',   swatch:'linear-gradient(135deg,rgba(20,25,40,.85),rgba(30,35,50,.85))'},
-    {id:'neon',  name:'Neon',   swatch:'linear-gradient(135deg,rgba(0,255,180,.1),rgba(0,255,180,.03))'}
+    {id:'glass',  name:'Liquid Glass', swatch:'linear-gradient(135deg,rgba(255,220,80,.15),rgba(255,220,80,.05))'},
+    {id:'paper',  name:'Warm Paper',   swatch:'linear-gradient(135deg,rgba(255,248,220,.9),rgba(245,235,200,.9))'},
+    {id:'dark',   name:'Dark Slate',   swatch:'linear-gradient(135deg,rgba(20,25,40,.85),rgba(30,35,50,.85))'},
+    {id:'neon',   name:'Neon Glow',    swatch:'linear-gradient(135deg,rgba(0,255,180,.1),rgba(0,255,180,.03))'},
+    {id:'postit', name:'Post-it',      swatch:'linear-gradient(135deg,#fef08a,#fde047)'},
+    {id:'lined',  name:'Notebook',     swatch:'linear-gradient(135deg,#fff,#f5f5f5)'},
+    {id:'chalk',  name:'Chalkboard',   swatch:'linear-gradient(135deg,#2a3a2a,#3a4a3a)'}
   ];
   picker.innerHTML = styles.map(s =>
     '<div class="theme-opt'+(( S.noteStyle||'glass')===s.id?' active':'')+'" data-nstyle="'+s.id+'">' +
